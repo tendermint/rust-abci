@@ -43,6 +43,10 @@ To use this library to build your own ABCI apps in rust you have to include the 
 rust-abci = { git = "git@github.com:tendermint/rust-abci.git" }
 ```
 
+
+----
+
+
 ## Running the examples
 
 ### Tendermint
@@ -61,10 +65,18 @@ cargo run --bin dummy
 cargo run --bin counter
 ```
 
+
+----
+
+
 ## Documentation
 // TODO - publish to rust docs
 
 // TODO - give quick examples
+
+
+----
+
 
 ## Optional Dependencies
 The message types for the ABCI protocol are defined in a protobuf file, which can be copied from [here](https://github.com/tendermint/abci/blob/master/types/types.proto).
