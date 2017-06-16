@@ -1,7 +1,7 @@
 # Rust ABCI
 A rust implementation of the ABCI protocol for Tendermint.
 
-![](https://tokei.rs/b1/github/tendermint/rust-abci)](https://github.com/tendermint/rust-abci)
+[![](https://tokei.rs/b1/github/tendermint/rust-abci)](https://github.com/tendermint/rust-abci)
 
 ### Join the chat!
 [![](https://img.shields.io/badge/slack-join%20chat-brightgreen.svg)](http://forum.tendermint.com:3000/)
