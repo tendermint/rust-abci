@@ -26,6 +26,10 @@ For a real life example of an ABCI application you can checkout [Ethermint](http
 ----
 
 
+## Dependencies
+Make sure that you have Rust installed. The easiest way is to follow the instructions on [rustup](https://rustup.rs/).
+
+
 ## Installation
 To test the examples, please clone this repository.
 ```bash
@@ -62,7 +66,7 @@ cargo run --bin counter
 
 // TODO - give quick examples
 
-## Dependencies
+## Optional Dependencies
 The message types for the ABCI protocol are defined in a protobuf file, which can be copied from [here](https://github.com/tendermint/abci/blob/master/types/types.proto).
 
 We use [rust-protobuf](https://github.com/stepancheg/rust-protobuf) to generate compatible rust files from the protobuf
