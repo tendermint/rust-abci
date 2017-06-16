@@ -1,10 +1,11 @@
-#![cfg(feature="grpc_support")]
+#![allow(unused_variables)]
+#![allow(unused_must_use)]
 
 extern crate grpc;
 extern crate rust_abci;
 
 
-use rust_abci::grpc_server::new_server;
+use rust_abci::new_server;
 use rust_abci::types::*;
 use rust_abci::types_grpc::*;
 
@@ -88,8 +89,9 @@ impl ABCIApplication for DummyApp {
 
 fn main() {
     let listen_addr = "0.0.0.0:46658";
+    let connection_type = "socket";
 
-    let _server = new_server(listen_addr, DummyApp);
+    let _server = new_server(listen_addr, connection_type, DummyApp);
 
     loop {
         thread::park();

@@ -10,9 +10,5 @@ futures-cpupool = "0.1"
 grpc            = "0.*"
 protobuf        = "1.*"
 tls-api         = "0.*"
+tokio-core      = "0.1.8"
 websocket       = "0.20.1"
-
-[features]
-default = []
-grpc_support = []
-socket_support = []

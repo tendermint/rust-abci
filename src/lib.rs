@@ -1,6 +1,4 @@
 //! This is the documentation for the rust-abci crate.
-//! The crate is build with socket support by default.
-//! In order to use grpc, please use `--feature "grpc_support".
 
 extern crate futures;
 extern crate futures_cpupool;
@@ -8,11 +6,23 @@ extern crate grpc;
 extern crate protobuf;
 extern crate tls_api;
 extern crate websocket;
+extern crate tokio_core;
+
+
+use types_grpc::ABCIApplication;
+
 
 pub mod types;
-#[cfg(feature="grpc_support")]
 pub mod types_grpc;
-#[cfg(feature="grpc_support")]
 pub mod grpc_server;
-#[cfg(feature="socket_support")]
 pub mod socket_server;
+
+pub trait Service {}
+
+pub fn new_server<H: ABCIApplication + 'static + Sync + Send + 'static>(listen_addr: &str, connection_type: &str, app: H) -> Option<Box<Service>> {
+    match connection_type {
+        "grpc" => Some(grpc_server::new_server(listen_addr, app)),
+        "socket" => Some(socket_server::new_server(listen_addr, app)),
+        _ => None,
+    }
+}

@@ -1,11 +1,12 @@
-#![cfg(feature="grpc_support")]
+#![allow(unused_variables)]
+#![allow(unused_must_use)]
 
 extern crate byteorder;
 extern crate grpc;
 extern crate rust_abci;
 
 
-use rust_abci::grpc_server::new_server;
+use rust_abci::new_server;
 use rust_abci::types::*;
 use rust_abci::types_grpc::*;
 
@@ -19,16 +20,16 @@ use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt};
 
 struct CounterApp {
     serial: Mutex<bool>,
-    txCount: Mutex<u64>,
-    hashCount: Mutex<u64>,
+    tx_count: Mutex<u64>,
+    hash_count: Mutex<u64>,
 }
 
 impl CounterApp {
     fn new(serial: bool) -> CounterApp {
         CounterApp {
             serial: Mutex::new(serial),
-            txCount: Mutex::new(0),
-            hashCount: Mutex::new(0),
+            tx_count: Mutex::new(0),
+            hash_count: Mutex::new(0),
         }
     }
 }
@@ -72,13 +73,13 @@ impl ABCIApplication for CounterApp {
             }
         }
         let nonce = p.get_tx().read_uint::<BigEndian>(p.get_tx().len()).unwrap();
-        if *self.txCount.lock().unwrap() != nonce {
+        if *self.tx_count.lock().unwrap() != nonce {
             response.set_code(CodeType::BadNonce);
             response.set_log("Invalid nonce.".to_owned());
             return ::grpc::SingleResponse::completed(response);
         }
-        let mut txCount = self.txCount.lock().unwrap();
-        *txCount += 1;
+        let mut tx_count = self.tx_count.lock().unwrap();
+        *tx_count += 1;
         response.set_code(CodeType::OK);
         ::grpc::SingleResponse::completed(response)
     }
@@ -93,7 +94,7 @@ impl ABCIApplication for CounterApp {
             }
         }
         let nonce = p.get_tx().read_uint::<BigEndian>(p.get_tx().len()).unwrap();
-        if *self.txCount.lock().unwrap() != nonce {
+        if *self.tx_count.lock().unwrap() != nonce {
             response.set_code(CodeType::BadNonce);
             response.set_log("Invalid nonce.".to_owned());
             return ::grpc::SingleResponse::completed(response);
@@ -107,13 +108,13 @@ impl ABCIApplication for CounterApp {
         match p.get_path() {
             "hash" => {
                 let mut data = vec![];
-                data.write_uint::<BigEndian>(*self.hashCount.lock().unwrap(), 8);
+                data.write_uint::<BigEndian>(*self.hash_count.lock().unwrap(), 8);
                 response.set_value(data);
                 return ::grpc::SingleResponse::completed(response);
             },
             "tx" => {
                 let mut data = vec![];
-                data.write_uint::<BigEndian>(*self.txCount.lock().unwrap(), 8);
+                data.write_uint::<BigEndian>(*self.tx_count.lock().unwrap(), 8);
                 response.set_value(data);
                 return ::grpc::SingleResponse::completed(response);
             },
@@ -127,16 +128,16 @@ impl ABCIApplication for CounterApp {
     fn commit(&self, o: ::grpc::RequestOptions, p: RequestCommit) -> ::grpc::SingleResponse<ResponseCommit> {
         let mut response = ResponseCommit::new();
 
-        let mut hashCount = self.hashCount.lock().unwrap();
-        *hashCount += 1;
+        let mut hash_count = self.hash_count.lock().unwrap();
+        *hash_count += 1;
 
-        if *self.txCount.lock().unwrap() == 0 {
+        if *self.tx_count.lock().unwrap() == 0 {
             response.set_code(CodeType::OK);
             return ::grpc::SingleResponse::completed(response);
         }
 
         let mut data = vec![];
-        data.write_uint::<BigEndian>(*self.txCount.lock().unwrap(), 8);
+        data.write_uint::<BigEndian>(*self.tx_count.lock().unwrap(), 8);
         response.set_data(data);
         ::grpc::SingleResponse::completed(response)
     }
@@ -159,10 +160,11 @@ impl ABCIApplication for CounterApp {
 
 fn main() {
     let listen_addr = "0.0.0.0:46658";
+    let connection_type = "socket";
 
     let app = CounterApp::new(true);
 
-    let _server = new_server(listen_addr, app);
+    let _server = new_server(listen_addr, connection_type, app);
 
     loop {
         thread::park();
