@@ -59,6 +59,7 @@ cargo run --bin counter
 
 ## Documentation
 // TODO - publish to rust docs
+
 // TODO - give quick examples
 
 ## Dependencies
@@ -72,6 +73,7 @@ Install these two tools.
 cargo install protobuf
 cargo install grpc-compiler
 ```
+
 ```bash
 protoc --rust_out src/ types.proto
 protoc --rust-grpc_out src/ types.proto
