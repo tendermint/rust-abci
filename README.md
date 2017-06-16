@@ -60,9 +60,9 @@ tendermint node --abci grpc
 Once the Tendermint instance is up and running you can start either of the examples like this. Of course, please rememeber to
 switch into the rust-abci folder.
 ```bash
-cargo run --bin dummy
+cargo run --features "grpc_support" --bin dummy
 
-cargo run --bin counter
+cargo run --features "grpc_support" --bin counter
 ```
 
 
