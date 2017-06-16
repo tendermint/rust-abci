@@ -35,6 +35,7 @@ Please have a look at the dummy or counter app inside `src/bin` to get a feeling
 
 To use this library to build your own ABCI apps in rust you have to include the following in your `Cargo.toml` file.
 ```bash
+[dependencies]
 rust-abci = { git = "git@github.com:tendermint/rust-abci.git" }
 ```
 
