@@ -27,6 +27,6 @@ cargo install protobuf
 cargo install grpc-compiler
 ```
 ```bash
-protoc --rust_out src/ src/types.proto
-protoc --rust-grpc_out src/ src/types.proto
+protoc --rust_out src/ types.proto
+protoc --rust-grpc_out src/ types.proto
 ```

@@ -22,33 +22,33 @@
 // interface
 
 pub trait ABCIApplication {
-    fn Echo(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestEcho) -> ::grpc::GrpcSingleResponse<super::types::ResponseEcho>;
+    fn echo(&self, o: ::grpc::RequestOptions, p: super::types::RequestEcho) -> ::grpc::SingleResponse<super::types::ResponseEcho>;
 
-    fn Flush(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestFlush) -> ::grpc::GrpcSingleResponse<super::types::ResponseFlush>;
+    fn flush(&self, o: ::grpc::RequestOptions, p: super::types::RequestFlush) -> ::grpc::SingleResponse<super::types::ResponseFlush>;
 
-    fn Info(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestInfo) -> ::grpc::GrpcSingleResponse<super::types::ResponseInfo>;
+    fn info(&self, o: ::grpc::RequestOptions, p: super::types::RequestInfo) -> ::grpc::SingleResponse<super::types::ResponseInfo>;
 
-    fn SetOption(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestSetOption) -> ::grpc::GrpcSingleResponse<super::types::ResponseSetOption>;
+    fn set_option(&self, o: ::grpc::RequestOptions, p: super::types::RequestSetOption) -> ::grpc::SingleResponse<super::types::ResponseSetOption>;
 
-    fn DeliverTx(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestDeliverTx) -> ::grpc::GrpcSingleResponse<super::types::ResponseDeliverTx>;
+    fn deliver_tx(&self, o: ::grpc::RequestOptions, p: super::types::RequestDeliverTx) -> ::grpc::SingleResponse<super::types::ResponseDeliverTx>;
 
-    fn CheckTx(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestCheckTx) -> ::grpc::GrpcSingleResponse<super::types::ResponseCheckTx>;
+    fn check_tx(&self, o: ::grpc::RequestOptions, p: super::types::RequestCheckTx) -> ::grpc::SingleResponse<super::types::ResponseCheckTx>;
 
-    fn Query(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestQuery) -> ::grpc::GrpcSingleResponse<super::types::ResponseQuery>;
+    fn query(&self, o: ::grpc::RequestOptions, p: super::types::RequestQuery) -> ::grpc::SingleResponse<super::types::ResponseQuery>;
 
-    fn Commit(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestCommit) -> ::grpc::GrpcSingleResponse<super::types::ResponseCommit>;
+    fn commit(&self, o: ::grpc::RequestOptions, p: super::types::RequestCommit) -> ::grpc::SingleResponse<super::types::ResponseCommit>;
 
-    fn InitChain(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestInitChain) -> ::grpc::GrpcSingleResponse<super::types::ResponseInitChain>;
+    fn init_chain(&self, o: ::grpc::RequestOptions, p: super::types::RequestInitChain) -> ::grpc::SingleResponse<super::types::ResponseInitChain>;
 
-    fn BeginBlock(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestBeginBlock) -> ::grpc::GrpcSingleResponse<super::types::ResponseBeginBlock>;
+    fn begin_block(&self, o: ::grpc::RequestOptions, p: super::types::RequestBeginBlock) -> ::grpc::SingleResponse<super::types::ResponseBeginBlock>;
 
-    fn EndBlock(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestEndBlock) -> ::grpc::GrpcSingleResponse<super::types::ResponseEndBlock>;
+    fn end_block(&self, o: ::grpc::RequestOptions, p: super::types::RequestEndBlock) -> ::grpc::SingleResponse<super::types::ResponseEndBlock>;
 }
 
 // client
 
 pub struct ABCIApplicationClient {
-    grpc_client: ::grpc::client::GrpcClient,
+    grpc_client: ::grpc::Client,
     method_Echo: ::std::sync::Arc<::grpc::method::MethodDescriptor<super::types::RequestEcho, super::types::ResponseEcho>>,
     method_Flush: ::std::sync::Arc<::grpc::method::MethodDescriptor<super::types::RequestFlush, super::types::ResponseFlush>>,
     method_Info: ::std::sync::Arc<::grpc::method::MethodDescriptor<super::types::RequestInfo, super::types::ResponseInfo>>,
@@ -63,127 +63,132 @@ pub struct ABCIApplicationClient {
 }
 
 impl ABCIApplicationClient {
-    pub fn with_client(grpc_client: ::grpc::client::GrpcClient) -> Self {
+    pub fn with_client(grpc_client: ::grpc::Client) -> Self {
         ABCIApplicationClient {
             grpc_client: grpc_client,
             method_Echo: ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                 name: "/types.ABCIApplication/Echo".to_string(),
                 streaming: ::grpc::method::GrpcStreaming::Unary,
-                req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
             }),
             method_Flush: ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                 name: "/types.ABCIApplication/Flush".to_string(),
                 streaming: ::grpc::method::GrpcStreaming::Unary,
-                req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
             }),
             method_Info: ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                 name: "/types.ABCIApplication/Info".to_string(),
                 streaming: ::grpc::method::GrpcStreaming::Unary,
-                req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
             }),
             method_SetOption: ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                 name: "/types.ABCIApplication/SetOption".to_string(),
                 streaming: ::grpc::method::GrpcStreaming::Unary,
-                req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
             }),
             method_DeliverTx: ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                 name: "/types.ABCIApplication/DeliverTx".to_string(),
                 streaming: ::grpc::method::GrpcStreaming::Unary,
-                req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
             }),
             method_CheckTx: ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                 name: "/types.ABCIApplication/CheckTx".to_string(),
                 streaming: ::grpc::method::GrpcStreaming::Unary,
-                req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
             }),
             method_Query: ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                 name: "/types.ABCIApplication/Query".to_string(),
                 streaming: ::grpc::method::GrpcStreaming::Unary,
-                req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
             }),
             method_Commit: ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                 name: "/types.ABCIApplication/Commit".to_string(),
                 streaming: ::grpc::method::GrpcStreaming::Unary,
-                req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
             }),
             method_InitChain: ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                 name: "/types.ABCIApplication/InitChain".to_string(),
                 streaming: ::grpc::method::GrpcStreaming::Unary,
-                req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
             }),
             method_BeginBlock: ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                 name: "/types.ABCIApplication/BeginBlock".to_string(),
                 streaming: ::grpc::method::GrpcStreaming::Unary,
-                req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
             }),
             method_EndBlock: ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                 name: "/types.ABCIApplication/EndBlock".to_string(),
                 streaming: ::grpc::method::GrpcStreaming::Unary,
-                req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
             }),
         }
     }
 
-    pub fn new(host: &str, port: u16, tls: bool, conf: ::grpc::client::GrpcClientConf) -> ::grpc::result::GrpcResult<Self> {
-        ::grpc::client::GrpcClient::new(host, port, tls, conf).map(|c| {
+    pub fn new_plain(host: &str, port: u16, conf: ::grpc::ClientConf) -> ::grpc::Result<Self> {
+        ::grpc::Client::new_plain(host, port, conf).map(|c| {
+            ABCIApplicationClient::with_client(c)
+        })
+    }
+    pub fn new_tls<C : ::tls_api::TlsConnector>(host: &str, port: u16, conf: ::grpc::ClientConf) -> ::grpc::Result<Self> {
+        ::grpc::Client::new_tls::<C>(host, port, conf).map(|c| {
             ABCIApplicationClient::with_client(c)
         })
     }
 }
 
 impl ABCIApplication for ABCIApplicationClient {
-    fn Echo(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestEcho) -> ::grpc::GrpcSingleResponse<super::types::ResponseEcho> {
+    fn echo(&self, o: ::grpc::RequestOptions, p: super::types::RequestEcho) -> ::grpc::SingleResponse<super::types::ResponseEcho> {
         self.grpc_client.call_unary(o, p, self.method_Echo.clone())
     }
 
-    fn Flush(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestFlush) -> ::grpc::GrpcSingleResponse<super::types::ResponseFlush> {
+    fn flush(&self, o: ::grpc::RequestOptions, p: super::types::RequestFlush) -> ::grpc::SingleResponse<super::types::ResponseFlush> {
         self.grpc_client.call_unary(o, p, self.method_Flush.clone())
     }
 
-    fn Info(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestInfo) -> ::grpc::GrpcSingleResponse<super::types::ResponseInfo> {
+    fn info(&self, o: ::grpc::RequestOptions, p: super::types::RequestInfo) -> ::grpc::SingleResponse<super::types::ResponseInfo> {
         self.grpc_client.call_unary(o, p, self.method_Info.clone())
     }
 
-    fn SetOption(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestSetOption) -> ::grpc::GrpcSingleResponse<super::types::ResponseSetOption> {
+    fn set_option(&self, o: ::grpc::RequestOptions, p: super::types::RequestSetOption) -> ::grpc::SingleResponse<super::types::ResponseSetOption> {
         self.grpc_client.call_unary(o, p, self.method_SetOption.clone())
     }
 
-    fn DeliverTx(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestDeliverTx) -> ::grpc::GrpcSingleResponse<super::types::ResponseDeliverTx> {
+    fn deliver_tx(&self, o: ::grpc::RequestOptions, p: super::types::RequestDeliverTx) -> ::grpc::SingleResponse<super::types::ResponseDeliverTx> {
         self.grpc_client.call_unary(o, p, self.method_DeliverTx.clone())
     }
 
-    fn CheckTx(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestCheckTx) -> ::grpc::GrpcSingleResponse<super::types::ResponseCheckTx> {
+    fn check_tx(&self, o: ::grpc::RequestOptions, p: super::types::RequestCheckTx) -> ::grpc::SingleResponse<super::types::ResponseCheckTx> {
         self.grpc_client.call_unary(o, p, self.method_CheckTx.clone())
     }
 
-    fn Query(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestQuery) -> ::grpc::GrpcSingleResponse<super::types::ResponseQuery> {
+    fn query(&self, o: ::grpc::RequestOptions, p: super::types::RequestQuery) -> ::grpc::SingleResponse<super::types::ResponseQuery> {
         self.grpc_client.call_unary(o, p, self.method_Query.clone())
     }
 
-    fn Commit(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestCommit) -> ::grpc::GrpcSingleResponse<super::types::ResponseCommit> {
+    fn commit(&self, o: ::grpc::RequestOptions, p: super::types::RequestCommit) -> ::grpc::SingleResponse<super::types::ResponseCommit> {
         self.grpc_client.call_unary(o, p, self.method_Commit.clone())
     }
 
-    fn InitChain(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestInitChain) -> ::grpc::GrpcSingleResponse<super::types::ResponseInitChain> {
+    fn init_chain(&self, o: ::grpc::RequestOptions, p: super::types::RequestInitChain) -> ::grpc::SingleResponse<super::types::ResponseInitChain> {
         self.grpc_client.call_unary(o, p, self.method_InitChain.clone())
     }
 
-    fn BeginBlock(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestBeginBlock) -> ::grpc::GrpcSingleResponse<super::types::ResponseBeginBlock> {
+    fn begin_block(&self, o: ::grpc::RequestOptions, p: super::types::RequestBeginBlock) -> ::grpc::SingleResponse<super::types::ResponseBeginBlock> {
         self.grpc_client.call_unary(o, p, self.method_BeginBlock.clone())
     }
 
-    fn EndBlock(&self, o: ::grpc::GrpcRequestOptions, p: super::types::RequestEndBlock) -> ::grpc::GrpcSingleResponse<super::types::ResponseEndBlock> {
+    fn end_block(&self, o: ::grpc::RequestOptions, p: super::types::RequestEndBlock) -> ::grpc::SingleResponse<super::types::ResponseEndBlock> {
         self.grpc_client.call_unary(o, p, self.method_EndBlock.clone())
     }
 }
@@ -191,11 +196,11 @@ impl ABCIApplication for ABCIApplicationClient {
 // server
 
 pub struct ABCIApplicationServer {
-    pub grpc_server: ::grpc::server::GrpcServer,
+    pub grpc_server: ::grpc::Server,
 }
 
 impl ::std::ops::Deref for ABCIApplicationServer {
-    type Target = ::grpc::server::GrpcServer;
+    type Target = ::grpc::Server;
 
     fn deref(&self) -> &Self::Target {
         &self.grpc_server
@@ -203,17 +208,17 @@ impl ::std::ops::Deref for ABCIApplicationServer {
 }
 
 impl ABCIApplicationServer {
-    pub fn new<A : ::std::net::ToSocketAddrs, H : ABCIApplication + 'static + Sync + Send + 'static>(addr: A, conf: ::grpc::server::GrpcServerConf, h: H) -> Self {
+    pub fn new<A : ::std::net::ToSocketAddrs, H : ABCIApplication + 'static + Sync + Send + 'static>(addr: A, conf: ::grpc::ServerConf, h: H) -> Self {
         let service_definition = ABCIApplicationServer::new_service_def(h);
         ABCIApplicationServer {
-            grpc_server: ::grpc::server::GrpcServer::new_plain(addr, conf, service_definition),
+            grpc_server: ::grpc::Server::new_plain(addr, conf, service_definition),
         }
     }
 
-    pub fn new_pool<A : ::std::net::ToSocketAddrs, H : ABCIApplication + 'static + Sync + Send + 'static>(addr: A, conf: ::grpc::server::GrpcServerConf, h: H, cpu_pool: ::futures_cpupool::CpuPool) -> Self {
+    pub fn new_pool<A : ::std::net::ToSocketAddrs, H : ABCIApplication + 'static + Sync + Send + 'static>(addr: A, conf: ::grpc::ServerConf, h: H, cpu_pool: ::futures_cpupool::CpuPool) -> Self {
         let service_definition = ABCIApplicationServer::new_service_def(h);
         ABCIApplicationServer {
-            grpc_server: ::grpc::server::GrpcServer::new_plain_pool(addr, conf, service_definition, cpu_pool),
+            grpc_server: ::grpc::Server::new_plain_pool(addr, conf, service_definition, cpu_pool),
         }
     }
 
@@ -225,132 +230,132 @@ impl ABCIApplicationServer {
                     ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                         name: "/types.ABCIApplication/Echo".to_string(),
                         streaming: ::grpc::method::GrpcStreaming::Unary,
-                        req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                        resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                        req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                        resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
                     }),
                     {
                         let handler_copy = handler_arc.clone();
-                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.Echo(o, p))
+                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.echo(o, p))
                     },
                 ),
                 ::grpc::server::ServerMethod::new(
                     ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                         name: "/types.ABCIApplication/Flush".to_string(),
                         streaming: ::grpc::method::GrpcStreaming::Unary,
-                        req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                        resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                        req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                        resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
                     }),
                     {
                         let handler_copy = handler_arc.clone();
-                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.Flush(o, p))
+                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.flush(o, p))
                     },
                 ),
                 ::grpc::server::ServerMethod::new(
                     ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                         name: "/types.ABCIApplication/Info".to_string(),
                         streaming: ::grpc::method::GrpcStreaming::Unary,
-                        req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                        resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                        req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                        resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
                     }),
                     {
                         let handler_copy = handler_arc.clone();
-                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.Info(o, p))
+                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.info(o, p))
                     },
                 ),
                 ::grpc::server::ServerMethod::new(
                     ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                         name: "/types.ABCIApplication/SetOption".to_string(),
                         streaming: ::grpc::method::GrpcStreaming::Unary,
-                        req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                        resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                        req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                        resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
                     }),
                     {
                         let handler_copy = handler_arc.clone();
-                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.SetOption(o, p))
+                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.set_option(o, p))
                     },
                 ),
                 ::grpc::server::ServerMethod::new(
                     ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                         name: "/types.ABCIApplication/DeliverTx".to_string(),
                         streaming: ::grpc::method::GrpcStreaming::Unary,
-                        req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                        resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                        req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                        resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
                     }),
                     {
                         let handler_copy = handler_arc.clone();
-                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.DeliverTx(o, p))
+                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.deliver_tx(o, p))
                     },
                 ),
                 ::grpc::server::ServerMethod::new(
                     ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                         name: "/types.ABCIApplication/CheckTx".to_string(),
                         streaming: ::grpc::method::GrpcStreaming::Unary,
-                        req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                        resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                        req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                        resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
                     }),
                     {
                         let handler_copy = handler_arc.clone();
-                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.CheckTx(o, p))
+                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.check_tx(o, p))
                     },
                 ),
                 ::grpc::server::ServerMethod::new(
                     ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                         name: "/types.ABCIApplication/Query".to_string(),
                         streaming: ::grpc::method::GrpcStreaming::Unary,
-                        req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                        resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                        req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                        resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
                     }),
                     {
                         let handler_copy = handler_arc.clone();
-                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.Query(o, p))
+                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.query(o, p))
                     },
                 ),
                 ::grpc::server::ServerMethod::new(
                     ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                         name: "/types.ABCIApplication/Commit".to_string(),
                         streaming: ::grpc::method::GrpcStreaming::Unary,
-                        req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                        resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                        req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                        resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
                     }),
                     {
                         let handler_copy = handler_arc.clone();
-                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.Commit(o, p))
+                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.commit(o, p))
                     },
                 ),
                 ::grpc::server::ServerMethod::new(
                     ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                         name: "/types.ABCIApplication/InitChain".to_string(),
                         streaming: ::grpc::method::GrpcStreaming::Unary,
-                        req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                        resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                        req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                        resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
                     }),
                     {
                         let handler_copy = handler_arc.clone();
-                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.InitChain(o, p))
+                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.init_chain(o, p))
                     },
                 ),
                 ::grpc::server::ServerMethod::new(
                     ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                         name: "/types.ABCIApplication/BeginBlock".to_string(),
                         streaming: ::grpc::method::GrpcStreaming::Unary,
-                        req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                        resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                        req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                        resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
                     }),
                     {
                         let handler_copy = handler_arc.clone();
-                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.BeginBlock(o, p))
+                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.begin_block(o, p))
                     },
                 ),
                 ::grpc::server::ServerMethod::new(
                     ::std::sync::Arc::new(::grpc::method::MethodDescriptor {
                         name: "/types.ABCIApplication/EndBlock".to_string(),
                         streaming: ::grpc::method::GrpcStreaming::Unary,
-                        req_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
-                        resp_marshaller: Box::new(::grpc::grpc_protobuf::MarshallerProtobuf),
+                        req_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
+                        resp_marshaller: Box::new(::grpc::protobuf::MarshallerProtobuf),
                     }),
                     {
                         let handler_copy = handler_arc.clone();
-                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.EndBlock(o, p))
+                        ::grpc::server::MethodHandlerUnary::new(move |o, p| handler_copy.end_block(o, p))
                     },
                 ),
             ],
