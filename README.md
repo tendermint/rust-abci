@@ -15,12 +15,18 @@ For a real life example of an ABCI application you can checkout [Ethermint](http
 // TODO - publish to rust docs
 // TODO - give quick examples
 
-## Contributing
-The message types for the ABCI protocol are defined in a proto buff file, which can be copied from [here](https://github.com/tendermint/abci/blob/master/types/types.proto).
+## Dependencies
+The message types for the ABCI protocol are defined in a protobuf file, which can be copied from [here](https://github.com/tendermint/abci/blob/master/types/types.proto).
 
 We use [rust-protobuf](https://github.com/stepancheg/rust-protobuf) to generate compatible rust files from the protobuf
 source files. For convenience the generated rust files are checked into git and will be packaged with the library. If you
 want to generate them yourself you can.
+Install these two tools.
+```bash
+cargo install protobuf
+cargo install grpc-compiler
+```
 ```bash
 protoc --rust_out src/ src/types.proto
+protoc --rust-grpc_out src/ src/types.proto
 ```
