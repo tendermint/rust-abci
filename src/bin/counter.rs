@@ -12,7 +12,6 @@ use rust_abci::types_grpc::*;
 
 
 use std::sync::Mutex;
-use std::thread;
 
 
 use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt};
@@ -159,8 +158,12 @@ impl ABCIApplication for CounterApp {
 }
 
 fn main() {
-    let listen_addr = "0.0.0.0:46658";
-    let connection_type = "socket";
+    use std::env;
+    use std::thread;
+
+    let args: Vec<String> = env::args().collect();
+    let connection_type: &str = &args[1];
+    let listen_addr: &str = &args[2];
 
     let app = CounterApp::new(true);
 
