@@ -1,7 +1,7 @@
 # Rust ABCI
 A rust implementation of the ABCI protocol for Tendermint.
 
-[![](https://tokei.rs/b1/github/tendermint/rust-abci)](https://github.com/tendermint/rust-abci)
+[![](https://tokei.rs/b1/github/tendermint/rust-abci)](https://github.com/tendermint/rust-abci) [![](https://docs.rs/rust-abci/badge.svg)](https://docs.rs/rust-abci/0.1.0/rust_abci/)
 
 ### Join the chat!
 [![](https://img.shields.io/badge/slack-join%20chat-brightgreen.svg)](http://forum.tendermint.com:3000/)
@@ -38,6 +38,12 @@ git clone git@github.com:tendermint/rust-abci.git
 Please have a look at the dummy or counter app inside `src/bin` to get a feeling for how this server works.
 
 To use this library to build your own ABCI apps in rust you have to include the following in your `Cargo.toml` file.
+```bash
+[dependencies]
+rust-abci = "0.1.0"
+```
+
+Or if you want to live on the edge then point directly towards our git repo.
 ```bash
 [dependencies]
 rust-abci = { git = "git@github.com:tendermint/rust-abci.git" }

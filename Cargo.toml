@@ -6,8 +6,9 @@ license = "MIT/Apache-2.0"
 description = "An implementation of the ABCI protocol used by Tendermint Core. Allows the building of ABCI apps in Rust."
 homepage = "https://tendermint.com/docs/guides/app-development"
 repository = "https://github.com/tendermint/rust-abci"
+documentation = "https://docs.rs/rust-abci/0.1.0/rust_abci/"
 keywords = ["abci", "tendermint", "cosmos", "blockchain", "proof-of-stake"]
-categories = ["blockchain", "encoding"]
+categories = ["encoding"]
 readme = "README.md"
 include = ["Cargo.toml", "src/**/*.rs", "README.md", "LICENSE-APACHE", "LICENSE-MIT"]
 
