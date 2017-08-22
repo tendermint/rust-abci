@@ -5,24 +5,22 @@ authors = ["Adrian Brink <adrian@brink-holdings.com>"]
 license = "MIT/Apache-2.0"
 description = "An implementation of the TSP protocol used by Tendermint Core. Allows the building of COSMOS apps in Rust."
 homepage = "https://tendermint.com/docs/guides/app-development"
-repository = "https://github.com/tendermint/tsp"
-documentation = "https://docs.rs/tsp/0.1.0/tsp/"
+repository = "https://github.com/tendermint/rust-tsp"
+documentation = "https://docs.rs/tsp/0.2.0/tsp/"
 keywords = ["tsp, abci", "tendermint", "cosmos", "blockchain", "proof-of-stake"]
 categories = ["encoding"]
 readme = "README.md"
 include = ["src/**/*", "Cargo.toml"]
 
 [dependencies]
+byteorder = "1.0"
 bytes = "0.4"
 futures = "0.1.14"
 futures-cpupool = "0.1.5"
 protobuf = "1.4.1"
-
-
-byteorder       = "1.0"
-tls-api         = "0.*"
-tokio-io = "0.1"
+tls-api = "0.*"
 tokio-core = "0.1"
+tokio-io = "0.1"
 tokio-proto = "0.1"
 tokio-service = "0.1"
 
