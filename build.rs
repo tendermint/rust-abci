@@ -5,5 +5,5 @@ fn main() {
         out_dir: "src",
         input: &["src/types.proto"],
         ..Default::default()
-    }).expect("Expected to find types.proto at src/types.proto.");
+    }).unwrap();
 }
