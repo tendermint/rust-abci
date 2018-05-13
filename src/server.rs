@@ -62,7 +62,7 @@ impl Decoder for TSPCodec {
             return Ok(None);
         }
 
-        let message = protobuf::core::parse_from_bytes(
+        let message = protobuf::parse_from_bytes(
             &buf[header_len .. (header_len + msg_nbytes)]);
         let _ = buf.split_to(header_len + msg_nbytes);
 
