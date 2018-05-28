@@ -1,6 +1,6 @@
 [package]
 name = "tsp"
-version = "0.2.6"
+version = "0.2.7"
 authors = ["Adrian Brink <adrian@brink-holdings.com>", "Jackson Lewis <st.japa6@gmail.com>"]
 license = "MIT/Apache-2.0"
 description = "An implementation of the TSP protocol used by Tendermint Core. Allows the building of COSMOS apps in Rust."
@@ -26,4 +26,4 @@ tokio-service = "0.1"
 
 [build-dependencies]
 protoc = "1.4.1"
-protobuf-codegen-pure = {git="https://github.com/stepancheg/rust-protobuf/tree/master/protobuf-codegen-pure", version="3.0"}
+protobuf-codegen-pure = "2.0.1"
