@@ -26,4 +26,4 @@ tokio-service = "0.1"
 
 [build-dependencies]
 protoc = "1.4.1"
-protobuf-codegen-pure = {git="https://github.com/stepancheg/rust-protobuf/tree/master/protobuf-codegen-pure" version="3.0"}
+protobuf-codegen-pure = {git="https://github.com/stepancheg/rust-protobuf/tree/master/protobuf-codegen-pure", version="3.0"}
