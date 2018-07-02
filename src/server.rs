@@ -25,6 +25,7 @@ use tokio_proto::pipeline::ServerProto;
 
 use tokio_service::Service;
 
+use integer_encoding::{VarInt, VarIntReader, VarIntWriter};
 
 pub fn new<A: Application + Send + Sync + 'static>(listen_addr: SocketAddr, app: &'static A) {
     let server = TcpServer::new(TSPProto, listen_addr);
@@ -36,37 +37,27 @@ pub fn new<A: Application + Send + Sync + 'static>(listen_addr: SocketAddr, app:
 // to request as defined in types.proto
 struct TSPCodec;
 
+const MAX_MESSAGE_SIZE:u64 = 104857600; // 100MB
+
 impl Decoder for TSPCodec {
     type Item = Request;
     type Error = io::Error;
 
     fn decode(&mut self, buf: &mut BytesMut) -> io::Result<Option<Request>> {
-        let avail = buf.len();
-        if avail == 0 {
+        let length = buf.len();
+
+        if length == 0 || length > MAX_MESSAGE_SIZE as usize {
             return Ok(None);
         }
 
-        let varint_len = buf[0] as usize;
-        if varint_len == 0 || varint_len > 8 {
-            return Err(io::Error::new(io::ErrorKind::InvalidData, "bogus packet length"));
-        }
-
-        if avail < varint_len+1 {
-            return Ok(None);
-        }
-
-        let msg_nbytes = BigEndian::read_uint(&buf[1 .. (varint_len + 1)], varint_len) as usize;
-        let header_len = 1 + varint_len;
-
-        if (avail - header_len) < msg_nbytes {
-            return Ok(None);
-        }
+        let varint:(i64,usize) = i64::decode_var(&buf[..]);
 
         let message = protobuf::parse_from_bytes(
-            &buf[header_len .. (header_len + msg_nbytes)]);
-        let _ = buf.split_to(header_len + msg_nbytes);
+            &buf[varint.1 .. (varint.0 as usize + varint.1)]);
 
-        return Ok(message.ok());
+        buf.split_to(length);
+
+        Ok(message.ok())
     }
 }
 
@@ -75,28 +66,22 @@ impl Encoder for TSPCodec {
     type Error = io::Error;
 
     fn encode(&mut self, msg: Response, buf: &mut BytesMut) -> io::Result<()> {
-        let msg_len = msg.compute_size();
-        let varint_len = cmp::max(8 - ((msg_len as u64).leading_zeros() >> 3), 1);
-        let total_msg_len = (1 + varint_len + msg_len) as usize;
+        let mut msg_to_vec = Vec::new();
+        msg.write_to_vec(&mut msg_to_vec).unwrap();
 
-        buf.reserve(total_msg_len);
+        let msg_len: i64 = msg_to_vec.len() as i64;
+        let varint = i64::encode_var_vec(msg_len);
 
         let mut writer = buf.writer();
 
-        let msg_len_bytes = {
-            let mut buf = [0u8; 8];
-            BigEndian::write_u64(&mut buf, msg_len as u64);
-            buf
-        };
-
-        writer.write_u8(varint_len as u8)?;
-        writer.write(&msg_len_bytes[(8 - varint_len as usize) ..])?;
-        msg.write_to_writer(&mut writer).unwrap();
+        writer.write(&varint).unwrap();
+        writer.write(&msg_to_vec).unwrap();
+        writer.write(b"\x04\x1a\0").unwrap();
 
         Ok(())
     }
-}
 
+}
 
 struct TSPProto;
 

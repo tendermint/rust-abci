@@ -1,6 +1,6 @@
 [package]
 name = "tsp"
-version = "0.2.8"
+version = "0.2.9"
 authors = ["Adrian Brink <adrian@brink-holdings.com>", "Jackson Lewis <st.japa6@gmail.com>"]
 license = "MIT/Apache-2.0"
 description = "An implementation of the TSP protocol used by Tendermint Core. Allows the building of COSMOS apps in Rust."
@@ -23,6 +23,7 @@ tokio-core = "0.1"
 tokio-io = "0.1"
 tokio-proto = "0.1"
 tokio-service = "0.1"
+integer-encoding = "1.0.5"
 
 [build-dependencies]
 protoc = "1.4.1"

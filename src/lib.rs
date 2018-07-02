@@ -9,6 +9,7 @@ extern crate tls_api;
 extern crate tokio_io;
 extern crate tokio_proto;
 extern crate tokio_service;
+extern crate integer_encoding;
 
 pub mod server;
 pub mod types;
