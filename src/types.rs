@@ -2048,6 +2048,9 @@ impl ::protobuf::reflect::ProtobufValue for RequestSetOption {
 #[derive(PartialEq,Clone,Default)]
 pub struct RequestInitChain {
     // message fields
+    pub time: i64,
+    pub chain_id: ::std::string::String,
+    pub consensus_params: ::protobuf::SingularPtrField<ConsensusParams>,
     pub validators: ::protobuf::RepeatedField<Validator>,
     pub app_state_bytes: ::std::vec::Vec<u8>,
     // special fields
@@ -2060,7 +2063,81 @@ impl RequestInitChain {
         ::std::default::Default::default()
     }
 
-    // repeated .types.Validator validators = 1;
+    // int64 time = 1;
+
+    pub fn clear_time(&mut self) {
+        self.time = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_time(&mut self, v: i64) {
+        self.time = v;
+    }
+
+    pub fn get_time(&self) -> i64 {
+        self.time
+    }
+
+    // string chain_id = 2;
+
+    pub fn clear_chain_id(&mut self) {
+        self.chain_id.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_chain_id(&mut self, v: ::std::string::String) {
+        self.chain_id = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_chain_id(&mut self) -> &mut ::std::string::String {
+        &mut self.chain_id
+    }
+
+    // Take field
+    pub fn take_chain_id(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.chain_id, ::std::string::String::new())
+    }
+
+    pub fn get_chain_id(&self) -> &str {
+        &self.chain_id
+    }
+
+    // .types.ConsensusParams consensus_params = 3;
+
+    pub fn clear_consensus_params(&mut self) {
+        self.consensus_params.clear();
+    }
+
+    pub fn has_consensus_params(&self) -> bool {
+        self.consensus_params.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_consensus_params(&mut self, v: ConsensusParams) {
+        self.consensus_params = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_consensus_params(&mut self) -> &mut ConsensusParams {
+        if self.consensus_params.is_none() {
+            self.consensus_params.set_default();
+        }
+        self.consensus_params.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_consensus_params(&mut self) -> ConsensusParams {
+        self.consensus_params.take().unwrap_or_else(|| ConsensusParams::new())
+    }
+
+    pub fn get_consensus_params(&self) -> &ConsensusParams {
+        self.consensus_params.as_ref().unwrap_or_else(|| ConsensusParams::default_instance())
+    }
+
+    // repeated .types.Validator validators = 4;
 
     pub fn clear_validators(&mut self) {
         self.validators.clear();
@@ -2085,7 +2162,7 @@ impl RequestInitChain {
         &self.validators
     }
 
-    // bytes app_state_bytes = 2;
+    // bytes app_state_bytes = 5;
 
     pub fn clear_app_state_bytes(&mut self) {
         self.app_state_bytes.clear();
@@ -2114,6 +2191,11 @@ impl RequestInitChain {
 
 impl ::protobuf::Message for RequestInitChain {
     fn is_initialized(&self) -> bool {
+        for v in &self.consensus_params {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
         for v in &self.validators {
             if !v.is_initialized() {
                 return false;
@@ -2127,9 +2209,22 @@ impl ::protobuf::Message for RequestInitChain {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
                 1 => {
-                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.validators)?;
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_int64()?;
+                    self.time = tmp;
                 },
                 2 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.chain_id)?;
+                },
+                3 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.consensus_params)?;
+                },
+                4 => {
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.validators)?;
+                },
+                5 => {
                     ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.app_state_bytes)?;
                 },
                 _ => {
@@ -2144,12 +2239,22 @@ impl ::protobuf::Message for RequestInitChain {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
+        if self.time != 0 {
+            my_size += ::protobuf::rt::value_size(1, self.time, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if !self.chain_id.is_empty() {
+            my_size += ::protobuf::rt::string_size(2, &self.chain_id);
+        }
+        if let Some(ref v) = self.consensus_params.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
         for value in &self.validators {
             let len = value.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         };
         if !self.app_state_bytes.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(2, &self.app_state_bytes);
+            my_size += ::protobuf::rt::bytes_size(5, &self.app_state_bytes);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -2157,13 +2262,24 @@ impl ::protobuf::Message for RequestInitChain {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if self.time != 0 {
+            os.write_int64(1, self.time)?;
+        }
+        if !self.chain_id.is_empty() {
+            os.write_string(2, &self.chain_id)?;
+        }
+        if let Some(ref v) = self.consensus_params.as_ref() {
+            os.write_tag(3, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
         for v in &self.validators {
-            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_tag(4, ::protobuf::wire_format::WireTypeLengthDelimited)?;
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
         };
         if !self.app_state_bytes.is_empty() {
-            os.write_bytes(2, &self.app_state_bytes)?;
+            os.write_bytes(5, &self.app_state_bytes)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -2207,6 +2323,21 @@ impl ::protobuf::Message for RequestInitChain {
         unsafe {
             descriptor.get(|| {
                 let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeInt64>(
+                    "time",
+                    |m: &RequestInitChain| { &m.time },
+                    |m: &mut RequestInitChain| { &mut m.time },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "chain_id",
+                    |m: &RequestInitChain| { &m.chain_id },
+                    |m: &mut RequestInitChain| { &mut m.chain_id },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<ConsensusParams>>(
+                    "consensus_params",
+                    |m: &RequestInitChain| { &m.consensus_params },
+                    |m: &mut RequestInitChain| { &mut m.consensus_params },
+                ));
                 fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<Validator>>(
                     "validators",
                     |m: &RequestInitChain| { &m.validators },
@@ -2239,6 +2370,9 @@ impl ::protobuf::Message for RequestInitChain {
 
 impl ::protobuf::Clear for RequestInitChain {
     fn clear(&mut self) {
+        self.clear_time();
+        self.clear_chain_id();
+        self.clear_consensus_params();
         self.clear_validators();
         self.clear_app_state_bytes();
         self.unknown_fields.clear();
@@ -2537,7 +2671,7 @@ pub struct RequestBeginBlock {
     // message fields
     pub hash: ::std::vec::Vec<u8>,
     pub header: ::protobuf::SingularPtrField<Header>,
-    pub absent_validators: ::std::vec::Vec<i32>,
+    pub validators: ::protobuf::RepeatedField<SigningValidator>,
     pub byzantine_validators: ::protobuf::RepeatedField<Evidence>,
     // special fields
     unknown_fields: ::protobuf::UnknownFields,
@@ -2608,29 +2742,29 @@ impl RequestBeginBlock {
         self.header.as_ref().unwrap_or_else(|| Header::default_instance())
     }
 
-    // repeated int32 absent_validators = 3;
+    // repeated .types.SigningValidator validators = 3;
 
-    pub fn clear_absent_validators(&mut self) {
-        self.absent_validators.clear();
+    pub fn clear_validators(&mut self) {
+        self.validators.clear();
     }
 
     // Param is passed by value, moved
-    pub fn set_absent_validators(&mut self, v: ::std::vec::Vec<i32>) {
-        self.absent_validators = v;
+    pub fn set_validators(&mut self, v: ::protobuf::RepeatedField<SigningValidator>) {
+        self.validators = v;
     }
 
     // Mutable pointer to the field.
-    pub fn mut_absent_validators(&mut self) -> &mut ::std::vec::Vec<i32> {
-        &mut self.absent_validators
+    pub fn mut_validators(&mut self) -> &mut ::protobuf::RepeatedField<SigningValidator> {
+        &mut self.validators
     }
 
     // Take field
-    pub fn take_absent_validators(&mut self) -> ::std::vec::Vec<i32> {
-        ::std::mem::replace(&mut self.absent_validators, ::std::vec::Vec::new())
+    pub fn take_validators(&mut self) -> ::protobuf::RepeatedField<SigningValidator> {
+        ::std::mem::replace(&mut self.validators, ::protobuf::RepeatedField::new())
     }
 
-    pub fn get_absent_validators(&self) -> &[i32] {
-        &self.absent_validators
+    pub fn get_validators(&self) -> &[SigningValidator] {
+        &self.validators
     }
 
     // repeated .types.Evidence byzantine_validators = 4;
@@ -2666,6 +2800,11 @@ impl ::protobuf::Message for RequestBeginBlock {
                 return false;
             }
         };
+        for v in &self.validators {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
         for v in &self.byzantine_validators {
             if !v.is_initialized() {
                 return false;
@@ -2685,7 +2824,7 @@ impl ::protobuf::Message for RequestBeginBlock {
                     ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.header)?;
                 },
                 3 => {
-                    ::protobuf::rt::read_repeated_int32_into(wire_type, is, &mut self.absent_validators)?;
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.validators)?;
                 },
                 4 => {
                     ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.byzantine_validators)?;
@@ -2709,8 +2848,9 @@ impl ::protobuf::Message for RequestBeginBlock {
             let len = v.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
-        for value in &self.absent_validators {
-            my_size += ::protobuf::rt::value_size(3, *value, ::protobuf::wire_format::WireTypeVarint);
+        for value in &self.validators {
+            let len = value.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         };
         for value in &self.byzantine_validators {
             let len = value.compute_size();
@@ -2730,8 +2870,10 @@ impl ::protobuf::Message for RequestBeginBlock {
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
         }
-        for v in &self.absent_validators {
-            os.write_int32(3, *v)?;
+        for v in &self.validators {
+            os.write_tag(3, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
         };
         for v in &self.byzantine_validators {
             os.write_tag(4, ::protobuf::wire_format::WireTypeLengthDelimited)?;
@@ -2790,10 +2932,10 @@ impl ::protobuf::Message for RequestBeginBlock {
                     |m: &RequestBeginBlock| { &m.header },
                     |m: &mut RequestBeginBlock| { &mut m.header },
                 ));
-                fields.push(::protobuf::reflect::accessor::make_vec_accessor::<_, ::protobuf::types::ProtobufTypeInt32>(
-                    "absent_validators",
-                    |m: &RequestBeginBlock| { &m.absent_validators },
-                    |m: &mut RequestBeginBlock| { &mut m.absent_validators },
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<SigningValidator>>(
+                    "validators",
+                    |m: &RequestBeginBlock| { &m.validators },
+                    |m: &mut RequestBeginBlock| { &mut m.validators },
                 ));
                 fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<Evidence>>(
                     "byzantine_validators",
@@ -2824,7 +2966,7 @@ impl ::protobuf::Clear for RequestBeginBlock {
     fn clear(&mut self) {
         self.clear_hash();
         self.clear_header();
-        self.clear_absent_validators();
+        self.clear_validators();
         self.clear_byzantine_validators();
         self.unknown_fields.clear();
     }
@@ -5460,6 +5602,9 @@ impl ::protobuf::reflect::ProtobufValue for ResponseSetOption {
 
 #[derive(PartialEq,Clone,Default)]
 pub struct ResponseInitChain {
+    // message fields
+    pub consensus_params: ::protobuf::SingularPtrField<ConsensusParams>,
+    pub validators: ::protobuf::RepeatedField<Validator>,
     // special fields
     unknown_fields: ::protobuf::UnknownFields,
     cached_size: ::protobuf::CachedSize,
@@ -5469,10 +5614,78 @@ impl ResponseInitChain {
     pub fn new() -> ResponseInitChain {
         ::std::default::Default::default()
     }
+
+    // .types.ConsensusParams consensus_params = 1;
+
+    pub fn clear_consensus_params(&mut self) {
+        self.consensus_params.clear();
+    }
+
+    pub fn has_consensus_params(&self) -> bool {
+        self.consensus_params.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_consensus_params(&mut self, v: ConsensusParams) {
+        self.consensus_params = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_consensus_params(&mut self) -> &mut ConsensusParams {
+        if self.consensus_params.is_none() {
+            self.consensus_params.set_default();
+        }
+        self.consensus_params.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_consensus_params(&mut self) -> ConsensusParams {
+        self.consensus_params.take().unwrap_or_else(|| ConsensusParams::new())
+    }
+
+    pub fn get_consensus_params(&self) -> &ConsensusParams {
+        self.consensus_params.as_ref().unwrap_or_else(|| ConsensusParams::default_instance())
+    }
+
+    // repeated .types.Validator validators = 2;
+
+    pub fn clear_validators(&mut self) {
+        self.validators.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_validators(&mut self, v: ::protobuf::RepeatedField<Validator>) {
+        self.validators = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_validators(&mut self) -> &mut ::protobuf::RepeatedField<Validator> {
+        &mut self.validators
+    }
+
+    // Take field
+    pub fn take_validators(&mut self) -> ::protobuf::RepeatedField<Validator> {
+        ::std::mem::replace(&mut self.validators, ::protobuf::RepeatedField::new())
+    }
+
+    pub fn get_validators(&self) -> &[Validator] {
+        &self.validators
+    }
 }
 
 impl ::protobuf::Message for ResponseInitChain {
     fn is_initialized(&self) -> bool {
+        for v in &self.consensus_params {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        for v in &self.validators {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
         true
     }
 
@@ -5480,6 +5693,12 @@ impl ::protobuf::Message for ResponseInitChain {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.consensus_params)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.validators)?;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -5492,12 +5711,30 @@ impl ::protobuf::Message for ResponseInitChain {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
+        if let Some(ref v) = self.consensus_params.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        for value in &self.validators {
+            let len = value.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        };
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.consensus_params.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        for v in &self.validators {
+            os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        };
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
     }
@@ -5539,7 +5776,17 @@ impl ::protobuf::Message for ResponseInitChain {
         };
         unsafe {
             descriptor.get(|| {
-                let fields = ::std::vec::Vec::new();
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<ConsensusParams>>(
+                    "consensus_params",
+                    |m: &ResponseInitChain| { &m.consensus_params },
+                    |m: &mut ResponseInitChain| { &mut m.consensus_params },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<Validator>>(
+                    "validators",
+                    |m: &ResponseInitChain| { &m.validators },
+                    |m: &mut ResponseInitChain| { &mut m.validators },
+                ));
                 ::protobuf::reflect::MessageDescriptor::new::<ResponseInitChain>(
                     "ResponseInitChain",
                     fields,
@@ -5562,6 +5809,8 @@ impl ::protobuf::Message for ResponseInitChain {
 
 impl ::protobuf::Clear for ResponseInitChain {
     fn clear(&mut self) {
+        self.clear_consensus_params();
+        self.clear_validators();
         self.unknown_fields.clear();
     }
 }
@@ -6016,6 +6265,8 @@ impl ::protobuf::reflect::ProtobufValue for ResponseQuery {
 
 #[derive(PartialEq,Clone,Default)]
 pub struct ResponseBeginBlock {
+    // message fields
+    pub tags: ::protobuf::RepeatedField<KVPair>,
     // special fields
     unknown_fields: ::protobuf::UnknownFields,
     cached_size: ::protobuf::CachedSize,
@@ -6025,10 +6276,40 @@ impl ResponseBeginBlock {
     pub fn new() -> ResponseBeginBlock {
         ::std::default::Default::default()
     }
+
+    // repeated .types.KVPair tags = 1;
+
+    pub fn clear_tags(&mut self) {
+        self.tags.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_tags(&mut self, v: ::protobuf::RepeatedField<KVPair>) {
+        self.tags = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_tags(&mut self) -> &mut ::protobuf::RepeatedField<KVPair> {
+        &mut self.tags
+    }
+
+    // Take field
+    pub fn take_tags(&mut self) -> ::protobuf::RepeatedField<KVPair> {
+        ::std::mem::replace(&mut self.tags, ::protobuf::RepeatedField::new())
+    }
+
+    pub fn get_tags(&self) -> &[KVPair] {
+        &self.tags
+    }
 }
 
 impl ::protobuf::Message for ResponseBeginBlock {
     fn is_initialized(&self) -> bool {
+        for v in &self.tags {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
         true
     }
 
@@ -6036,6 +6317,9 @@ impl ::protobuf::Message for ResponseBeginBlock {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
+                1 => {
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.tags)?;
+                },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
                 },
@@ -6048,12 +6332,21 @@ impl ::protobuf::Message for ResponseBeginBlock {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
+        for value in &self.tags {
+            let len = value.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        };
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        for v in &self.tags {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        };
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
     }
@@ -6095,7 +6388,12 @@ impl ::protobuf::Message for ResponseBeginBlock {
         };
         unsafe {
             descriptor.get(|| {
-                let fields = ::std::vec::Vec::new();
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<KVPair>>(
+                    "tags",
+                    |m: &ResponseBeginBlock| { &m.tags },
+                    |m: &mut ResponseBeginBlock| { &mut m.tags },
+                ));
                 ::protobuf::reflect::MessageDescriptor::new::<ResponseBeginBlock>(
                     "ResponseBeginBlock",
                     fields,
@@ -6118,6 +6416,7 @@ impl ::protobuf::Message for ResponseBeginBlock {
 
 impl ::protobuf::Clear for ResponseBeginBlock {
     fn clear(&mut self) {
+        self.clear_tags();
         self.unknown_fields.clear();
     }
 }
@@ -7055,6 +7354,7 @@ pub struct ResponseEndBlock {
     // message fields
     pub validator_updates: ::protobuf::RepeatedField<Validator>,
     pub consensus_param_updates: ::protobuf::SingularPtrField<ConsensusParams>,
+    pub tags: ::protobuf::RepeatedField<KVPair>,
     // special fields
     unknown_fields: ::protobuf::UnknownFields,
     cached_size: ::protobuf::CachedSize,
@@ -7122,6 +7422,31 @@ impl ResponseEndBlock {
     pub fn get_consensus_param_updates(&self) -> &ConsensusParams {
         self.consensus_param_updates.as_ref().unwrap_or_else(|| ConsensusParams::default_instance())
     }
+
+    // repeated .types.KVPair tags = 3;
+
+    pub fn clear_tags(&mut self) {
+        self.tags.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_tags(&mut self, v: ::protobuf::RepeatedField<KVPair>) {
+        self.tags = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_tags(&mut self) -> &mut ::protobuf::RepeatedField<KVPair> {
+        &mut self.tags
+    }
+
+    // Take field
+    pub fn take_tags(&mut self) -> ::protobuf::RepeatedField<KVPair> {
+        ::std::mem::replace(&mut self.tags, ::protobuf::RepeatedField::new())
+    }
+
+    pub fn get_tags(&self) -> &[KVPair] {
+        &self.tags
+    }
 }
 
 impl ::protobuf::Message for ResponseEndBlock {
@@ -7132,6 +7457,11 @@ impl ::protobuf::Message for ResponseEndBlock {
             }
         };
         for v in &self.consensus_param_updates {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        for v in &self.tags {
             if !v.is_initialized() {
                 return false;
             }
@@ -7148,6 +7478,9 @@ impl ::protobuf::Message for ResponseEndBlock {
                 },
                 2 => {
                     ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.consensus_param_updates)?;
+                },
+                3 => {
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.tags)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -7169,6 +7502,10 @@ impl ::protobuf::Message for ResponseEndBlock {
             let len = v.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
+        for value in &self.tags {
+            let len = value.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        };
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
@@ -7185,6 +7522,11 @@ impl ::protobuf::Message for ResponseEndBlock {
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
         }
+        for v in &self.tags {
+            os.write_tag(3, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        };
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
     }
@@ -7237,6 +7579,11 @@ impl ::protobuf::Message for ResponseEndBlock {
                     |m: &ResponseEndBlock| { &m.consensus_param_updates },
                     |m: &mut ResponseEndBlock| { &mut m.consensus_param_updates },
                 ));
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<KVPair>>(
+                    "tags",
+                    |m: &ResponseEndBlock| { &m.tags },
+                    |m: &mut ResponseEndBlock| { &mut m.tags },
+                ));
                 ::protobuf::reflect::MessageDescriptor::new::<ResponseEndBlock>(
                     "ResponseEndBlock",
                     fields,
@@ -7261,6 +7608,7 @@ impl ::protobuf::Clear for ResponseEndBlock {
     fn clear(&mut self) {
         self.clear_validator_updates();
         self.clear_consensus_param_updates();
+        self.clear_tags();
         self.unknown_fields.clear();
     }
 }
@@ -8312,11 +8660,11 @@ pub struct Header {
     pub height: i64,
     pub time: i64,
     pub num_txs: i32,
-    pub last_block_id: ::protobuf::SingularPtrField<BlockID>,
-    pub last_commit_hash: ::std::vec::Vec<u8>,
-    pub data_hash: ::std::vec::Vec<u8>,
+    pub total_txs: i64,
+    pub last_block_hash: ::std::vec::Vec<u8>,
     pub validators_hash: ::std::vec::Vec<u8>,
     pub app_hash: ::std::vec::Vec<u8>,
+    pub proposer: ::protobuf::SingularPtrField<Validator>,
     // special fields
     unknown_fields: ::protobuf::UnknownFields,
     cached_size: ::protobuf::CachedSize,
@@ -8398,92 +8746,48 @@ impl Header {
         self.num_txs
     }
 
-    // .types.BlockID last_block_id = 5;
+    // int64 total_txs = 5;
 
-    pub fn clear_last_block_id(&mut self) {
-        self.last_block_id.clear();
-    }
-
-    pub fn has_last_block_id(&self) -> bool {
-        self.last_block_id.is_some()
+    pub fn clear_total_txs(&mut self) {
+        self.total_txs = 0;
     }
 
     // Param is passed by value, moved
-    pub fn set_last_block_id(&mut self, v: BlockID) {
-        self.last_block_id = ::protobuf::SingularPtrField::some(v);
+    pub fn set_total_txs(&mut self, v: i64) {
+        self.total_txs = v;
+    }
+
+    pub fn get_total_txs(&self) -> i64 {
+        self.total_txs
+    }
+
+    // bytes last_block_hash = 6;
+
+    pub fn clear_last_block_hash(&mut self) {
+        self.last_block_hash.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_last_block_hash(&mut self, v: ::std::vec::Vec<u8>) {
+        self.last_block_hash = v;
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_last_block_id(&mut self) -> &mut BlockID {
-        if self.last_block_id.is_none() {
-            self.last_block_id.set_default();
-        }
-        self.last_block_id.as_mut().unwrap()
+    pub fn mut_last_block_hash(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.last_block_hash
     }
 
     // Take field
-    pub fn take_last_block_id(&mut self) -> BlockID {
-        self.last_block_id.take().unwrap_or_else(|| BlockID::new())
+    pub fn take_last_block_hash(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.last_block_hash, ::std::vec::Vec::new())
     }
 
-    pub fn get_last_block_id(&self) -> &BlockID {
-        self.last_block_id.as_ref().unwrap_or_else(|| BlockID::default_instance())
+    pub fn get_last_block_hash(&self) -> &[u8] {
+        &self.last_block_hash
     }
 
-    // bytes last_commit_hash = 6;
-
-    pub fn clear_last_commit_hash(&mut self) {
-        self.last_commit_hash.clear();
-    }
-
-    // Param is passed by value, moved
-    pub fn set_last_commit_hash(&mut self, v: ::std::vec::Vec<u8>) {
-        self.last_commit_hash = v;
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_last_commit_hash(&mut self) -> &mut ::std::vec::Vec<u8> {
-        &mut self.last_commit_hash
-    }
-
-    // Take field
-    pub fn take_last_commit_hash(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.last_commit_hash, ::std::vec::Vec::new())
-    }
-
-    pub fn get_last_commit_hash(&self) -> &[u8] {
-        &self.last_commit_hash
-    }
-
-    // bytes data_hash = 7;
-
-    pub fn clear_data_hash(&mut self) {
-        self.data_hash.clear();
-    }
-
-    // Param is passed by value, moved
-    pub fn set_data_hash(&mut self, v: ::std::vec::Vec<u8>) {
-        self.data_hash = v;
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_data_hash(&mut self) -> &mut ::std::vec::Vec<u8> {
-        &mut self.data_hash
-    }
-
-    // Take field
-    pub fn take_data_hash(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.data_hash, ::std::vec::Vec::new())
-    }
-
-    pub fn get_data_hash(&self) -> &[u8] {
-        &self.data_hash
-    }
-
-    // bytes validators_hash = 8;
+    // bytes validators_hash = 7;
 
     pub fn clear_validators_hash(&mut self) {
         self.validators_hash.clear();
@@ -8509,7 +8813,7 @@ impl Header {
         &self.validators_hash
     }
 
-    // bytes app_hash = 9;
+    // bytes app_hash = 8;
 
     pub fn clear_app_hash(&mut self) {
         self.app_hash.clear();
@@ -8534,11 +8838,44 @@ impl Header {
     pub fn get_app_hash(&self) -> &[u8] {
         &self.app_hash
     }
+
+    // .types.Validator proposer = 9;
+
+    pub fn clear_proposer(&mut self) {
+        self.proposer.clear();
+    }
+
+    pub fn has_proposer(&self) -> bool {
+        self.proposer.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_proposer(&mut self, v: Validator) {
+        self.proposer = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_proposer(&mut self) -> &mut Validator {
+        if self.proposer.is_none() {
+            self.proposer.set_default();
+        }
+        self.proposer.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_proposer(&mut self) -> Validator {
+        self.proposer.take().unwrap_or_else(|| Validator::new())
+    }
+
+    pub fn get_proposer(&self) -> &Validator {
+        self.proposer.as_ref().unwrap_or_else(|| Validator::default_instance())
+    }
 }
 
 impl ::protobuf::Message for Header {
     fn is_initialized(&self) -> bool {
-        for v in &self.last_block_id {
+        for v in &self.proposer {
             if !v.is_initialized() {
                 return false;
             }
@@ -8575,19 +8912,23 @@ impl ::protobuf::Message for Header {
                     self.num_txs = tmp;
                 },
                 5 => {
-                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.last_block_id)?;
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_int64()?;
+                    self.total_txs = tmp;
                 },
                 6 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.last_commit_hash)?;
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.last_block_hash)?;
                 },
                 7 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.data_hash)?;
-                },
-                8 => {
                     ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.validators_hash)?;
                 },
-                9 => {
+                8 => {
                     ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.app_hash)?;
+                },
+                9 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.proposer)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -8613,21 +8954,21 @@ impl ::protobuf::Message for Header {
         if self.num_txs != 0 {
             my_size += ::protobuf::rt::value_size(4, self.num_txs, ::protobuf::wire_format::WireTypeVarint);
         }
-        if let Some(ref v) = self.last_block_id.as_ref() {
-            let len = v.compute_size();
-            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        if self.total_txs != 0 {
+            my_size += ::protobuf::rt::value_size(5, self.total_txs, ::protobuf::wire_format::WireTypeVarint);
         }
-        if !self.last_commit_hash.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(6, &self.last_commit_hash);
-        }
-        if !self.data_hash.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(7, &self.data_hash);
+        if !self.last_block_hash.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(6, &self.last_block_hash);
         }
         if !self.validators_hash.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(8, &self.validators_hash);
+            my_size += ::protobuf::rt::bytes_size(7, &self.validators_hash);
         }
         if !self.app_hash.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(9, &self.app_hash);
+            my_size += ::protobuf::rt::bytes_size(8, &self.app_hash);
+        }
+        if let Some(ref v) = self.proposer.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -8647,22 +8988,22 @@ impl ::protobuf::Message for Header {
         if self.num_txs != 0 {
             os.write_int32(4, self.num_txs)?;
         }
-        if let Some(ref v) = self.last_block_id.as_ref() {
-            os.write_tag(5, ::protobuf::wire_format::WireTypeLengthDelimited)?;
-            os.write_raw_varint32(v.get_cached_size())?;
-            v.write_to_with_cached_sizes(os)?;
+        if self.total_txs != 0 {
+            os.write_int64(5, self.total_txs)?;
         }
-        if !self.last_commit_hash.is_empty() {
-            os.write_bytes(6, &self.last_commit_hash)?;
-        }
-        if !self.data_hash.is_empty() {
-            os.write_bytes(7, &self.data_hash)?;
+        if !self.last_block_hash.is_empty() {
+            os.write_bytes(6, &self.last_block_hash)?;
         }
         if !self.validators_hash.is_empty() {
-            os.write_bytes(8, &self.validators_hash)?;
+            os.write_bytes(7, &self.validators_hash)?;
         }
         if !self.app_hash.is_empty() {
-            os.write_bytes(9, &self.app_hash)?;
+            os.write_bytes(8, &self.app_hash)?;
+        }
+        if let Some(ref v) = self.proposer.as_ref() {
+            os.write_tag(9, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -8726,20 +9067,15 @@ impl ::protobuf::Message for Header {
                     |m: &Header| { &m.num_txs },
                     |m: &mut Header| { &mut m.num_txs },
                 ));
-                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<BlockID>>(
-                    "last_block_id",
-                    |m: &Header| { &m.last_block_id },
-                    |m: &mut Header| { &mut m.last_block_id },
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeInt64>(
+                    "total_txs",
+                    |m: &Header| { &m.total_txs },
+                    |m: &mut Header| { &mut m.total_txs },
                 ));
                 fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                    "last_commit_hash",
-                    |m: &Header| { &m.last_commit_hash },
-                    |m: &mut Header| { &mut m.last_commit_hash },
-                ));
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                    "data_hash",
-                    |m: &Header| { &m.data_hash },
-                    |m: &mut Header| { &mut m.data_hash },
+                    "last_block_hash",
+                    |m: &Header| { &m.last_block_hash },
+                    |m: &mut Header| { &mut m.last_block_hash },
                 ));
                 fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
                     "validators_hash",
@@ -8750,6 +9086,11 @@ impl ::protobuf::Message for Header {
                     "app_hash",
                     |m: &Header| { &m.app_hash },
                     |m: &mut Header| { &mut m.app_hash },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<Validator>>(
+                    "proposer",
+                    |m: &Header| { &m.proposer },
+                    |m: &mut Header| { &mut m.proposer },
                 ));
                 ::protobuf::reflect::MessageDescriptor::new::<Header>(
                     "Header",
@@ -8777,11 +9118,11 @@ impl ::protobuf::Clear for Header {
         self.clear_height();
         self.clear_time();
         self.clear_num_txs();
-        self.clear_last_block_id();
-        self.clear_last_commit_hash();
-        self.clear_data_hash();
+        self.clear_total_txs();
+        self.clear_last_block_hash();
         self.clear_validators_hash();
         self.clear_app_hash();
+        self.clear_proposer();
         self.unknown_fields.clear();
     }
 }
@@ -8799,427 +9140,10 @@ impl ::protobuf::reflect::ProtobufValue for Header {
 }
 
 #[derive(PartialEq,Clone,Default)]
-pub struct BlockID {
-    // message fields
-    pub hash: ::std::vec::Vec<u8>,
-    pub parts: ::protobuf::SingularPtrField<PartSetHeader>,
-    // special fields
-    unknown_fields: ::protobuf::UnknownFields,
-    cached_size: ::protobuf::CachedSize,
-}
-
-impl BlockID {
-    pub fn new() -> BlockID {
-        ::std::default::Default::default()
-    }
-
-    // bytes hash = 1;
-
-    pub fn clear_hash(&mut self) {
-        self.hash.clear();
-    }
-
-    // Param is passed by value, moved
-    pub fn set_hash(&mut self, v: ::std::vec::Vec<u8>) {
-        self.hash = v;
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_hash(&mut self) -> &mut ::std::vec::Vec<u8> {
-        &mut self.hash
-    }
-
-    // Take field
-    pub fn take_hash(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.hash, ::std::vec::Vec::new())
-    }
-
-    pub fn get_hash(&self) -> &[u8] {
-        &self.hash
-    }
-
-    // .types.PartSetHeader parts = 2;
-
-    pub fn clear_parts(&mut self) {
-        self.parts.clear();
-    }
-
-    pub fn has_parts(&self) -> bool {
-        self.parts.is_some()
-    }
-
-    // Param is passed by value, moved
-    pub fn set_parts(&mut self, v: PartSetHeader) {
-        self.parts = ::protobuf::SingularPtrField::some(v);
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_parts(&mut self) -> &mut PartSetHeader {
-        if self.parts.is_none() {
-            self.parts.set_default();
-        }
-        self.parts.as_mut().unwrap()
-    }
-
-    // Take field
-    pub fn take_parts(&mut self) -> PartSetHeader {
-        self.parts.take().unwrap_or_else(|| PartSetHeader::new())
-    }
-
-    pub fn get_parts(&self) -> &PartSetHeader {
-        self.parts.as_ref().unwrap_or_else(|| PartSetHeader::default_instance())
-    }
-}
-
-impl ::protobuf::Message for BlockID {
-    fn is_initialized(&self) -> bool {
-        for v in &self.parts {
-            if !v.is_initialized() {
-                return false;
-            }
-        };
-        true
-    }
-
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
-        while !is.eof()? {
-            let (field_number, wire_type) = is.read_tag_unpack()?;
-            match field_number {
-                1 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.hash)?;
-                },
-                2 => {
-                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.parts)?;
-                },
-                _ => {
-                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
-                },
-            };
-        }
-        ::std::result::Result::Ok(())
-    }
-
-    // Compute sizes of nested messages
-    #[allow(unused_variables)]
-    fn compute_size(&self) -> u32 {
-        let mut my_size = 0;
-        if !self.hash.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(1, &self.hash);
-        }
-        if let Some(ref v) = self.parts.as_ref() {
-            let len = v.compute_size();
-            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
-        }
-        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
-        self.cached_size.set(my_size);
-        my_size
-    }
-
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
-        if !self.hash.is_empty() {
-            os.write_bytes(1, &self.hash)?;
-        }
-        if let Some(ref v) = self.parts.as_ref() {
-            os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
-            os.write_raw_varint32(v.get_cached_size())?;
-            v.write_to_with_cached_sizes(os)?;
-        }
-        os.write_unknown_fields(self.get_unknown_fields())?;
-        ::std::result::Result::Ok(())
-    }
-
-    fn get_cached_size(&self) -> u32 {
-        self.cached_size.get()
-    }
-
-    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
-        &self.unknown_fields
-    }
-
-    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
-        &mut self.unknown_fields
-    }
-
-    fn as_any(&self) -> &::std::any::Any {
-        self as &::std::any::Any
-    }
-    fn as_any_mut(&mut self) -> &mut ::std::any::Any {
-        self as &mut ::std::any::Any
-    }
-    fn into_any(self: Box<Self>) -> ::std::boxed::Box<::std::any::Any> {
-        self
-    }
-
-    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
-        Self::descriptor_static()
-    }
-
-    fn new() -> BlockID {
-        BlockID::new()
-    }
-
-    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
-        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
-            lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
-        };
-        unsafe {
-            descriptor.get(|| {
-                let mut fields = ::std::vec::Vec::new();
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                    "hash",
-                    |m: &BlockID| { &m.hash },
-                    |m: &mut BlockID| { &mut m.hash },
-                ));
-                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<PartSetHeader>>(
-                    "parts",
-                    |m: &BlockID| { &m.parts },
-                    |m: &mut BlockID| { &mut m.parts },
-                ));
-                ::protobuf::reflect::MessageDescriptor::new::<BlockID>(
-                    "BlockID",
-                    fields,
-                    file_descriptor_proto()
-                )
-            })
-        }
-    }
-
-    fn default_instance() -> &'static BlockID {
-        static mut instance: ::protobuf::lazy::Lazy<BlockID> = ::protobuf::lazy::Lazy {
-            lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const BlockID,
-        };
-        unsafe {
-            instance.get(BlockID::new)
-        }
-    }
-}
-
-impl ::protobuf::Clear for BlockID {
-    fn clear(&mut self) {
-        self.clear_hash();
-        self.clear_parts();
-        self.unknown_fields.clear();
-    }
-}
-
-impl ::std::fmt::Debug for BlockID {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        ::protobuf::text_format::fmt(self, f)
-    }
-}
-
-impl ::protobuf::reflect::ProtobufValue for BlockID {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
-        ::protobuf::reflect::ProtobufValueRef::Message(self)
-    }
-}
-
-#[derive(PartialEq,Clone,Default)]
-pub struct PartSetHeader {
-    // message fields
-    pub total: i32,
-    pub hash: ::std::vec::Vec<u8>,
-    // special fields
-    unknown_fields: ::protobuf::UnknownFields,
-    cached_size: ::protobuf::CachedSize,
-}
-
-impl PartSetHeader {
-    pub fn new() -> PartSetHeader {
-        ::std::default::Default::default()
-    }
-
-    // int32 total = 1;
-
-    pub fn clear_total(&mut self) {
-        self.total = 0;
-    }
-
-    // Param is passed by value, moved
-    pub fn set_total(&mut self, v: i32) {
-        self.total = v;
-    }
-
-    pub fn get_total(&self) -> i32 {
-        self.total
-    }
-
-    // bytes hash = 2;
-
-    pub fn clear_hash(&mut self) {
-        self.hash.clear();
-    }
-
-    // Param is passed by value, moved
-    pub fn set_hash(&mut self, v: ::std::vec::Vec<u8>) {
-        self.hash = v;
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_hash(&mut self) -> &mut ::std::vec::Vec<u8> {
-        &mut self.hash
-    }
-
-    // Take field
-    pub fn take_hash(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.hash, ::std::vec::Vec::new())
-    }
-
-    pub fn get_hash(&self) -> &[u8] {
-        &self.hash
-    }
-}
-
-impl ::protobuf::Message for PartSetHeader {
-    fn is_initialized(&self) -> bool {
-        true
-    }
-
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
-        while !is.eof()? {
-            let (field_number, wire_type) = is.read_tag_unpack()?;
-            match field_number {
-                1 => {
-                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
-                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
-                    }
-                    let tmp = is.read_int32()?;
-                    self.total = tmp;
-                },
-                2 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.hash)?;
-                },
-                _ => {
-                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
-                },
-            };
-        }
-        ::std::result::Result::Ok(())
-    }
-
-    // Compute sizes of nested messages
-    #[allow(unused_variables)]
-    fn compute_size(&self) -> u32 {
-        let mut my_size = 0;
-        if self.total != 0 {
-            my_size += ::protobuf::rt::value_size(1, self.total, ::protobuf::wire_format::WireTypeVarint);
-        }
-        if !self.hash.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(2, &self.hash);
-        }
-        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
-        self.cached_size.set(my_size);
-        my_size
-    }
-
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
-        if self.total != 0 {
-            os.write_int32(1, self.total)?;
-        }
-        if !self.hash.is_empty() {
-            os.write_bytes(2, &self.hash)?;
-        }
-        os.write_unknown_fields(self.get_unknown_fields())?;
-        ::std::result::Result::Ok(())
-    }
-
-    fn get_cached_size(&self) -> u32 {
-        self.cached_size.get()
-    }
-
-    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
-        &self.unknown_fields
-    }
-
-    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
-        &mut self.unknown_fields
-    }
-
-    fn as_any(&self) -> &::std::any::Any {
-        self as &::std::any::Any
-    }
-    fn as_any_mut(&mut self) -> &mut ::std::any::Any {
-        self as &mut ::std::any::Any
-    }
-    fn into_any(self: Box<Self>) -> ::std::boxed::Box<::std::any::Any> {
-        self
-    }
-
-    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
-        Self::descriptor_static()
-    }
-
-    fn new() -> PartSetHeader {
-        PartSetHeader::new()
-    }
-
-    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
-        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
-            lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
-        };
-        unsafe {
-            descriptor.get(|| {
-                let mut fields = ::std::vec::Vec::new();
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeInt32>(
-                    "total",
-                    |m: &PartSetHeader| { &m.total },
-                    |m: &mut PartSetHeader| { &mut m.total },
-                ));
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                    "hash",
-                    |m: &PartSetHeader| { &m.hash },
-                    |m: &mut PartSetHeader| { &mut m.hash },
-                ));
-                ::protobuf::reflect::MessageDescriptor::new::<PartSetHeader>(
-                    "PartSetHeader",
-                    fields,
-                    file_descriptor_proto()
-                )
-            })
-        }
-    }
-
-    fn default_instance() -> &'static PartSetHeader {
-        static mut instance: ::protobuf::lazy::Lazy<PartSetHeader> = ::protobuf::lazy::Lazy {
-            lock: ::protobuf::lazy::ONCE_INIT,
-            ptr: 0 as *const PartSetHeader,
-        };
-        unsafe {
-            instance.get(PartSetHeader::new)
-        }
-    }
-}
-
-impl ::protobuf::Clear for PartSetHeader {
-    fn clear(&mut self) {
-        self.clear_total();
-        self.clear_hash();
-        self.unknown_fields.clear();
-    }
-}
-
-impl ::std::fmt::Debug for PartSetHeader {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        ::protobuf::text_format::fmt(self, f)
-    }
-}
-
-impl ::protobuf::reflect::ProtobufValue for PartSetHeader {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
-        ::protobuf::reflect::ProtobufValueRef::Message(self)
-    }
-}
-
-#[derive(PartialEq,Clone,Default)]
 pub struct Validator {
     // message fields
-    pub pub_key: ::std::vec::Vec<u8>,
+    pub address: ::std::vec::Vec<u8>,
+    pub pub_key: ::protobuf::SingularPtrField<PubKey>,
     pub power: i64,
     // special fields
     unknown_fields: ::protobuf::UnknownFields,
@@ -9231,33 +9155,66 @@ impl Validator {
         ::std::default::Default::default()
     }
 
-    // bytes pub_key = 1;
+    // bytes address = 1;
+
+    pub fn clear_address(&mut self) {
+        self.address.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_address(&mut self, v: ::std::vec::Vec<u8>) {
+        self.address = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_address(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.address
+    }
+
+    // Take field
+    pub fn take_address(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.address, ::std::vec::Vec::new())
+    }
+
+    pub fn get_address(&self) -> &[u8] {
+        &self.address
+    }
+
+    // .types.PubKey pub_key = 2;
 
     pub fn clear_pub_key(&mut self) {
         self.pub_key.clear();
     }
 
+    pub fn has_pub_key(&self) -> bool {
+        self.pub_key.is_some()
+    }
+
     // Param is passed by value, moved
-    pub fn set_pub_key(&mut self, v: ::std::vec::Vec<u8>) {
-        self.pub_key = v;
+    pub fn set_pub_key(&mut self, v: PubKey) {
+        self.pub_key = ::protobuf::SingularPtrField::some(v);
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_pub_key(&mut self) -> &mut ::std::vec::Vec<u8> {
-        &mut self.pub_key
+    pub fn mut_pub_key(&mut self) -> &mut PubKey {
+        if self.pub_key.is_none() {
+            self.pub_key.set_default();
+        }
+        self.pub_key.as_mut().unwrap()
     }
 
     // Take field
-    pub fn take_pub_key(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.pub_key, ::std::vec::Vec::new())
+    pub fn take_pub_key(&mut self) -> PubKey {
+        self.pub_key.take().unwrap_or_else(|| PubKey::new())
     }
 
-    pub fn get_pub_key(&self) -> &[u8] {
-        &self.pub_key
+    pub fn get_pub_key(&self) -> &PubKey {
+        self.pub_key.as_ref().unwrap_or_else(|| PubKey::default_instance())
     }
 
-    // int64 power = 2;
+    // int64 power = 3;
 
     pub fn clear_power(&mut self) {
         self.power = 0;
@@ -9275,6 +9232,11 @@ impl Validator {
 
 impl ::protobuf::Message for Validator {
     fn is_initialized(&self) -> bool {
+        for v in &self.pub_key {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
         true
     }
 
@@ -9283,9 +9245,12 @@ impl ::protobuf::Message for Validator {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
                 1 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.pub_key)?;
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.address)?;
                 },
                 2 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.pub_key)?;
+                },
+                3 => {
                     if wire_type != ::protobuf::wire_format::WireTypeVarint {
                         return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
                     }
@@ -9304,11 +9269,15 @@ impl ::protobuf::Message for Validator {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if !self.pub_key.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(1, &self.pub_key);
+        if !self.address.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(1, &self.address);
+        }
+        if let Some(ref v) = self.pub_key.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
         if self.power != 0 {
-            my_size += ::protobuf::rt::value_size(2, self.power, ::protobuf::wire_format::WireTypeVarint);
+            my_size += ::protobuf::rt::value_size(3, self.power, ::protobuf::wire_format::WireTypeVarint);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -9316,11 +9285,16 @@ impl ::protobuf::Message for Validator {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
-        if !self.pub_key.is_empty() {
-            os.write_bytes(1, &self.pub_key)?;
+        if !self.address.is_empty() {
+            os.write_bytes(1, &self.address)?;
+        }
+        if let Some(ref v) = self.pub_key.as_ref() {
+            os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
         }
         if self.power != 0 {
-            os.write_int64(2, self.power)?;
+            os.write_int64(3, self.power)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -9365,6 +9339,11 @@ impl ::protobuf::Message for Validator {
             descriptor.get(|| {
                 let mut fields = ::std::vec::Vec::new();
                 fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+                    "address",
+                    |m: &Validator| { &m.address },
+                    |m: &mut Validator| { &mut m.address },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<PubKey>>(
                     "pub_key",
                     |m: &Validator| { &m.pub_key },
                     |m: &mut Validator| { &mut m.pub_key },
@@ -9396,6 +9375,7 @@ impl ::protobuf::Message for Validator {
 
 impl ::protobuf::Clear for Validator {
     fn clear(&mut self) {
+        self.clear_address();
         self.clear_pub_key();
         self.clear_power();
         self.unknown_fields.clear();
@@ -9415,64 +9395,76 @@ impl ::protobuf::reflect::ProtobufValue for Validator {
 }
 
 #[derive(PartialEq,Clone,Default)]
-pub struct Evidence {
+pub struct SigningValidator {
     // message fields
-    pub pub_key: ::std::vec::Vec<u8>,
-    pub height: i64,
+    pub validator: ::protobuf::SingularPtrField<Validator>,
+    pub signed_last_block: bool,
     // special fields
     unknown_fields: ::protobuf::UnknownFields,
     cached_size: ::protobuf::CachedSize,
 }
 
-impl Evidence {
-    pub fn new() -> Evidence {
+impl SigningValidator {
+    pub fn new() -> SigningValidator {
         ::std::default::Default::default()
     }
 
-    // bytes pub_key = 1;
+    // .types.Validator validator = 1;
 
-    pub fn clear_pub_key(&mut self) {
-        self.pub_key.clear();
+    pub fn clear_validator(&mut self) {
+        self.validator.clear();
+    }
+
+    pub fn has_validator(&self) -> bool {
+        self.validator.is_some()
     }
 
     // Param is passed by value, moved
-    pub fn set_pub_key(&mut self, v: ::std::vec::Vec<u8>) {
-        self.pub_key = v;
+    pub fn set_validator(&mut self, v: Validator) {
+        self.validator = ::protobuf::SingularPtrField::some(v);
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_pub_key(&mut self) -> &mut ::std::vec::Vec<u8> {
-        &mut self.pub_key
+    pub fn mut_validator(&mut self) -> &mut Validator {
+        if self.validator.is_none() {
+            self.validator.set_default();
+        }
+        self.validator.as_mut().unwrap()
     }
 
     // Take field
-    pub fn take_pub_key(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.pub_key, ::std::vec::Vec::new())
+    pub fn take_validator(&mut self) -> Validator {
+        self.validator.take().unwrap_or_else(|| Validator::new())
     }
 
-    pub fn get_pub_key(&self) -> &[u8] {
-        &self.pub_key
+    pub fn get_validator(&self) -> &Validator {
+        self.validator.as_ref().unwrap_or_else(|| Validator::default_instance())
     }
 
-    // int64 height = 2;
+    // bool signed_last_block = 2;
 
-    pub fn clear_height(&mut self) {
-        self.height = 0;
+    pub fn clear_signed_last_block(&mut self) {
+        self.signed_last_block = false;
     }
 
     // Param is passed by value, moved
-    pub fn set_height(&mut self, v: i64) {
-        self.height = v;
+    pub fn set_signed_last_block(&mut self, v: bool) {
+        self.signed_last_block = v;
     }
 
-    pub fn get_height(&self) -> i64 {
-        self.height
+    pub fn get_signed_last_block(&self) -> bool {
+        self.signed_last_block
     }
 }
 
-impl ::protobuf::Message for Evidence {
+impl ::protobuf::Message for SigningValidator {
     fn is_initialized(&self) -> bool {
+        for v in &self.validator {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
         true
     }
 
@@ -9481,14 +9473,14 @@ impl ::protobuf::Message for Evidence {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
                 1 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.pub_key)?;
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.validator)?;
                 },
                 2 => {
                     if wire_type != ::protobuf::wire_format::WireTypeVarint {
                         return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
                     }
-                    let tmp = is.read_int64()?;
-                    self.height = tmp;
+                    let tmp = is.read_bool()?;
+                    self.signed_last_block = tmp;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -9502,11 +9494,12 @@ impl ::protobuf::Message for Evidence {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if !self.pub_key.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(1, &self.pub_key);
+        if let Some(ref v) = self.validator.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
-        if self.height != 0 {
-            my_size += ::protobuf::rt::value_size(2, self.height, ::protobuf::wire_format::WireTypeVarint);
+        if self.signed_last_block != false {
+            my_size += 2;
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -9514,11 +9507,525 @@ impl ::protobuf::Message for Evidence {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
-        if !self.pub_key.is_empty() {
-            os.write_bytes(1, &self.pub_key)?;
+        if let Some(ref v) = self.validator.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        if self.signed_last_block != false {
+            os.write_bool(2, self.signed_last_block)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &::std::any::Any {
+        self as &::std::any::Any
+    }
+    fn as_any_mut(&mut self) -> &mut ::std::any::Any {
+        self as &mut ::std::any::Any
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<::std::any::Any> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> SigningValidator {
+        SigningValidator::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<Validator>>(
+                    "validator",
+                    |m: &SigningValidator| { &m.validator },
+                    |m: &mut SigningValidator| { &mut m.validator },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBool>(
+                    "signed_last_block",
+                    |m: &SigningValidator| { &m.signed_last_block },
+                    |m: &mut SigningValidator| { &mut m.signed_last_block },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<SigningValidator>(
+                    "SigningValidator",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static SigningValidator {
+        static mut instance: ::protobuf::lazy::Lazy<SigningValidator> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const SigningValidator,
+        };
+        unsafe {
+            instance.get(SigningValidator::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for SigningValidator {
+    fn clear(&mut self) {
+        self.clear_validator();
+        self.clear_signed_last_block();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for SigningValidator {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for SigningValidator {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct PubKey {
+    // message fields
+    pub field_type: ::std::string::String,
+    pub data: ::std::vec::Vec<u8>,
+    // special fields
+    unknown_fields: ::protobuf::UnknownFields,
+    cached_size: ::protobuf::CachedSize,
+}
+
+impl PubKey {
+    pub fn new() -> PubKey {
+        ::std::default::Default::default()
+    }
+
+    // string type = 1;
+
+    pub fn clear_field_type(&mut self) {
+        self.field_type.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_field_type(&mut self, v: ::std::string::String) {
+        self.field_type = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_field_type(&mut self) -> &mut ::std::string::String {
+        &mut self.field_type
+    }
+
+    // Take field
+    pub fn take_field_type(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.field_type, ::std::string::String::new())
+    }
+
+    pub fn get_field_type(&self) -> &str {
+        &self.field_type
+    }
+
+    // bytes data = 2;
+
+    pub fn clear_data(&mut self) {
+        self.data.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_data(&mut self, v: ::std::vec::Vec<u8>) {
+        self.data = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_data(&mut self) -> &mut ::std::vec::Vec<u8> {
+        &mut self.data
+    }
+
+    // Take field
+    pub fn take_data(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.data, ::std::vec::Vec::new())
+    }
+
+    pub fn get_data(&self) -> &[u8] {
+        &self.data
+    }
+}
+
+impl ::protobuf::Message for PubKey {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.field_type)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.data)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if !self.field_type.is_empty() {
+            my_size += ::protobuf::rt::string_size(1, &self.field_type);
+        }
+        if !self.data.is_empty() {
+            my_size += ::protobuf::rt::bytes_size(2, &self.data);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if !self.field_type.is_empty() {
+            os.write_string(1, &self.field_type)?;
+        }
+        if !self.data.is_empty() {
+            os.write_bytes(2, &self.data)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &::std::any::Any {
+        self as &::std::any::Any
+    }
+    fn as_any_mut(&mut self) -> &mut ::std::any::Any {
+        self as &mut ::std::any::Any
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<::std::any::Any> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> PubKey {
+        PubKey::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "type",
+                    |m: &PubKey| { &m.field_type },
+                    |m: &mut PubKey| { &mut m.field_type },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+                    "data",
+                    |m: &PubKey| { &m.data },
+                    |m: &mut PubKey| { &mut m.data },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<PubKey>(
+                    "PubKey",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static PubKey {
+        static mut instance: ::protobuf::lazy::Lazy<PubKey> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const PubKey,
+        };
+        unsafe {
+            instance.get(PubKey::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for PubKey {
+    fn clear(&mut self) {
+        self.clear_field_type();
+        self.clear_data();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for PubKey {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for PubKey {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct Evidence {
+    // message fields
+    pub field_type: ::std::string::String,
+    pub validator: ::protobuf::SingularPtrField<Validator>,
+    pub height: i64,
+    pub time: i64,
+    pub total_voting_power: i64,
+    // special fields
+    unknown_fields: ::protobuf::UnknownFields,
+    cached_size: ::protobuf::CachedSize,
+}
+
+impl Evidence {
+    pub fn new() -> Evidence {
+        ::std::default::Default::default()
+    }
+
+    // string type = 1;
+
+    pub fn clear_field_type(&mut self) {
+        self.field_type.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_field_type(&mut self, v: ::std::string::String) {
+        self.field_type = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_field_type(&mut self) -> &mut ::std::string::String {
+        &mut self.field_type
+    }
+
+    // Take field
+    pub fn take_field_type(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.field_type, ::std::string::String::new())
+    }
+
+    pub fn get_field_type(&self) -> &str {
+        &self.field_type
+    }
+
+    // .types.Validator validator = 2;
+
+    pub fn clear_validator(&mut self) {
+        self.validator.clear();
+    }
+
+    pub fn has_validator(&self) -> bool {
+        self.validator.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_validator(&mut self, v: Validator) {
+        self.validator = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_validator(&mut self) -> &mut Validator {
+        if self.validator.is_none() {
+            self.validator.set_default();
+        }
+        self.validator.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_validator(&mut self) -> Validator {
+        self.validator.take().unwrap_or_else(|| Validator::new())
+    }
+
+    pub fn get_validator(&self) -> &Validator {
+        self.validator.as_ref().unwrap_or_else(|| Validator::default_instance())
+    }
+
+    // int64 height = 3;
+
+    pub fn clear_height(&mut self) {
+        self.height = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_height(&mut self, v: i64) {
+        self.height = v;
+    }
+
+    pub fn get_height(&self) -> i64 {
+        self.height
+    }
+
+    // int64 time = 4;
+
+    pub fn clear_time(&mut self) {
+        self.time = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_time(&mut self, v: i64) {
+        self.time = v;
+    }
+
+    pub fn get_time(&self) -> i64 {
+        self.time
+    }
+
+    // int64 total_voting_power = 5;
+
+    pub fn clear_total_voting_power(&mut self) {
+        self.total_voting_power = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_total_voting_power(&mut self, v: i64) {
+        self.total_voting_power = v;
+    }
+
+    pub fn get_total_voting_power(&self) -> i64 {
+        self.total_voting_power
+    }
+}
+
+impl ::protobuf::Message for Evidence {
+    fn is_initialized(&self) -> bool {
+        for v in &self.validator {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.field_type)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.validator)?;
+                },
+                3 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_int64()?;
+                    self.height = tmp;
+                },
+                4 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_int64()?;
+                    self.time = tmp;
+                },
+                5 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_int64()?;
+                    self.total_voting_power = tmp;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if !self.field_type.is_empty() {
+            my_size += ::protobuf::rt::string_size(1, &self.field_type);
+        }
+        if let Some(ref v) = self.validator.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
         if self.height != 0 {
-            os.write_int64(2, self.height)?;
+            my_size += ::protobuf::rt::value_size(3, self.height, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.time != 0 {
+            my_size += ::protobuf::rt::value_size(4, self.time, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if self.total_voting_power != 0 {
+            my_size += ::protobuf::rt::value_size(5, self.total_voting_power, ::protobuf::wire_format::WireTypeVarint);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if !self.field_type.is_empty() {
+            os.write_string(1, &self.field_type)?;
+        }
+        if let Some(ref v) = self.validator.as_ref() {
+            os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        if self.height != 0 {
+            os.write_int64(3, self.height)?;
+        }
+        if self.time != 0 {
+            os.write_int64(4, self.time)?;
+        }
+        if self.total_voting_power != 0 {
+            os.write_int64(5, self.total_voting_power)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -9562,15 +10069,30 @@ impl ::protobuf::Message for Evidence {
         unsafe {
             descriptor.get(|| {
                 let mut fields = ::std::vec::Vec::new();
-                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                    "pub_key",
-                    |m: &Evidence| { &m.pub_key },
-                    |m: &mut Evidence| { &mut m.pub_key },
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "type",
+                    |m: &Evidence| { &m.field_type },
+                    |m: &mut Evidence| { &mut m.field_type },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<Validator>>(
+                    "validator",
+                    |m: &Evidence| { &m.validator },
+                    |m: &mut Evidence| { &mut m.validator },
                 ));
                 fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeInt64>(
                     "height",
                     |m: &Evidence| { &m.height },
                     |m: &mut Evidence| { &mut m.height },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeInt64>(
+                    "time",
+                    |m: &Evidence| { &m.time },
+                    |m: &mut Evidence| { &mut m.time },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeInt64>(
+                    "total_voting_power",
+                    |m: &Evidence| { &m.total_voting_power },
+                    |m: &mut Evidence| { &mut m.total_voting_power },
                 ));
                 ::protobuf::reflect::MessageDescriptor::new::<Evidence>(
                     "Evidence",
@@ -9594,8 +10116,11 @@ impl ::protobuf::Message for Evidence {
 
 impl ::protobuf::Clear for Evidence {
     fn clear(&mut self) {
-        self.clear_pub_key();
+        self.clear_field_type();
+        self.clear_validator();
         self.clear_height();
+        self.clear_time();
+        self.clear_total_voting_power();
         self.unknown_fields.clear();
     }
 }
@@ -9633,20 +10158,23 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     e\x18\x01\x20\x01(\tB\x02\x18\0\"\x0e\n\x0cRequestFlush\"\"\n\x0bRequest\
     Info\x12\x13\n\x07version\x18\x01\x20\x01(\tB\x02\x18\0\"6\n\x10RequestS\
     etOption\x12\x0f\n\x03key\x18\x01\x20\x01(\tB\x02\x18\0\x12\x11\n\x05val\
-    ue\x18\x02\x20\x01(\tB\x02\x18\0\"Y\n\x10RequestInitChain\x12(\n\nvalida\
-    tors\x18\x01\x20\x03(\x0b2\x10.types.ValidatorB\x02\x18\0\x12\x1b\n\x0fa\
-    pp_state_bytes\x18\x02\x20\x01(\x0cB\x02\x18\0\"Y\n\x0cRequestQuery\x12\
-    \x10\n\x04data\x18\x01\x20\x01(\x0cB\x02\x18\0\x12\x10\n\x04path\x18\x02\
-    \x20\x01(\tB\x02\x18\0\x12\x12\n\x06height\x18\x03\x20\x01(\x03B\x02\x18\
-    \0\x12\x11\n\x05prove\x18\x04\x20\x01(\x08B\x02\x18\0\"\x9a\x01\n\x11Req\
-    uestBeginBlock\x12\x10\n\x04hash\x18\x01\x20\x01(\x0cB\x02\x18\0\x12!\n\
-    \x06header\x18\x02\x20\x01(\x0b2\r.types.HeaderB\x02\x18\0\x12\x1d\n\x11\
-    absent_validators\x18\x03\x20\x03(\x05B\x02\x18\0\x121\n\x14byzantine_va\
-    lidators\x18\x04\x20\x03(\x0b2\x0f.types.EvidenceB\x02\x18\0\"\x20\n\x0e\
-    RequestCheckTx\x12\x0e\n\x02tx\x18\x01\x20\x01(\x0cB\x02\x18\0\"\"\n\x10\
-    RequestDeliverTx\x12\x0e\n\x02tx\x18\x01\x20\x01(\x0cB\x02\x18\0\"%\n\
-    \x0fRequestEndBlock\x12\x12\n\x06height\x18\x01\x20\x01(\x03B\x02\x18\0\
-    \"\x0f\n\rRequestCommit\"\xcf\x04\n\x08Response\x121\n\texception\x18\
+    ue\x18\x02\x20\x01(\tB\x02\x18\0\"\xb7\x01\n\x10RequestInitChain\x12\x10\
+    \n\x04time\x18\x01\x20\x01(\x03B\x02\x18\0\x12\x14\n\x08chain_id\x18\x02\
+    \x20\x01(\tB\x02\x18\0\x124\n\x10consensus_params\x18\x03\x20\x01(\x0b2\
+    \x16.types.ConsensusParamsB\x02\x18\0\x12(\n\nvalidators\x18\x04\x20\x03\
+    (\x0b2\x10.types.ValidatorB\x02\x18\0\x12\x1b\n\x0fapp_state_bytes\x18\
+    \x05\x20\x01(\x0cB\x02\x18\0\"Y\n\x0cRequestQuery\x12\x10\n\x04data\x18\
+    \x01\x20\x01(\x0cB\x02\x18\0\x12\x10\n\x04path\x18\x02\x20\x01(\tB\x02\
+    \x18\0\x12\x12\n\x06height\x18\x03\x20\x01(\x03B\x02\x18\0\x12\x11\n\x05\
+    prove\x18\x04\x20\x01(\x08B\x02\x18\0\"\xac\x01\n\x11RequestBeginBlock\
+    \x12\x10\n\x04hash\x18\x01\x20\x01(\x0cB\x02\x18\0\x12!\n\x06header\x18\
+    \x02\x20\x01(\x0b2\r.types.HeaderB\x02\x18\0\x12/\n\nvalidators\x18\x03\
+    \x20\x03(\x0b2\x17.types.SigningValidatorB\x02\x18\0\x121\n\x14byzantine\
+    _validators\x18\x04\x20\x03(\x0b2\x0f.types.EvidenceB\x02\x18\0\"\x20\n\
+    \x0eRequestCheckTx\x12\x0e\n\x02tx\x18\x01\x20\x01(\x0cB\x02\x18\0\"\"\n\
+    \x10RequestDeliverTx\x12\x0e\n\x02tx\x18\x01\x20\x01(\x0cB\x02\x18\0\"%\
+    \n\x0fRequestEndBlock\x12\x12\n\x06height\x18\x01\x20\x01(\x03B\x02\x18\
+    \0\"\x0f\n\rRequestCommit\"\xcf\x04\n\x08Response\x121\n\texception\x18\
     \x01\x20\x01(\x0b2\x18.types.ResponseExceptionH\0B\x02\x18\0\x12'\n\x04e\
     cho\x18\x02\x20\x01(\x0b2\x13.types.ResponseEchoH\0B\x02\x18\0\x12)\n\
     \x05flush\x18\x03\x20\x01(\x0b2\x14.types.ResponseFlushH\0B\x02\x18\0\
@@ -9668,30 +10196,34 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x20\x01(\x03B\x02\x18\0\x12\x1f\n\x13last_block_app_hash\x18\x04\x20\
     \x01(\x0cB\x02\x18\0\"H\n\x11ResponseSetOption\x12\x10\n\x04code\x18\x01\
     \x20\x01(\rB\x02\x18\0\x12\x0f\n\x03log\x18\x03\x20\x01(\tB\x02\x18\0\
-    \x12\x10\n\x04info\x18\x04\x20\x01(\tB\x02\x18\0\"\x13\n\x11ResponseInit\
-    Chain\"\xa2\x01\n\rResponseQuery\x12\x10\n\x04code\x18\x01\x20\x01(\rB\
-    \x02\x18\0\x12\x0f\n\x03log\x18\x03\x20\x01(\tB\x02\x18\0\x12\x10\n\x04i\
-    nfo\x18\x04\x20\x01(\tB\x02\x18\0\x12\x11\n\x05index\x18\x05\x20\x01(\
-    \x03B\x02\x18\0\x12\x0f\n\x03key\x18\x06\x20\x01(\x0cB\x02\x18\0\x12\x11\
-    \n\x05value\x18\x07\x20\x01(\x0cB\x02\x18\0\x12\x11\n\x05proof\x18\x08\
-    \x20\x01(\x0cB\x02\x18\0\x12\x12\n\x06height\x18\t\x20\x01(\x03B\x02\x18\
-    \0\"\x14\n\x12ResponseBeginBlock\"\xc9\x01\n\x0fResponseCheckTx\x12\x10\
-    \n\x04code\x18\x01\x20\x01(\rB\x02\x18\0\x12\x10\n\x04data\x18\x02\x20\
-    \x01(\x0cB\x02\x18\0\x12\x0f\n\x03log\x18\x03\x20\x01(\tB\x02\x18\0\x12\
-    \x10\n\x04info\x18\x04\x20\x01(\tB\x02\x18\0\x12\x16\n\ngas_wanted\x18\
-    \x05\x20\x01(\x03B\x02\x18\0\x12\x14\n\x08gas_used\x18\x06\x20\x01(\x03B\
-    \x02\x18\0\x12\x1f\n\x04tags\x18\x07\x20\x03(\x0b2\r.types.KVPairB\x02\
-    \x18\0\x12\x20\n\x03fee\x18\x08\x20\x01(\x0b2\x0f.types.KI64PairB\x02\
-    \x18\0\"\xcb\x01\n\x11ResponseDeliverTx\x12\x10\n\x04code\x18\x01\x20\
-    \x01(\rB\x02\x18\0\x12\x10\n\x04data\x18\x02\x20\x01(\x0cB\x02\x18\0\x12\
-    \x0f\n\x03log\x18\x03\x20\x01(\tB\x02\x18\0\x12\x10\n\x04info\x18\x04\
-    \x20\x01(\tB\x02\x18\0\x12\x16\n\ngas_wanted\x18\x05\x20\x01(\x03B\x02\
-    \x18\0\x12\x14\n\x08gas_used\x18\x06\x20\x01(\x03B\x02\x18\0\x12\x1f\n\
-    \x04tags\x18\x07\x20\x03(\x0b2\r.types.KVPairB\x02\x18\0\x12\x20\n\x03fe\
-    e\x18\x08\x20\x01(\x0b2\x0f.types.KI64PairB\x02\x18\0\"\x80\x01\n\x10Res\
-    ponseEndBlock\x12/\n\x11validator_updates\x18\x01\x20\x03(\x0b2\x10.type\
-    s.ValidatorB\x02\x18\0\x12;\n\x17consensus_param_updates\x18\x02\x20\x01\
-    (\x0b2\x16.types.ConsensusParamsB\x02\x18\0\"\"\n\x0eResponseCommit\x12\
+    \x12\x10\n\x04info\x18\x04\x20\x01(\tB\x02\x18\0\"s\n\x11ResponseInitCha\
+    in\x124\n\x10consensus_params\x18\x01\x20\x01(\x0b2\x16.types.ConsensusP\
+    aramsB\x02\x18\0\x12(\n\nvalidators\x18\x02\x20\x03(\x0b2\x10.types.Vali\
+    datorB\x02\x18\0\"\xa2\x01\n\rResponseQuery\x12\x10\n\x04code\x18\x01\
+    \x20\x01(\rB\x02\x18\0\x12\x0f\n\x03log\x18\x03\x20\x01(\tB\x02\x18\0\
+    \x12\x10\n\x04info\x18\x04\x20\x01(\tB\x02\x18\0\x12\x11\n\x05index\x18\
+    \x05\x20\x01(\x03B\x02\x18\0\x12\x0f\n\x03key\x18\x06\x20\x01(\x0cB\x02\
+    \x18\0\x12\x11\n\x05value\x18\x07\x20\x01(\x0cB\x02\x18\0\x12\x11\n\x05p\
+    roof\x18\x08\x20\x01(\x0cB\x02\x18\0\x12\x12\n\x06height\x18\t\x20\x01(\
+    \x03B\x02\x18\0\"5\n\x12ResponseBeginBlock\x12\x1f\n\x04tags\x18\x01\x20\
+    \x03(\x0b2\r.types.KVPairB\x02\x18\0\"\xc9\x01\n\x0fResponseCheckTx\x12\
+    \x10\n\x04code\x18\x01\x20\x01(\rB\x02\x18\0\x12\x10\n\x04data\x18\x02\
+    \x20\x01(\x0cB\x02\x18\0\x12\x0f\n\x03log\x18\x03\x20\x01(\tB\x02\x18\0\
+    \x12\x10\n\x04info\x18\x04\x20\x01(\tB\x02\x18\0\x12\x16\n\ngas_wanted\
+    \x18\x05\x20\x01(\x03B\x02\x18\0\x12\x14\n\x08gas_used\x18\x06\x20\x01(\
+    \x03B\x02\x18\0\x12\x1f\n\x04tags\x18\x07\x20\x03(\x0b2\r.types.KVPairB\
+    \x02\x18\0\x12\x20\n\x03fee\x18\x08\x20\x01(\x0b2\x0f.types.KI64PairB\
+    \x02\x18\0\"\xcb\x01\n\x11ResponseDeliverTx\x12\x10\n\x04code\x18\x01\
+    \x20\x01(\rB\x02\x18\0\x12\x10\n\x04data\x18\x02\x20\x01(\x0cB\x02\x18\0\
+    \x12\x0f\n\x03log\x18\x03\x20\x01(\tB\x02\x18\0\x12\x10\n\x04info\x18\
+    \x04\x20\x01(\tB\x02\x18\0\x12\x16\n\ngas_wanted\x18\x05\x20\x01(\x03B\
+    \x02\x18\0\x12\x14\n\x08gas_used\x18\x06\x20\x01(\x03B\x02\x18\0\x12\x1f\
+    \n\x04tags\x18\x07\x20\x03(\x0b2\r.types.KVPairB\x02\x18\0\x12\x20\n\x03\
+    fee\x18\x08\x20\x01(\x0b2\x0f.types.KI64PairB\x02\x18\0\"\xa1\x01\n\x10R\
+    esponseEndBlock\x12/\n\x11validator_updates\x18\x01\x20\x03(\x0b2\x10.ty\
+    pes.ValidatorB\x02\x18\0\x12;\n\x17consensus_param_updates\x18\x02\x20\
+    \x01(\x0b2\x16.types.ConsensusParamsB\x02\x18\0\x12\x1f\n\x04tags\x18\
+    \x03\x20\x03(\x0b2\r.types.KVPairB\x02\x18\0\"\"\n\x0eResponseCommit\x12\
     \x10\n\x04data\x18\x02\x20\x01(\x0cB\x02\x18\0\"\x8d\x01\n\x0fConsensusP\
     arams\x12(\n\nblock_size\x18\x01\x20\x01(\x0b2\x10.types.BlockSizeB\x02\
     \x18\0\x12\"\n\x07tx_size\x18\x02\x20\x01(\x0b2\r.types.TxSizeB\x02\x18\
@@ -9701,22 +10233,25 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \n\x07max_gas\x18\x03\x20\x01(\x03B\x02\x18\0\"4\n\x06TxSize\x12\x15\n\t\
     max_bytes\x18\x01\x20\x01(\x05B\x02\x18\0\x12\x13\n\x07max_gas\x18\x02\
     \x20\x01(\x03B\x02\x18\0\"0\n\x0bBlockGossip\x12!\n\x15block_part_size_b\
-    ytes\x18\x01\x20\x01(\x05B\x02\x18\0\"\xec\x01\n\x06Header\x12\x14\n\x08\
+    ytes\x18\x01\x20\x01(\x05B\x02\x18\0\"\xe8\x01\n\x06Header\x12\x14\n\x08\
     chain_id\x18\x01\x20\x01(\tB\x02\x18\0\x12\x12\n\x06height\x18\x02\x20\
     \x01(\x03B\x02\x18\0\x12\x10\n\x04time\x18\x03\x20\x01(\x03B\x02\x18\0\
-    \x12\x13\n\x07num_txs\x18\x04\x20\x01(\x05B\x02\x18\0\x12)\n\rlast_block\
-    _id\x18\x05\x20\x01(\x0b2\x0e.types.BlockIDB\x02\x18\0\x12\x1c\n\x10last\
-    _commit_hash\x18\x06\x20\x01(\x0cB\x02\x18\0\x12\x15\n\tdata_hash\x18\
-    \x07\x20\x01(\x0cB\x02\x18\0\x12\x1b\n\x0fvalidators_hash\x18\x08\x20\
-    \x01(\x0cB\x02\x18\0\x12\x14\n\x08app_hash\x18\t\x20\x01(\x0cB\x02\x18\0\
-    \"D\n\x07BlockID\x12\x10\n\x04hash\x18\x01\x20\x01(\x0cB\x02\x18\0\x12'\
-    \n\x05parts\x18\x02\x20\x01(\x0b2\x14.types.PartSetHeaderB\x02\x18\0\"4\
-    \n\rPartSetHeader\x12\x11\n\x05total\x18\x01\x20\x01(\x05B\x02\x18\0\x12\
-    \x10\n\x04hash\x18\x02\x20\x01(\x0cB\x02\x18\0\"3\n\tValidator\x12\x13\n\
-    \x07pub_key\x18\x01\x20\x01(\x0cB\x02\x18\0\x12\x11\n\x05power\x18\x02\
-    \x20\x01(\x03B\x02\x18\0\"3\n\x08Evidence\x12\x13\n\x07pub_key\x18\x01\
-    \x20\x01(\x0cB\x02\x18\0\x12\x12\n\x06height\x18\x02\x20\x01(\x03B\x02\
-    \x18\0B\0b\x06proto3\
+    \x12\x13\n\x07num_txs\x18\x04\x20\x01(\x05B\x02\x18\0\x12\x15\n\ttotal_t\
+    xs\x18\x05\x20\x01(\x03B\x02\x18\0\x12\x1b\n\x0flast_block_hash\x18\x06\
+    \x20\x01(\x0cB\x02\x18\0\x12\x1b\n\x0fvalidators_hash\x18\x07\x20\x01(\
+    \x0cB\x02\x18\0\x12\x14\n\x08app_hash\x18\x08\x20\x01(\x0cB\x02\x18\0\
+    \x12&\n\x08proposer\x18\t\x20\x01(\x0b2\x10.types.ValidatorB\x02\x18\0\"\
+    W\n\tValidator\x12\x13\n\x07address\x18\x01\x20\x01(\x0cB\x02\x18\0\x12\
+    \"\n\x07pub_key\x18\x02\x20\x01(\x0b2\r.types.PubKeyB\x02\x18\0\x12\x11\
+    \n\x05power\x18\x03\x20\x01(\x03B\x02\x18\0\"Z\n\x10SigningValidator\x12\
+    '\n\tvalidator\x18\x01\x20\x01(\x0b2\x10.types.ValidatorB\x02\x18\0\x12\
+    \x1d\n\x11signed_last_block\x18\x02\x20\x01(\x08B\x02\x18\0\",\n\x06PubK\
+    ey\x12\x10\n\x04type\x18\x01\x20\x01(\tB\x02\x18\0\x12\x10\n\x04data\x18\
+    \x02\x20\x01(\x0cB\x02\x18\0\"\x8b\x01\n\x08Evidence\x12\x10\n\x04type\
+    \x18\x01\x20\x01(\tB\x02\x18\0\x12'\n\tvalidator\x18\x02\x20\x01(\x0b2\
+    \x10.types.ValidatorB\x02\x18\0\x12\x12\n\x06height\x18\x03\x20\x01(\x03\
+    B\x02\x18\0\x12\x10\n\x04time\x18\x04\x20\x01(\x03B\x02\x18\0\x12\x1e\n\
+    \x12total_voting_power\x18\x05\x20\x01(\x03B\x02\x18\0B\0b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {

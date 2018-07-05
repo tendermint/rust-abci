@@ -115,76 +115,77 @@ impl Service for TSPService {
 
 impl TSPService {
     fn handle(&self, request: &Request) -> Response {
+        println!("{:?}", request);
         unsafe {
             let app_ptr = self.app as *const Application;
 
             // Here we do some really trippy pointer magic
             let app_ptr = app_ptr as *mut Application;
             // Now we have a mutable pointer from a immutable reference. Unsafe Rust is epic.
-            let app = &mut *app_ptr; 
+            let app = &mut *app_ptr;
 
-        let mut response = Response::new();
+            let mut response = Response::new();
 
-        // Info/Query connection
-        if request.has_info() {
-            response.set_info(app.info(request.get_info()));
-            return response;
-        }
+            // Info/Query connection
+            if request.has_info() {
+                response.set_info(app.info(request.get_info()));
+                return response;
+            }
 
-        if request.has_set_option() {
-            response.set_set_option(app.set_option(request.get_set_option()));
-            return response;
-        }
+            if request.has_set_option() {
+                response.set_set_option(app.set_option(request.get_set_option()));
+                return response;
+            }
 
-        if request.has_query() {
-            response.set_query(app.query(request.get_query()));
-            return response;
-        }
+            if request.has_query() {
+                response.set_query(app.query(request.get_query()));
+                return response;
+            }
 
-        // Mempool connection
-        if request.has_check_tx() {
-            response.set_check_tx(app.check_tx(request.get_check_tx()));
-            return response;
-        }
+            // Mempool connection
+            if request.has_check_tx() {
+                response.set_check_tx(app.check_tx(request.get_check_tx()));
+                return response;
+            }
 
-        // Consensus connection
-        if request.has_init_chain() {
-            response.set_init_chain(app.init_chain(request.get_init_chain()));
-            return response;
-        }
+            // Consensus connection
+            if request.has_init_chain() {
+                response.set_init_chain(app.init_chain(request.get_init_chain()));
+                return response;
+            }
 
-        if request.has_begin_block() {
-            response.set_begin_block(app.begin_block(request.get_begin_block()));
-            return response;
-        }
+            if request.has_begin_block() {
+                response.set_begin_block(app.begin_block(request.get_begin_block()));
+                return response;
+            }
 
-        if request.has_deliver_tx() {
-            response.set_deliver_tx(app.deliver_tx(request.get_deliver_tx()));
-            return response;
-        }
+            if request.has_deliver_tx() {
+                response.set_deliver_tx(app.deliver_tx(request.get_deliver_tx()));
+                return response;
+            }
 
-        if request.has_end_block() {
-            response.set_end_block(app.end_block(request.get_end_block()));
-            return response;
-        }
+            if request.has_end_block() {
+                response.set_end_block(app.end_block(request.get_end_block()));
+                return response;
+            }
 
-        if request.has_commit() {
-            response.set_commit(app.commit(request.get_commit()));
-            return response;
-        }
+            if request.has_commit() {
+                response.set_commit(app.commit(request.get_commit()));
+                return response;
+            }
 
-        // Miscellaneous connection
-        if request.has_echo() {
-            response.set_echo(app.echo(request.get_echo()));
-            return response;
-        }
+            // Miscellaneous connection
+            if request.has_echo() {
+                response.set_echo(app.echo(request.get_echo()));
+                return response;
+            }
 
-        if request.has_flush() {
-            response.set_flush(app.flush(request.get_flush()));
-            return response;
-        }
+            if request.has_flush() {
+                response.set_flush(app.flush(request.get_flush()));
+                return response;
+            }
 
-        unreachable!();
+            unreachable!();
         }
     }
 }
