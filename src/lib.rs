@@ -1,5 +1,5 @@
 //! This is the documentation for the rust-abci crate.
-
+#![feature(ptr_internals)]
 extern crate byteorder;
 extern crate bytes;
 extern crate futures;
@@ -10,13 +10,16 @@ extern crate tokio_io;
 extern crate tokio_proto;
 extern crate tokio_service;
 extern crate integer_encoding;
+#[macro_use]
+extern crate lazy_static;
 
+mod tcpserver;
 pub mod server;
 pub mod types;
 
 use types::*;
 
-pub trait Application {
+pub trait Application : Sync {
 
     // Info/Query connection
     fn info(&mut self, req: &RequestInfo) -> ResponseInfo;

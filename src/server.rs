@@ -27,9 +27,13 @@ use tokio_service::Service;
 
 use integer_encoding::{VarInt, VarIntReader, VarIntWriter};
 
+use tcpserver::*;
+
 pub fn new<A: Application + Send + Sync + 'static>(listen_addr: SocketAddr, app: &'static A) {
-    let server = TcpServer::new(TSPProto, listen_addr);
-    server.serve(move|| Ok(TSPService{app: app}));
+    //let server = TcpServer::new(TSPProto, listen_addr);
+    //server.serve(move|| Ok(TSPService{app: app}));
+    let mut server = TCPServer::new(app, listen_addr);
+    server.serve().unwrap();
 }
 
 // A codec describes how to go from a bunch of bytes from the wire into a
@@ -66,6 +70,7 @@ impl Encoder for TSPCodec {
     type Error = io::Error;
 
     fn encode(&mut self, msg: Response, buf: &mut BytesMut) -> io::Result<()> {
+        println!("Encoding {:?}", msg);
         let mut msg_to_vec = Vec::new();
         msg.write_to_vec(&mut msg_to_vec).unwrap();
 
@@ -108,14 +113,15 @@ impl Service for TSPService {
     type Future = BoxFuture<Self::Response, Self::Error>;
 
     fn call(&self, req: Self::Request) -> Self::Future {
+        println!("Recieved request for {:?}", req);
         let response = self.handle(&req);
+        println!("Now returning request {:?}", req);
         future::ok(response).boxed()
     }
 }
 
 impl TSPService {
     fn handle(&self, request: &Request) -> Response {
-        println!("{:?}", request);
         unsafe {
             let app_ptr = self.app as *const Application;
 

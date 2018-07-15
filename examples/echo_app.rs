@@ -51,13 +51,12 @@ impl Application for EchoApp {
     }
 
     fn flush(&mut self, p: &RequestFlush) -> ResponseFlush {
-        println!("Calling flush");
         ResponseFlush::new()
     }
 }
 
 fn main() {
     static APP: EchoApp = EchoApp;
-    let addr = "127.0.0.1:46658".parse().unwrap();
+    let addr = "127.0.0.1:26658".parse().unwrap();
     server::new(addr, &APP);
 }

@@ -24,6 +24,7 @@ tokio-io = "0.1"
 tokio-proto = "0.1"
 tokio-service = "0.1"
 integer-encoding = "1.0.5"
+lazy_static = "1.0.0"
 
 [build-dependencies]
 protoc = "1.4.1"
