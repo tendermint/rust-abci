@@ -1,23 +1,14 @@
 //! This is the documentation for the rust-abci crate.
 #![feature(ptr_internals)]
-extern crate byteorder;
 extern crate bytes;
-extern crate futures;
-extern crate futures_cpupool;
 extern crate protobuf;
-extern crate tls_api;
-extern crate tokio_io;
-extern crate tokio_proto;
-extern crate tokio_service;
 extern crate integer_encoding;
-#[macro_use]
-extern crate lazy_static;
 
 mod tcpserver;
 pub mod server;
 pub mod types;
 
-use types::*;
+pub use types::*;
 
 pub trait Application : Sync {
 
@@ -41,9 +32,4 @@ pub trait Application : Sync {
     fn end_block(&mut self, p: &RequestEndBlock) -> ResponseEndBlock;
 
     fn commit(&mut self, p: &RequestCommit) -> ResponseCommit;
-
-    // Miscellaneous connection
-    fn echo(&mut self, p: &RequestEcho) -> ResponseEcho;
-
-    fn flush(&mut self, p: &RequestFlush) -> ResponseFlush;
 }

@@ -1,6 +1,5 @@
-extern crate tsp;
-use tsp::*;
-use tsp::types::*;
+extern crate abci;
+use abci::*;
 
 struct EchoApp;
 
@@ -43,15 +42,6 @@ impl Application for EchoApp {
 
     fn commit(&mut self, p: &RequestCommit) -> ResponseCommit {
         ResponseCommit::new()
-    }
-
-    // Miscellaneous connection
-    fn echo(&mut self, p: &RequestEcho) -> ResponseEcho {
-        ResponseEcho::new()
-    }
-
-    fn flush(&mut self, p: &RequestFlush) -> ResponseFlush {
-        ResponseFlush::new()
     }
 }
 
