@@ -1,9 +1,9 @@
 extern crate abci;
 use abci::*;
 
-struct EchoApp;
+struct EmptyApp;
 
-impl Application for EchoApp {
+impl Application for EmptyApp {
 
     // Info/Query connection
     fn info(&mut self, req: &RequestInfo) -> ResponseInfo {
@@ -46,7 +46,7 @@ impl Application for EchoApp {
 }
 
 fn main() {
-    static APP: EchoApp = EchoApp;
+    static APP: EmptyApp = EmptyApp;
     let addr = "127.0.0.1:26658".parse().unwrap();
     server::new(addr, &APP);
 }
