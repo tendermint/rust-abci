@@ -13,6 +13,8 @@ use bytes::{BytesMut, BufMut};
 use protobuf;
 use protobuf::Message;
 
+const BUFFER_SIZE: usize = 4096;
+
 pub struct TCPServer<A> where A: Application + 'static + Send + Sync{
     app: &'static A,
     addr: SocketAddr
@@ -47,10 +49,10 @@ impl<A: Application + 'static + Send + Sync> TCPServer<A> {
 
 fn handle_stream(mut stream: TcpStream, app: Unique<Application>) {
     loop {
-        let mut bytes = BytesMut::with_capacity(4096);
-        bytes.put(&[0; 4096][..]);
+        let mut bytes = BytesMut::with_capacity(BUFFER_SIZE);
+        bytes.put(&[0; BUFFER_SIZE][..]);
         stream.read(bytes.as_mut()).unwrap();
-        if bytes.as_ref() == [0; 4096].as_ref() {
+        if bytes.as_ref() == [0; BUFFER_SIZE].as_ref() {
             break;
         }
         for message in process_bytes(bytes) {
@@ -107,7 +109,7 @@ fn respond(stream: &mut TcpStream, app: *mut Application, request: Request) -> i
                 unreachable!();
             }
         };
-        let mut buffer = BytesMut::with_capacity(4096);
+        let mut buffer = BytesMut::with_capacity(BUFFER_SIZE);
         encode(res, &mut buffer);
         let buffer = buffer.into_iter().collect::<Vec<u8>>();
         stream.write(buffer.as_slice()).unwrap();
