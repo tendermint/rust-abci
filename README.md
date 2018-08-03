@@ -1,6 +1,5 @@
 # Rust ABCI
-A rust implementation of the ABCI protocol for Tendermint. This has been heavily modified to be consistent and compliant with
-Tendermint `0.22`. 
+A rust implementation of the ABCI protocol for Tendermint.
 
 [![Build Status](https://travis-ci.org/tendermint/rust-abci.svg?branch=develop)](https://travis-ci.org/tendermint/rust-abci) [![](https://tokei.rs/b1/github/tendermint/rust-abci)](https://github.com/tendermint/rust-abci) [![](https://docs.rs/rust-abci/badge.svg)](https://docs.rs/rust-abci/0.1.0/rust_abci/)
 
