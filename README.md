@@ -35,7 +35,7 @@ To test the examples, please clone this repository.
 ```bash
 git clone git@github.com:tendermint/rust-abci.git
 ```
-The `echo_app` example, found under the `examples` folder, is a good demonstration/bare minimum foundation for a Rust ABCI app.
+The `empty_app` example, found under the `examples` folder, is a good demonstration/bare minimum foundation for a Rust ABCI app.
 
 To use this library to build your own ABCI apps in rust you have to include the following in your `Cargo.toml` file.
 ```toml
