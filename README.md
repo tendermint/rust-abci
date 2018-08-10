@@ -46,14 +46,14 @@ abci = "0.3.0"
 ## Running the examples
 
 ### Tendermint
-To run either of the example apps you have to have Tendermint installed and initialised. Please install it according to these [instructions](https://github.com/tendermint/tendermint). After initializing and configuring the node, Tendermint can be run with:
+To run either of the example apps you have to have Tendermint installed and initialised (Remember to run `tendermint init`!). Please install it according to these [instructions](https://github.com/tendermint/tendermint). After initializing and configuring the node, Tendermint can be run with:
 ```bash
 tendermint node
 ```
 
 If you wish to not create new blocks each second, make sure to add the `--consensus.create_empty_blocks=0` flag.
 
-After the node is online, you can run the `echo_app` example using `cargo run --example echo_app`.
+After the node is online, you can run the `empty_app` example using `cargo run --example empty_app`.
 
 
 ## Documentation
