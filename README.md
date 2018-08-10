@@ -27,7 +27,7 @@ For a real life example of an ABCI application you can checkout [Ethermint](http
 
 
 ## Dependencies
-Make sure that you have Rust installed. The easiest way is to follow the instructions on [rustup](https://rustup.rs/).
+Make sure that you have Rust and Cargo installed. The easiest way is to follow the instructions on [rustup](https://rustup.rs/).
 
 
 ## Installation
@@ -35,68 +35,32 @@ To test the examples, please clone this repository.
 ```bash
 git clone git@github.com:tendermint/rust-abci.git
 ```
-Please have a look at the dummy or counter app inside `src/bin` to get a feeling for how this server works.
+The `empty_app` example, found under the `examples` folder, is a good demonstration/bare minimum foundation for a Rust ABCI app.
 
 To use this library to build your own ABCI apps in rust you have to include the following in your `Cargo.toml` file.
-```bash
+```toml
 [dependencies]
-rust-abci = "0.1.0"
+abci = "0.3.0"
 ```
-
-Or if you want to live on the edge then point directly towards our git repo.
-```bash
-[dependencies]
-rust-abci = { git = "git@github.com:tendermint/rust-abci.git" }
-```
-
-
-----
-
 
 ## Running the examples
 
 ### Tendermint
-To run either of the example apps you have to have Tendermint installed and initialised. Please install it according to these [instructions](https://github.com/tendermint/tendermint). You can also check out [Ethermint](https://github.com/tendermint/ethermint/tree/develop) for an in-depth explanation of how ABCI apps work.
-Rememeber to run tendermint with the `--abci grpc` flag like so.
+To run either of the example apps you have to have Tendermint installed and initialised (Remember to run `tendermint init`!). Please install it according to these [instructions](https://github.com/tendermint/tendermint). After initializing and configuring the node, Tendermint can be run with:
 ```bash
-tendermint node --abci grpc
+tendermint node
 ```
 
-### Examples
-Once the Tendermint instance is up and running you can start either of the examples like this. Of course, please rememeber to
-switch into the rust-abci folder.
-```bash
-cargo run --features "grpc_support" --bin dummy
+If you wish to not create new blocks each second, make sure to add the `--consensus.create_empty_blocks=0` flag.
 
-cargo run --features "grpc_support" --bin counter
-```
-
-
-----
+After the node is online, you can run the `empty_app` example using `cargo run --example empty_app`.
 
 
 ## Documentation
-// TODO - publish to rust docs
-
-// TODO - give quick examples
+Documentation is coming soon.
 
 
 ----
 
-
-## Optional Dependencies
-The message types for the ABCI protocol are defined in a protobuf file, which can be copied from [here](https://github.com/tendermint/abci/blob/master/types/types.proto).
-
-We use [rust-protobuf](https://github.com/stepancheg/rust-protobuf) to generate compatible rust files from the protobuf
-source files. For convenience the generated rust files are checked into git and will be packaged with the library. If you
-want to generate them yourself you can.
-Install these two tools.
-```bash
-cargo install protobuf
-cargo install grpc-compiler
-```
-
-```bash
-protoc --rust_out src/ types.proto
-protoc --rust-grpc_out src/ types.proto
-```
+## Credits
+Original `rust-tsp` made by Adrian Brink. New `abci` package and fixes based on `rust-tsp` made by Jackson Lewis.

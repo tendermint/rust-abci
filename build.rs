@@ -1,9 +1,11 @@
-extern crate protoc_rust;
-
+extern crate protobuf_codegen_pure;
 fn main() {
-    protoc_rust::run(protoc_rust::Args {
+    protobuf_codegen_pure::run(protobuf_codegen_pure::Args {
         out_dir: "src",
         input: &["src/types.proto"],
-        ..Default::default()
-    }).expect("Expected to find types.proto at src/types.proto.");
+        includes: &[""],
+        customize: protobuf_codegen_pure::Customize {
+            ..Default::default()
+        },
+    }).expect("protoc");
 }

@@ -2,240 +2,291 @@ syntax = "proto3";
 package types;
 
 // This file is copied from http://github.com/tendermint/abci
+// NOTE: When using custom types, mind the warnings.
+// https://github.com/gogo/protobuf/blob/master/custom_types.md#warnings-and-issues
 
 //----------------------------------------
-// Code types
+// Abstract types
 
-enum CodeType {
-	OK                    = 0;
+// Define these here for compatibility but use tmlibs/common.KVPair.
+message KVPair {
+  bytes key = 1;
+  bytes value = 2;
+}
 
-	// General response codes, 0 ~ 99
-	InternalError         = 1;
-	EncodingError         = 2;
-	BadNonce              = 3;
-	Unauthorized          = 4;
-	InsufficientFunds     = 5;
-	UnknownRequest        = 6;
-
-	// Reserved for basecoin, 100 ~ 199
-	BaseDuplicateAddress  = 101;
-	BaseEncodingError     = 102;
-	BaseInsufficientFees  = 103;
-	BaseInsufficientFunds = 104;
-	BaseInsufficientGasPrice = 105;
-	BaseInvalidInput      = 106;
-	BaseInvalidOutput     = 107;
-	BaseInvalidPubKey     = 108;
-	BaseInvalidSequence   = 109;
-	BaseInvalidSignature  = 110;
-	BaseUnknownAddress    = 111;
-	BaseUnknownPubKey     = 112;
-	BaseUnknownPlugin     = 113;
-
-	// Reserved for governance, 200 ~ 299
-	GovUnknownEntity      = 201;
-	GovUnknownGroup       = 202;
-	GovUnknownProposal    = 203;
-	GovDuplicateGroup     = 204;
-	GovDuplicateMember    = 205;
-	GovDuplicateProposal  = 206;
-	GovDuplicateVote      = 207;
-	GovInvalidMember      = 208;
-	GovInvalidVote        = 209;
-	GovInvalidVotingPower = 210;
-
+// Define these here for compatibility but use tmlibs/common.KI64Pair.
+message KI64Pair {
+  bytes key = 1;
+  int64 value = 2;
 }
 
 //----------------------------------------
 // Request types
 
 message Request {
-	oneof value{
-		RequestEcho echo = 1;
-		RequestFlush flush = 2;
-		RequestInfo info = 3;
-		RequestSetOption set_option = 4;
-		RequestDeliverTx deliver_tx = 5;
-		RequestCheckTx check_tx = 6;
-		RequestCommit commit = 7;
-		RequestQuery query = 8;
-		RequestInitChain init_chain = 9;
-		RequestBeginBlock begin_block = 10;
-		RequestEndBlock end_block = 11;
-	}
+  oneof value {
+    RequestEcho echo = 2;
+    RequestFlush flush = 3;
+    RequestInfo info = 4;
+    RequestSetOption set_option = 5;
+    RequestInitChain init_chain = 6;
+    RequestQuery query = 7;
+    RequestBeginBlock begin_block = 8;
+    RequestCheckTx check_tx = 9;
+    RequestDeliverTx deliver_tx = 19;
+    RequestEndBlock end_block = 11;
+    RequestCommit commit = 12;
+  }
 }
 
 message RequestEcho {
-	string message = 1;
+  string message = 1;
 }
 
 message RequestFlush {
 }
 
 message RequestInfo {
+  string version = 1;
 }
 
-message RequestSetOption{
-	string key = 1;
-	string value = 2;
+// nondeterministic
+message RequestSetOption {
+  string key = 1;
+  string value = 2;
 }
 
-message RequestDeliverTx{
-	bytes tx = 1;
+message RequestInitChain {
+  int64 time = 1;
+  string chain_id = 2;
+  ConsensusParams consensus_params = 3;
+  repeated Validator validators = 4  [(gogoproto.nullable)=false];
+  bytes app_state_bytes = 5;
 }
 
-message RequestCheckTx{
-	bytes tx = 1;
+message RequestQuery {
+  bytes data = 1;
+  string path = 2;
+  int64 height = 3;
+  bool prove = 4;
 }
 
-message RequestQuery{
-	bytes data = 1;
-	string path = 2;
-	uint64 height = 3;
-	bool prove = 4;
+message RequestBeginBlock {
+  bytes hash = 1;
+  Header header = 2 [(gogoproto.nullable)=false];
+  repeated SigningValidator validators = 3  [(gogoproto.nullable)=false];
+  repeated Evidence byzantine_validators = 4 [(gogoproto.nullable)=false];
 }
 
-message RequestCommit{
+message RequestCheckTx {
+  bytes tx = 1;
 }
 
-message RequestInitChain{
-	repeated Validator validators = 1;
+message RequestDeliverTx {
+  bytes tx = 1;
 }
 
-message RequestBeginBlock{
-	bytes hash = 1;
-	Header header = 2;
+message RequestEndBlock {
+  int64 height = 1;
 }
 
-message RequestEndBlock{
-	uint64 height = 1;
+message RequestCommit {
 }
 
 //----------------------------------------
 // Response types
 
-
 message Response {
-	oneof value{
-		ResponseException exception = 1;
-		ResponseEcho echo = 2;
-		ResponseFlush flush = 3;
-		ResponseInfo info = 4;
-		ResponseSetOption set_option = 5;
-		ResponseDeliverTx deliver_tx = 6;
-		ResponseCheckTx check_tx = 7;
-		ResponseCommit commit = 8;
-		ResponseQuery query = 9;
-		ResponseInitChain init_chain = 10;
-		ResponseBeginBlock begin_block = 11;
-		ResponseEndBlock end_block = 12;
-	}
+  oneof value {
+    ResponseException exception = 1;
+    ResponseEcho echo = 2;
+    ResponseFlush flush = 3;
+    ResponseInfo info = 4;
+    ResponseSetOption set_option = 5;
+    ResponseInitChain init_chain = 6;
+    ResponseQuery query = 7;
+    ResponseBeginBlock begin_block = 8;
+    ResponseCheckTx check_tx = 9;
+    ResponseDeliverTx deliver_tx = 10;
+    ResponseEndBlock end_block = 11;
+    ResponseCommit commit = 12;
+  }
 }
 
-message ResponseException{
-	string error = 1;
+// nondeterministic
+message ResponseException {
+  string error = 1;
 }
 
 message ResponseEcho {
-	string message = 1;
+  string message = 1;
 }
 
-message ResponseFlush{
+message ResponseFlush {
 }
 
 message ResponseInfo {
-	string data = 1;
-	string version = 2;
-	uint64 last_block_height = 3;
-	bytes last_block_app_hash = 4;
+  string data = 1;
+  string version = 2;
+  int64 last_block_height = 3;
+  bytes last_block_app_hash = 4;
 }
 
-message ResponseSetOption{
-	string log = 1;
+// nondeterministic
+message ResponseSetOption {
+  uint32 code = 1;
+  // bytes data = 2;
+  string log = 3;
+  string info = 4;
 }
 
-message ResponseDeliverTx{
-	CodeType          code        = 1;
-	bytes             data        = 2;
-	string            log         = 3;
+message ResponseInitChain {
+  ConsensusParams consensus_params = 1;
+  repeated Validator validators = 2 [(gogoproto.nullable)=false];
 }
 
-message ResponseCheckTx{
-	CodeType          code        = 1;
-	bytes             data        = 2;
-	string            log         = 3;
+message ResponseQuery {
+  uint32 code = 1;
+  // bytes data = 2; // use "value" instead.
+  string log = 3; // nondeterministic
+  string info = 4; // nondeterministic
+  int64 index = 5;
+  bytes key = 6;
+  bytes value = 7;
+  bytes proof = 8;
+  int64 height = 9;
 }
 
-message ResponseQuery{
-	CodeType          code        = 1;
-	int64             index       = 2;
-	bytes             key         = 3;
-	bytes             value       = 4;
-	bytes             proof       = 5;
-	uint64            height      = 6;
-	string            log         = 7;
+message ResponseBeginBlock {
+  repeated KVPair tags = 1 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
 }
 
-message ResponseCommit{
-	CodeType          code        = 1;
-	bytes             data        = 2;
-	string            log         = 3;
+message ResponseCheckTx {
+  uint32 code = 1;
+  bytes data = 2;
+  string log = 3; // nondeterministic
+  string info = 4; // nondeterministic
+  int64 gas_wanted  = 5;
+  int64 gas_used = 6;
+  repeated KVPair tags = 7 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
+  KI64Pair fee = 8 [(gogoproto.nullable)=false];
 }
 
-
-message ResponseInitChain{
+message ResponseDeliverTx {
+  uint32 code = 1;
+  bytes data = 2;
+  string log = 3; // nondeterministic
+  string info = 4; // nondeterministic
+  int64 gas_wanted = 5;
+  int64 gas_used = 6;
+  repeated KVPair tags = 7 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
+  KI64Pair fee = 8 [(gogoproto.nullable)=false];
 }
 
-message ResponseBeginBlock{
+message ResponseEndBlock {
+  repeated Validator validator_updates = 1 [(gogoproto.nullable)=false];
+  ConsensusParams consensus_param_updates = 2;
+  repeated KVPair tags = 3 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
 }
 
-message ResponseEndBlock{
-	repeated Validator diffs = 1;
+message ResponseCommit {
+  // reserve 1
+  bytes data = 2;
+}
+
+//----------------------------------------
+// Misc.
+
+// ConsensusParams contains all consensus-relevant parameters
+// that can be adjusted by the abci app
+message ConsensusParams {
+  BlockSize block_size = 1;
+  TxSize tx_size = 2;
+  BlockGossip block_gossip = 3;
+}
+
+// BlockSize contain limits on the block size.
+message BlockSize {
+  int32 max_bytes = 1;
+  int32 max_txs = 2;
+  int64 max_gas = 3;
+}
+
+// TxSize contain limits on the tx size.
+message TxSize {
+  int32 max_bytes = 1;
+  int64 max_gas = 2;
+}
+
+// BlockGossip determine consensus critical
+// elements of how blocks are gossiped
+message BlockGossip {
+  // Note: must not be 0
+  int32 block_part_size_bytes = 1;
 }
 
 //----------------------------------------
 // Blockchain Types
 
+// just the minimum the app might need
 message Header {
-	string chain_id = 1;
-	uint64 height = 2;
-	uint64 time = 3;
-	uint64 num_txs = 4;
-	BlockID last_block_id = 5;
-	bytes last_commit_hash = 6;
-	bytes data_hash = 7;
-	bytes validators_hash = 8;
-	bytes app_hash = 9;
+  // basics
+  string chain_id = 1 [(gogoproto.customname)="ChainID"];
+  int64 height = 2;
+  int64 time = 3;
+
+  // txs
+  int32 num_txs = 4;
+  int64 total_txs = 5;
+
+  // hashes
+  bytes last_block_hash = 6;
+  bytes validators_hash = 7;
+  bytes app_hash = 8;
+
+  // consensus
+  Validator proposer = 9 [(gogoproto.nullable)=false];
 }
 
-message BlockID {
-	bytes hash = 1;
-	PartSetHeader parts = 2;
-}
-
-message PartSetHeader {
-	uint64 total = 1;
-	bytes hash = 2;
-}
-
+// Validator
 message Validator {
-	bytes pubKey = 1;
-	uint64 power = 2;
+  bytes address = 1;
+  PubKey pub_key = 2 [(gogoproto.nullable)=false];
+  int64 power = 3;
+}
+
+// Validator with an extra bool
+message SigningValidator {
+  Validator validator = 1 [(gogoproto.nullable)=false];
+  bool signed_last_block = 2;
+}
+
+message PubKey {
+  string type = 1;
+  bytes  data = 2;
+}
+
+message Evidence {
+  string type = 1;
+  Validator validator = 2 [(gogoproto.nullable)=false];
+  int64 height = 3;
+  int64 time = 4;
+  int64 total_voting_power = 5;
 }
 
 //----------------------------------------
 // Service Definition
 
 service ABCIApplication {
-	rpc Echo(RequestEcho) returns (ResponseEcho) ;
-	rpc Flush(RequestFlush) returns (ResponseFlush);
-	rpc Info(RequestInfo) returns (ResponseInfo);
-	rpc SetOption(RequestSetOption) returns (ResponseSetOption);
-	rpc DeliverTx(RequestDeliverTx) returns (ResponseDeliverTx);
-	rpc CheckTx(RequestCheckTx) returns (ResponseCheckTx);
-	rpc Query(RequestQuery) returns (ResponseQuery);
-	rpc Commit(RequestCommit) returns (ResponseCommit);
-	rpc InitChain(RequestInitChain) returns (ResponseInitChain);
-	rpc BeginBlock(RequestBeginBlock) returns (ResponseBeginBlock);
-	rpc EndBlock(RequestEndBlock) returns (ResponseEndBlock);
+  rpc Echo(RequestEcho) returns (ResponseEcho) ;
+  rpc Flush(RequestFlush) returns (ResponseFlush);
+  rpc Info(RequestInfo) returns (ResponseInfo);
+  rpc SetOption(RequestSetOption) returns (ResponseSetOption);
+  rpc DeliverTx(RequestDeliverTx) returns (ResponseDeliverTx);
+  rpc CheckTx(RequestCheckTx) returns (ResponseCheckTx);
+  rpc Query(RequestQuery) returns (ResponseQuery);
+  rpc Commit(RequestCommit) returns (ResponseCommit);
+  rpc InitChain(RequestInitChain) returns (ResponseInitChain);
+  rpc BeginBlock(RequestBeginBlock) returns (ResponseBeginBlock);
+  rpc EndBlock(RequestEndBlock) returns (ResponseEndBlock);
 }
