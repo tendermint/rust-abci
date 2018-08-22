@@ -1,32 +1,57 @@
+use std::net::SocketAddr;
+
 extern crate bytes;
 extern crate integer_encoding;
 extern crate protobuf;
 
-pub mod server;
-mod tcpserver;
+mod server;
 pub mod types;
 
+use server::TCPServer;
 pub use types::*;
 
 pub trait Application {
-    // Info/Query connection
-    fn info(&mut self, req: &RequestInfo) -> ResponseInfo;
+    fn info(&mut self, _req: &RequestInfo) -> ResponseInfo {
+        ResponseInfo::new()
+    }
 
-    fn set_option(&mut self, req: &RequestSetOption) -> ResponseSetOption;
+    fn set_option(&mut self, _req: &RequestSetOption) -> ResponseSetOption {
+        ResponseSetOption::new()
+    }
 
-    fn query(&mut self, p: &RequestQuery) -> ResponseQuery;
+    fn query(&mut self, _req: &RequestQuery) -> ResponseQuery {
+        ResponseQuery::new()
+    }
 
     // Mempool connection
-    fn check_tx(&mut self, p: &RequestCheckTx) -> ResponseCheckTx;
+    fn check_tx(&mut self, _req: &RequestCheckTx) -> ResponseCheckTx {
+        ResponseCheckTx::new()
+    }
 
     // Consensus connection
-    fn init_chain(&mut self, p: &RequestInitChain) -> ResponseInitChain;
+    fn init_chain(&mut self, _req: &RequestInitChain) -> ResponseInitChain {
+        ResponseInitChain::new()
+    }
 
-    fn begin_block(&mut self, p: &RequestBeginBlock) -> ResponseBeginBlock;
+    fn begin_block(&mut self, _req: &RequestBeginBlock) -> ResponseBeginBlock {
+        ResponseBeginBlock::new()
+    }
+
+    fn end_block(&mut self, _req: &RequestEndBlock) -> ResponseEndBlock {
+        ResponseEndBlock::new()
+    }
+
+    fn commit(&mut self, _req: &RequestCommit) -> ResponseCommit {
+        ResponseCommit::new()
+    }
 
     fn deliver_tx(&mut self, p: &RequestDeliverTx) -> ResponseDeliverTx;
+}
 
-    fn end_block(&mut self, p: &RequestEndBlock) -> ResponseEndBlock;
-
-    fn commit(&mut self, p: &RequestCommit) -> ResponseCommit;
+pub fn run<A>(listen_addr: SocketAddr, app: A)
+where
+    A: Application + 'static + Send + Sync,
+{
+    let server = TCPServer::new(app, listen_addr);
+    server.serve().unwrap();
 }

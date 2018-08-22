@@ -1,9 +1,9 @@
 [package]
 name = "abci"
-version = "0.3.0"
-authors = ["Adrian Brink <adrian@brink-holdings.com>", "Jackson Lewis <st.japa6@gmail.com>"]
+version = "0.3.1"
+authors = ["Adrian Brink <adrian@brink-holdings.com>", "Jackson Lewis <st.japa6@gmail.com>", "Dave Bryson"]
 license = "MIT/Apache-2.0"
-#description = "A ABCI server for Rust. Compatible with Tendermint 0.22."
+description = "Tendermint ABCI server for Rust"
 homepage = "https://tendermint.com/docs/guides/app-development"
 repository = "https://github.com/tendermint/rust-tsp"
 #documentation = "https://docs.rs/tsp/0.2.3/tsp/"
