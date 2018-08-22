@@ -16,6 +16,8 @@ use protobuf::Message;
 
 const BUFFER_SIZE: usize = 4096;
 
+// TCP Server.  Processes incoming requests from Tendermint, deserializes byte code to respective
+// protobuf message, and passes to Application.
 pub struct TCPServer<A>
 where
     A: Application + 'static + Send + Sync,
@@ -35,16 +37,20 @@ where
     pub fn serve(self) -> io::Result<()> {
         let listener = TcpListener::bind(self.addr).unwrap();
 
+        // Wrap the app atomically and clone for each connection
+        // the Mutex is probably not *really* needed as Tendermint synchronizes calls...being
+        // safe in the event that changes.
         let app = Arc::new(Mutex::new(self.app));
 
         for new_connection in listener.incoming() {
             let app_instance = Arc::clone(&app);
-
             match new_connection {
                 Ok(stream) => {
                     thread::spawn(move || handle_stream(stream, app_instance));
                 }
                 Err(err) => {
+                    // TODO: better handling here... if a single connection fails
+                    // from Tendermint, the app shouldn't start
                     println!("Connection failed: {}", err);
                 }
             }
