@@ -4,9 +4,9 @@ use abci::*;
 struct EmptyApp;
 
 impl Application for EmptyApp {
-
     // Info/Query connection
     fn info(&mut self, req: &RequestInfo) -> ResponseInfo {
+        println!("INFO");
         ResponseInfo::new()
     }
 
@@ -25,6 +25,7 @@ impl Application for EmptyApp {
 
     // Consensus connection
     fn init_chain(&mut self, p: &RequestInitChain) -> ResponseInitChain {
+        println!("INITCHAIN");
         ResponseInitChain::new()
     }
 
@@ -41,12 +42,12 @@ impl Application for EmptyApp {
     }
 
     fn commit(&mut self, p: &RequestCommit) -> ResponseCommit {
+        println!("COMMIT");
         ResponseCommit::new()
     }
 }
 
 fn main() {
-    static APP: EmptyApp = EmptyApp;
     let addr = "127.0.0.1:26658".parse().unwrap();
-    server::new(addr, &APP);
+    server::new(addr, EmptyApp);
 }

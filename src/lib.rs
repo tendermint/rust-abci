@@ -1,17 +1,14 @@
-//! This is the documentation for the rust-abci crate.
-#![feature(ptr_internals)]
 extern crate bytes;
-extern crate protobuf;
 extern crate integer_encoding;
+extern crate protobuf;
 
-mod tcpserver;
 pub mod server;
+mod tcpserver;
 pub mod types;
 
 pub use types::*;
 
-pub trait Application : Sync {
-
+pub trait Application {
     // Info/Query connection
     fn info(&mut self, req: &RequestInfo) -> ResponseInfo;
 
