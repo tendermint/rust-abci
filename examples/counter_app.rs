@@ -15,6 +15,7 @@ impl CounterApp {
     }
 }
 
+// Convert incoming tx data to the proper BigEndian size. txs.len() > 8 will return 0
 fn convert_tx(tx: &[u8]) -> u64 {
     if tx.len() < 8 {
         let pad = 8 - tx.len();
@@ -26,7 +27,7 @@ fn convert_tx(tx: &[u8]) -> u64 {
 }
 
 impl abci::Application for CounterApp {
-    // Validate transactions.  Rule:  count transactions must be incremental
+    // Validate transactions.  Rule:  Transactions must be incremental: 1,2,3,4...
     fn check_tx(&mut self, req: &abci::RequestCheckTx) -> abci::ResponseCheckTx {
         // Get the Tx [u8] and convert to u64
         let c = convert_tx(req.get_tx());

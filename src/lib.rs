@@ -2,21 +2,18 @@
 //!
 //! This library provides an application Trait and TCP server for implementing
 //! Tendemint ABCI application in Rust.  The Application Trait provides default implementations
-//! for all but the deliver_tx functions to simplify development.
+//! to simplify development.
 //!
 //! ## Example
 //!
-//! Here's a simple example that communicates with Tendermint. Note: it only overrides the deliver_tx
-//! and uses the default implementation for other callbacks
+//! Here's a simple example that communicates with Tendermint. Defaults callbacks are handled by
+//! the Trait
 //!
 //! ```
 //! struct EmptyApp;
 //!
-//! impl abci::Application for EmptyApp {
-//!   fn deliver_tx(&mut self, _p: &abci::RequestDeliverTx) -> abci::ResponseDeliverTx {
-//!     abci::ResponseDeliverTx::new()
-//!   }
-//! }
+//! impl abci::Application for EmptyApp {}
+//!
 //!
 //! let addr = "127.0.0.1:26658".parse().unwrap();
 //! abci::run(addr, EmptyApp);
