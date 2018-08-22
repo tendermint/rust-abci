@@ -67,6 +67,6 @@ impl abci::Application for CounterApp {
 }
 
 fn main() {
-    let addr = "127.0.0.1:26658".parse().unwrap();
-    abci::run(addr, CounterApp::new());
+    // Run on localhost using default Tendermint port
+    abci::run_local(CounterApp::new());
 }

@@ -15,8 +15,8 @@
 //! impl abci::Application for EmptyApp {}
 //!
 //!
-//! let addr = "127.0.0.1:26658".parse().unwrap();
-//! abci::run(addr, EmptyApp);
+//!
+//! abci::run_local(EmptyApp);
 //!```
 //!
 use std::net::SocketAddr;
@@ -93,7 +93,16 @@ pub trait Application {
     }
 }
 
-// Setup the application and start the server
+// Setup the app and start the server using localhost and default tendermint port 26658
+pub fn run_local<A>(app: A)
+where
+    A: Application + 'static + Send + Sync,
+{
+    let addr = "127.0.0.1:26658".parse().unwrap();
+    run(addr, app);
+}
+
+// Setup the application and start the server. Use this fn when setting different ip:port.
 pub fn run<A>(listen_addr: SocketAddr, app: A)
 where
     A: Application + 'static + Send + Sync,
