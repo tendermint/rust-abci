@@ -1,20 +1,18 @@
 //! # Tendermint ABCI library for Rust
 //!
-//! This library provides an application Trait and TCP server for implementing
-//! Tendemint ABCI application in Rust.  The Application Trait provides default implementations
+//! This library provides an application Trait and TCP server for implementing Tendemint ABCI
+//! application in Rust.  The Application Trait provides default implementations for each callback
 //! to simplify development.
 //!
 //! ## Example
 //!
 //! Here's a simple example that communicates with Tendermint. Defaults callbacks are handled by
-//! the Trait
+//! the Trait.  The app doesn't do any actual processing on a transaction.
 //!
 //! ```
 //! struct EmptyApp;
 //!
 //! impl abci::Application for EmptyApp {}
-//!
-//!
 //!
 //! abci::run_local(EmptyApp);
 //!```
@@ -28,12 +26,12 @@ extern crate protobuf;
 mod server;
 pub mod types;
 
-use server::TCPServer;
+use server::serve;
 pub use types::*;
 
 // Main Trait for ABCI application. Provides generic responses for all callbacks
 // Override desired callbacks as needed.  Tendermint makes 3 TCP connections to the
-// application, and does so in a synchonized manner.
+// application and does so in a synchonized manner.
 pub trait Application {
     // Query Connection: Called on startup from Tendermint.  The application should normally
     // return the last know state so Tendermint can determine if it needs to replay blocks
@@ -107,6 +105,5 @@ pub fn run<A>(listen_addr: SocketAddr, app: A)
 where
     A: Application + 'static + Send + Sync,
 {
-    let server = TCPServer::new(app, listen_addr);
-    server.serve().unwrap();
+    serve(app, listen_addr).unwrap();
 }

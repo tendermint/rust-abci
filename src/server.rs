@@ -16,48 +16,34 @@ use protobuf::Message;
 
 const BUFFER_SIZE: usize = 4096;
 
-// TCP Server.  Processes incoming requests from Tendermint, deserializes byte code to respective
-// protobuf message, and passes to Application.
-pub struct TCPServer<A>
+// Creates the TCP server and listens for connections from Tendermint
+pub fn serve<A>(app: A, addr: SocketAddr) -> io::Result<()>
 where
     A: Application + 'static + Send + Sync,
 {
-    app: A,
-    addr: SocketAddr,
-}
+    let listener = TcpListener::bind(addr).unwrap();
 
-impl<A> TCPServer<A>
-where
-    A: Application + 'static + Send + Sync,
-{
-    pub fn new(app: A, addr: SocketAddr) -> TCPServer<A> {
-        TCPServer { app, addr }
-    }
+    // Wrap the app atomically and clone for each connection.
+    //
+    // The Mutex is probably not *really* needed as Tendermint synchronizes calls...just being
+    // safe in the event that changes.
+    let app = Arc::new(Mutex::new(app));
 
-    pub fn serve(self) -> io::Result<()> {
-        let listener = TcpListener::bind(self.addr).unwrap();
-
-        // Wrap the app atomically and clone for each connection
-        // the Mutex is probably not *really* needed as Tendermint synchronizes calls...being
-        // safe in the event that changes.
-        let app = Arc::new(Mutex::new(self.app));
-
-        for new_connection in listener.incoming() {
-            let app_instance = Arc::clone(&app);
-            match new_connection {
-                Ok(stream) => {
-                    thread::spawn(move || handle_stream(stream, app_instance));
-                }
-                Err(err) => {
-                    // TODO: better handling here... if a single connection fails
-                    // from Tendermint, the app shouldn't start
-                    println!("Connection failed: {}", err);
-                }
+    for new_connection in listener.incoming() {
+        let app_instance = Arc::clone(&app);
+        match new_connection {
+            Ok(stream) => {
+                thread::spawn(move || handle_stream(stream, app_instance));
+            }
+            Err(err) => {
+                // TODO: better handling here? if a single connection fails from Tendermint,
+                // should the app really start?  The app needs all 3 connections.
+                println!("Connection failed: {}", err);
             }
         }
-        drop(listener);
-        Ok(())
     }
+    drop(listener);
+    Ok(())
 }
 
 fn handle_stream<A>(mut stream: TcpStream, app: Arc<Mutex<A>>)
@@ -147,14 +133,10 @@ fn process_bytes(mut bytes: BytesMut) -> Vec<Request> {
         }
         let varint = i64::decode_var(&bytes[..]);
         let msg_bytes = bytes.split_to(varint.0 as usize + varint.1);
-        match protobuf::parse_from_bytes(&msg_bytes[varint.1..]).ok() {
-            Some(req) => {
-                messages.push(req);
-            }
-            None => {
-                println!("NOTE: Invalid request made");
-            }
-        }
+
+        protobuf::parse_from_bytes(&msg_bytes[varint.1..])
+            .ok()
+            .map(|req| messages.push(req));
     }
     messages
 }
