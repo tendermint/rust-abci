@@ -22,9 +22,12 @@ Here you can find more information about [Tendermint](https://github.com/tenderm
 
 For a real life example of an ABCI application you can checkout [Ethermint](https://github.com/tendermint/ethermint) or [Basecoin](https://github.com/tendermint/basecoin).
 
-
 ----
 
+## Tendermint version support
+Tested against Tendermint 0.25.0
+
+----
 
 ## Dependencies
 Make sure that you have Rust and Cargo installed. The easiest way is to follow the instructions on [rustup](https://rustup.rs/).
@@ -40,7 +43,7 @@ The `empty_app` example, found under the `examples` folder, is a good demonstrat
 To use this library to build your own ABCI apps in rust you have to include the following in your `Cargo.toml` file.
 ```toml
 [dependencies]
-abci = "0.3.1"
+abci = "0.4.0"
 ```
 
 ## Running the examples

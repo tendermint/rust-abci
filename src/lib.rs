@@ -14,7 +14,9 @@
 //!
 //! impl abci::Application for EmptyApp {}
 //!
-//! abci::run_local(EmptyApp);
+//! fn main() {
+//!     abci::run_local(EmptyApp);
+//! }
 //!```
 //!
 use std::net::SocketAddr;
@@ -23,75 +25,76 @@ extern crate bytes;
 extern crate integer_encoding;
 extern crate protobuf;
 
+pub mod common;
 mod server;
 pub mod types;
 
 use server::serve;
 pub use types::*;
 
-// Main Trait for ABCI application. Provides generic responses for all callbacks
-// Override desired callbacks as needed.  Tendermint makes 3 TCP connections to the
-// application and does so in a synchonized manner.
+/// Main Trait for ABCI application. Provides generic responses for all callbacks
+/// Override desired callbacks as needed.  Tendermint makes 3 TCP connections to the
+/// application and does so in a synchonized manner.
 pub trait Application {
-    // Query Connection: Called on startup from Tendermint.  The application should normally
-    // return the last know state so Tendermint can determine if it needs to replay blocks
-    // to the application.
+    /// Query Connection: Called on startup from Tendermint.  The application should normally
+    /// return the last know state so Tendermint can determine if it needs to replay blocks
+    /// to the application.
     fn info(&mut self, _req: &RequestInfo) -> ResponseInfo {
         ResponseInfo::new()
     }
 
-    // Query Connection: Set options on the application (rarely used)
+    /// Query Connection: Set options on the application (rarely used)
     fn set_option(&mut self, _req: &RequestSetOption) -> ResponseSetOption {
         ResponseSetOption::new()
     }
 
-    // Query Connection: Query your application. This usually resolves through a merkle tree holding
-    // the state of the app.
+    /// Query Connection: Query your application. This usually resolves through a merkle tree holding
+    /// the state of the app.
     fn query(&mut self, _req: &RequestQuery) -> ResponseQuery {
         ResponseQuery::new()
     }
 
-    // Mempool Connection:  Used to validate incoming transactions.  If the application reponds
-    // with a non-zero value, the transaction is added to Tendermint's mempool for processing
-    // on the deliver_tx call below.
+    /// Mempool Connection:  Used to validate incoming transactions.  If the application reponds
+    /// with a non-zero value, the transaction is added to Tendermint's mempool for processing
+    /// on the deliver_tx call below.
     fn check_tx(&mut self, _req: &RequestCheckTx) -> ResponseCheckTx {
         ResponseCheckTx::new()
     }
 
-    // Consensus Connection:  Called once on startup. Usually used to establish initial (genesis)
-    // state.
+    /// Consensus Connection:  Called once on startup. Usually used to establish initial (genesis)
+    /// state.
     fn init_chain(&mut self, _req: &RequestInitChain) -> ResponseInitChain {
         ResponseInitChain::new()
     }
 
-    // Consensus Connection: Called at the start of processing a block of transactions
-    // The flow is:
-    // begin_block()
-    //   deliver_tx()  for each transaction in the block
-    // end_block()
-    // commit()
+    /// Consensus Connection: Called at the start of processing a block of transactions
+    /// The flow is:
+    /// begin_block()
+    ///   deliver_tx()  for each transaction in the block
+    /// end_block()
+    /// commit()
     fn begin_block(&mut self, _req: &RequestBeginBlock) -> ResponseBeginBlock {
         ResponseBeginBlock::new()
     }
 
-    // Consensus Connection: Actually processing the transaction, performing some form of a
-    // state transistion.
+    /// Consensus Connection: Actually processing the transaction, performing some form of a
+    /// state transistion.
     fn deliver_tx(&mut self, _p: &RequestDeliverTx) -> ResponseDeliverTx {
         ResponseDeliverTx::new()
     }
 
-    // Consensus Connection: Called at the end of the block.  Often used to update the validator set.
+    /// Consensus Connection: Called at the end of the block.  Often used to update the validator set.
     fn end_block(&mut self, _req: &RequestEndBlock) -> ResponseEndBlock {
         ResponseEndBlock::new()
     }
 
-    // Consensus Connection: Commit the block with the latest state from the application.
+    /// Consensus Connection: Commit the block with the latest state from the application.
     fn commit(&mut self, _req: &RequestCommit) -> ResponseCommit {
         ResponseCommit::new()
     }
 }
 
-// Setup the app and start the server using localhost and default tendermint port 26658
+/// Setup the app and start the server using localhost and default tendermint port 26658
 pub fn run_local<A>(app: A)
 where
     A: Application + 'static + Send + Sync,
@@ -100,7 +103,7 @@ where
     run(addr, app);
 }
 
-// Setup the application and start the server. Use this fn when setting different ip:port.
+/// Setup the application and start the server. Use this fn when setting different ip:port.
 pub fn run<A>(listen_addr: SocketAddr, app: A)
 where
     A: Application + 'static + Send + Sync,
