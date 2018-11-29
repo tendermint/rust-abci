@@ -1,24 +1,24 @@
 syntax = "proto3";
 package types;
 
+// For more information on gogo.proto, see:
+// https://github.com/gogo/protobuf/blob/master/extensions.md
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "github.com/tendermint/tendermint/libs/common/common.proto";
+
 // This file is copied from http://github.com/tendermint/abci
 // NOTE: When using custom types, mind the warnings.
 // https://github.com/gogo/protobuf/blob/master/custom_types.md#warnings-and-issues
 
-//----------------------------------------
-// Abstract types
-
-// Define these here for compatibility but use tmlibs/common.KVPair.
-message KVPair {
-  bytes key = 1;
-  bytes value = 2;
-}
-
-// Define these here for compatibility but use tmlibs/common.KI64Pair.
-message KI64Pair {
-  bytes key = 1;
-  int64 value = 2;
-}
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.unmarshaler_all) = true;
+option (gogoproto.sizer_all) = true;
+option (gogoproto.goproto_registration) = true;
+// Generate tests
+option (gogoproto.populate_all) = true;
+option (gogoproto.equal_all) = true;
+option (gogoproto.testgen_all) = true;
 
 //----------------------------------------
 // Request types
@@ -57,10 +57,10 @@ message RequestSetOption {
 }
 
 message RequestInitChain {
-  int64 time = 1;
+  google.protobuf.Timestamp time = 1  [(gogoproto.nullable)=false, (gogoproto.stdtime)=true];
   string chain_id = 2;
   ConsensusParams consensus_params = 3;
-  repeated Validator validators = 4  [(gogoproto.nullable)=false];
+  repeated ValidatorUpdate validators = 4  [(gogoproto.nullable)=false];
   bytes app_state_bytes = 5;
 }
 
@@ -71,10 +71,11 @@ message RequestQuery {
   bool prove = 4;
 }
 
+// NOTE: validators here have empty pubkeys.
 message RequestBeginBlock {
   bytes hash = 1;
   Header header = 2 [(gogoproto.nullable)=false];
-  repeated SigningValidator validators = 3  [(gogoproto.nullable)=false];
+  LastCommitInfo last_commit_info = 3 [(gogoproto.nullable)=false];
   repeated Evidence byzantine_validators = 4 [(gogoproto.nullable)=false];
 }
 
@@ -142,7 +143,7 @@ message ResponseSetOption {
 
 message ResponseInitChain {
   ConsensusParams consensus_params = 1;
-  repeated Validator validators = 2 [(gogoproto.nullable)=false];
+  repeated ValidatorUpdate validators = 2 [(gogoproto.nullable)=false];
 }
 
 message ResponseQuery {
@@ -158,7 +159,7 @@ message ResponseQuery {
 }
 
 message ResponseBeginBlock {
-  repeated KVPair tags = 1 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
+  repeated common.KVPair tags = 1 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
 }
 
 message ResponseCheckTx {
@@ -168,8 +169,7 @@ message ResponseCheckTx {
   string info = 4; // nondeterministic
   int64 gas_wanted  = 5;
   int64 gas_used = 6;
-  repeated KVPair tags = 7 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
-  KI64Pair fee = 8 [(gogoproto.nullable)=false];
+  repeated common.KVPair tags = 7 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
 }
 
 message ResponseDeliverTx {
@@ -179,14 +179,13 @@ message ResponseDeliverTx {
   string info = 4; // nondeterministic
   int64 gas_wanted = 5;
   int64 gas_used = 6;
-  repeated KVPair tags = 7 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
-  KI64Pair fee = 8 [(gogoproto.nullable)=false];
+  repeated common.KVPair tags = 7 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
 }
 
 message ResponseEndBlock {
-  repeated Validator validator_updates = 1 [(gogoproto.nullable)=false];
+  repeated ValidatorUpdate validator_updates = 1 [(gogoproto.nullable)=false];
   ConsensusParams consensus_param_updates = 2;
-  repeated KVPair tags = 3 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
+  repeated common.KVPair tags = 3 [(gogoproto.nullable)=false, (gogoproto.jsontag)="tags,omitempty"];
 }
 
 message ResponseCommit {
@@ -201,62 +200,83 @@ message ResponseCommit {
 // that can be adjusted by the abci app
 message ConsensusParams {
   BlockSize block_size = 1;
-  TxSize tx_size = 2;
-  BlockGossip block_gossip = 3;
+  EvidenceParams evidence_params = 2;
 }
 
-// BlockSize contain limits on the block size.
+// BlockSize contains limits on the block size.
 message BlockSize {
-  int32 max_bytes = 1;
-  int32 max_txs = 2;
-  int64 max_gas = 3;
-}
-
-// TxSize contain limits on the tx size.
-message TxSize {
-  int32 max_bytes = 1;
+  // Note: must be greater than 0
+  int64 max_bytes = 1;
+  // Note: must be greater or equal to -1
   int64 max_gas = 2;
 }
 
-// BlockGossip determine consensus critical
-// elements of how blocks are gossiped
-message BlockGossip {
-  // Note: must not be 0
-  int32 block_part_size_bytes = 1;
+// EvidenceParams contains limits on the evidence.
+message EvidenceParams {
+  // Note: must be greater than 0
+  int64 max_age = 1;
+}
+
+message LastCommitInfo {
+  int32 round = 1;
+  repeated VoteInfo votes = 2 [(gogoproto.nullable)=false];
 }
 
 //----------------------------------------
 // Blockchain Types
 
-// just the minimum the app might need
 message Header {
-  // basics
+  // basic block info
   string chain_id = 1 [(gogoproto.customname)="ChainID"];
   int64 height = 2;
-  int64 time = 3;
-
-  // txs
-  int32 num_txs = 4;
+  google.protobuf.Timestamp time = 3 [(gogoproto.nullable)=false, (gogoproto.stdtime)=true];
+  int64 num_txs = 4;
   int64 total_txs = 5;
 
-  // hashes
-  bytes last_block_hash = 6;
-  bytes validators_hash = 7;
-  bytes app_hash = 8;
+  // prev block info
+  BlockID last_block_id = 6 [(gogoproto.nullable)=false];
 
-  // consensus
-  Validator proposer = 9 [(gogoproto.nullable)=false];
+  // hashes of block data
+  bytes last_commit_hash = 7; // commit from validators from the last block
+  bytes data_hash = 8;        // transactions
+
+  // hashes from the app output from the prev block
+  bytes validators_hash = 9;   // validators for the current block
+  bytes next_validators_hash = 10;   // validators for the next block
+  bytes consensus_hash = 11;   // consensus params for current block
+  bytes app_hash = 12;         // state after txs from the previous block
+  bytes last_results_hash = 13;// root hash of all results from the txs from the previous block
+
+  // consensus info
+  bytes evidence_hash = 14;    // evidence included in the block
+  bytes proposer_address = 15; // original proposer of the block
+}
+
+message BlockID {
+  bytes hash = 1;
+  PartSetHeader parts_header = 2 [(gogoproto.nullable)=false];
+}
+
+message PartSetHeader {
+  int32 total = 1;
+  bytes hash = 2;
 }
 
 // Validator
 message Validator {
   bytes address = 1;
-  PubKey pub_key = 2 [(gogoproto.nullable)=false];
+  //PubKey pub_key = 2 [(gogoproto.nullable)=false];
   int64 power = 3;
 }
 
-// Validator with an extra bool
-message SigningValidator {
+// ValidatorUpdate
+message ValidatorUpdate {
+  PubKey pub_key = 1 [(gogoproto.nullable)=false];
+  int64 power = 2;
+}
+
+// VoteInfo
+message VoteInfo {
   Validator validator = 1 [(gogoproto.nullable)=false];
   bool signed_last_block = 2;
 }
@@ -270,7 +290,7 @@ message Evidence {
   string type = 1;
   Validator validator = 2 [(gogoproto.nullable)=false];
   int64 height = 3;
-  int64 time = 4;
+  google.protobuf.Timestamp time = 4 [(gogoproto.nullable)=false, (gogoproto.stdtime)=true];
   int64 total_voting_power = 5;
 }
 

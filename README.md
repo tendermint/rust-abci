@@ -11,6 +11,9 @@ Here you can find more information about [Tendermint](https://github.com/tenderm
 
 For a real life example of an ABCI application you can checkout [Ethermint](https://github.com/cosmos/ethermint) or [Cosmos SDK](https://github.com/cosmos/cosmos-sdk).
 
+## Tendermint version support
+Tested against Tendermint 0.25.0
+
 ## Installation
 
 ### Dependencies
@@ -29,7 +32,7 @@ To use this library to build your own ABCI apps in rust you have to include the 
 
 ```toml
 [dependencies]
-abci = "0.3.0"
+abci = "0.4.0"
 ```
 
 ## Running the examples
@@ -46,6 +49,13 @@ If you wish to not create new blocks each second, make sure to add the `--consen
 
 After the node is online, you can run the `empty_app` example using `cargo run --example empty_app`.
 
+To run the `counter_app` run `cargo run --example counter_app` and send transaction to Tendermint via:
+```
+ > curl localhost:26657/broadcast_tx_commit?tx=0x01
+ > curl localhost:26657/broadcast_tx_commit?tx=0x02
+ ...
+```
+
 ## Documentation
 
 Coming soon!
@@ -61,3 +71,4 @@ Please read, understand and adhere to our [code of conduct](https://github.com/t
 ## Credits
 
 Original `rust-tsp` made by Adrian Brink. New `abci` package and fixes based on `rust-tsp` made by Jackson Lewis.
+Additional updates, fixes, and example made by Dave Bryson.
