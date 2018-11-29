@@ -2,7 +2,7 @@
 
 Tendermint ABCI server, written in Rust programming language.
 
-[![](https://tokei.rs/b1/github/tendermint/rust-tsp)](https://github.com/tendermint/rust-tsp) [![CircleCI](https://circleci.com/gh/tendermint/rust-tsp/tree/master.svg?style=shield)](https://circleci.com/gh/tendermint/rust-tsp/tree/master)
+[![](https://tokei.rs/b1/github/tendermint/rust-abci)](https://github.com/tendermint/rust-abci) [![CircleCI](https://circleci.com/gh/tendermint/rust-abci/tree/master.svg?style=shield)](https://circleci.com/gh/tendermint/rust-abci/tree/master)
 
 This library implements the [ABCI
 protocol](https://tendermint.com/docs/spec/abci/) and can be used to write ABCI
@@ -19,7 +19,7 @@ Make sure that you have Rust and Cargo installed. The easiest way is to follow t
 To test the examples, please clone this repository.
 
 ```
-git clone https://github.com/tendermint/rust-tsp.git
+git clone https://github.com/tendermint/rust-abci.git
 ```
 
 The `empty_app` example, found under the `examples` folder, is a good demonstration/bare minimum foundation for a Rust ABCI app.
@@ -62,7 +62,7 @@ Find us through a variety of channels [here](https://cosmos.network/community).
 
 ### Code of Conduct
 
-Please read, understand and adhere to our [code of conduct](https://github.com/tendermint/rust-tsp/blob/master/CODE_OF_CONDUCT.md).
+Please read, understand and adhere to our [code of conduct](./CODE_OF_CONDUCT.md).
 
 ## Credits
 
