@@ -1,4 +1,4 @@
-# Rust TSP
+# Rust ABCI
 
 Tendermint ABCI server, written in Rust programming language.
 
