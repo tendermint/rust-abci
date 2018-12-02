@@ -1,0 +1,15 @@
+[package]
+name = "abci-protobuf"
+version = "0.1.0"
+authors = ["Dave Bryson"]
+license = "MIT/Apache-2.0"
+description = "Tendermint ABCI protobuf types for Rust"
+keywords = ["abci", "tendermint", "protobuf", "rust"]
+readme = "README.md"
+
+[dependencies]
+protobuf = "2.2.0"
+
+[build-dependencies]
+protobuf-codegen-pure = "2.2.0"
+

@@ -1,4 +1,4 @@
-use types::*;
+use abci_protobuf::abci::*;
 use Application;
 
 use std::io;
@@ -25,7 +25,11 @@ enum NetStream {
 impl Debug for NetStream {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match *self {
+<<<<<<< HEAD
             NetStream::Mocked(ref _s) => Ok(f.debug_struct("SharedMockStream").finish()?),
+=======
+            NetStream::Mocked(ref s) => Ok(f.debug_struct("SharedMockStream").finish()?),
+>>>>>>> refactor protobuf generation to subcrate
             NetStream::Tcp(ref s) => s.fmt(f),
         }
     }
