@@ -21,18 +21,16 @@
 //!
 use std::net::SocketAddr;
 
+extern crate abci_protobuf;
 extern crate bytes;
 extern crate integer_encoding;
-extern crate protobuf;
 extern crate mockstream;
+extern crate protobuf;
 
-pub mod common;
-pub mod merkle;
 mod server;
-pub mod types;
 
+use abci_protobuf::abci::*;
 use server::serve;
-pub use types::*;
 
 /// Main Trait for ABCI application. Provides generic responses for all callbacks
 /// Override desired callbacks as needed.  Tendermint makes 3 TCP connections to the
