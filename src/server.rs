@@ -25,7 +25,7 @@ enum NetStream {
 impl Debug for NetStream {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match *self {
-            NetStream::Mocked(ref s) => Ok(f.debug_struct("SharedMockStream").finish()?),
+            NetStream::Mocked(ref _s) => Ok(f.debug_struct("SharedMockStream").finish()?),
             NetStream::Tcp(ref s) => s.fmt(f),
         }
     }
