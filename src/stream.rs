@@ -149,7 +149,6 @@ mod tests {
         mockstream.push_bytes_to_read(msg_to_vec.as_slice());
 
         let mut consumer = AbciStream::from(mockstream);
-
         let packet = consumer.read_request();
         assert_eq!(packet.is_some(), true);
         let v = packet.unwrap();
