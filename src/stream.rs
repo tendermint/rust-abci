@@ -54,12 +54,14 @@ impl Debug for AbciStream {
 }
 
 impl AbciStream {
+    /// Create an ABCI Stream from a mock
     pub fn from_mock(mockstream: SharedMockStream) -> AbciStream {
         AbciStream {
             stream: StreamWrapper::Mocked(mockstream),
         }
     }
 
+    /// Create an ABCI Stream from a TcpStream
     pub fn from_tcp(tcpstream: TcpStream) -> AbciStream {
         AbciStream {
             stream: StreamWrapper::Tcp(tcpstream),
