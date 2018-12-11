@@ -15,47 +15,45 @@ use protobuf;
 use protobuf::Message;
 
 use mockstream::SharedMockStream;
-use std::fmt::{Formatter, Debug, self};
+use std::fmt::{self, Debug, Formatter};
 
 enum NetStream {
-	Mocked(SharedMockStream),
-	Tcp(TcpStream)
+    Mocked(SharedMockStream),
+    Tcp(TcpStream),
 }
 
 impl Debug for NetStream {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match *self {
-			NetStream::Mocked(ref s) => {
-                Ok(f.debug_struct("SharedMockStream").finish()?)
-            },
-			NetStream::Tcp(ref s) => s.fmt(f),
-		}
+            NetStream::Mocked(ref s) => Ok(f.debug_struct("SharedMockStream").finish()?),
+            NetStream::Tcp(ref s) => s.fmt(f),
+        }
     }
 }
 
 impl io::Read for NetStream {
-	fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-		match *self {
-			NetStream::Mocked(ref mut s) => s.read(buf),
-			NetStream::Tcp(ref mut s) => s.read(buf),
-		}
-	}
+    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+        match *self {
+            NetStream::Mocked(ref mut s) => s.read(buf),
+            NetStream::Tcp(ref mut s) => s.read(buf),
+        }
+    }
 }
 
 impl io::Write for NetStream {
-	fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-		match *self {
-			NetStream::Mocked(ref mut s) => s.write(buf),
-			NetStream::Tcp(ref mut s) => s.write(buf),
-		}
-	}
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        match *self {
+            NetStream::Mocked(ref mut s) => s.write(buf),
+            NetStream::Tcp(ref mut s) => s.write(buf),
+        }
+    }
 
-	fn flush(&mut self) -> io::Result<()> {
-		match *self {
-			NetStream::Mocked(ref mut s) => s.flush(),
-			NetStream::Tcp(ref mut s) => s.flush(),
-		}
-	}
+    fn flush(&mut self) -> io::Result<()> {
+        match *self {
+            NetStream::Mocked(ref mut s) => s.flush(),
+            NetStream::Tcp(ref mut s) => s.flush(),
+        }
+    }
 }
 
 const BUFFER_SIZE: usize = 4096;
@@ -212,12 +210,12 @@ mod tests {
     fn respond_should_not_crash_over_4mb() {
         let mut app = EmptyApp {};
         let s = SharedMockStream::new();
-	    let mut e = NetStream::Mocked(s.clone());
+        let mut e = NetStream::Mocked(s.clone());
         let mut r = Request::new();
         let mut echo = RequestEcho::new();
-        let st = (0..2*BUFFER_SIZE).map(|_| "X").collect::<String>();
+        let st = (0..2 * BUFFER_SIZE).map(|_| "X").collect::<String>();
         echo.set_message(st);
-        
+
         r.set_echo(echo);
         let resp = respond(&mut e, &mut app, &r);
         assert!(resp.is_ok())
