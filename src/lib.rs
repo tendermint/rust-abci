@@ -36,7 +36,7 @@ pub use messages::types::*;
 
 use server::serve;
 
-/// Main Trait for ABCI application. Provides generic responses for all callbacks
+/// Main Trait for an ABCI application. Provides generic responses for all callbacks
 /// Override desired callbacks as needed.  Tendermint makes 3 TCP connections to the
 /// application and does so in a synchonized manner.
 pub trait Application {
