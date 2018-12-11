@@ -24,9 +24,7 @@ where
         match new_connection {
             Ok(stream) => {
                 println!("Got connection! {:?}", stream);
-                thread::spawn(move || {
-                    handle_stream(AbciStream::new(StreamWrapper::Tcp(stream)), &app_instance)
-                });
+                thread::spawn(move || handle_stream(AbciStream::from_tcp(stream), &app_instance));
             }
             Err(err) => {
                 // We need all 3 connections...

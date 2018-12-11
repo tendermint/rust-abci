@@ -8,6 +8,7 @@ use std::io;
 use std::io::{Read, Write};
 use std::net::TcpStream;
 
+/// Wraps a stream for easier testing.  Original code from tomtau
 pub enum StreamWrapper {
     Mocked(SharedMockStream),
     Tcp(TcpStream),
@@ -38,6 +39,7 @@ impl io::Write for StreamWrapper {
     }
 }
 
+/// An ABCI Stream
 pub struct AbciStream {
     stream: StreamWrapper,
 }
@@ -52,11 +54,20 @@ impl Debug for AbciStream {
 }
 
 impl AbciStream {
-    pub fn new(stream: StreamWrapper) -> AbciStream {
-        AbciStream { stream }
+    pub fn from_mock(mockstream: SharedMockStream) -> AbciStream {
+        AbciStream {
+            stream: StreamWrapper::Mocked(mockstream),
+        }
     }
 
-    /// Write an ABCI response to stream
+    pub fn from_tcp(tcpstream: TcpStream) -> AbciStream {
+        AbciStream {
+            stream: StreamWrapper::Tcp(tcpstream),
+        }
+    }
+
+    /// Write an ABCI specifc response to the stream.   Properly sizes the output
+    /// based on the size of the response.
     pub fn write_response(&mut self, response: &Response) -> io::Result<()> {
         let msg_size = response.compute_size() as usize;
         let varint = i64::encode_var_vec(msg_size as i64);
@@ -70,6 +81,8 @@ impl AbciStream {
         Ok(())
     }
 
+    /// Read a varint delimited ABCI request from the stream
+    /// Returning either Some(request) or None
     pub fn read_request(&mut self) -> Option<Request> {
         if let Ok(amount) = read_varint(&mut self.stream) {
             let mut buf = vec![0; amount as usize];
@@ -82,7 +95,7 @@ impl AbciStream {
     }
 }
 
-// Adapted from integer-encoding...
+/// Parse out the varint. This code was adapted from the excellent integer-encoding crate
 fn read_varint(stream: &mut Read) -> Result<i64, io::Error> {
     const BUFLEN: usize = 10;
     let mut buf = [0 as u8; BUFLEN];
@@ -113,7 +126,6 @@ fn read_varint(stream: &mut Read) -> Result<i64, io::Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    //use protobuf::Message;
 
     #[test]
     fn should_decode() {
@@ -132,10 +144,7 @@ mod tests {
         mockstream.push_bytes_to_read(varint.as_slice());
         mockstream.push_bytes_to_read(msg_to_vec.as_slice());
 
-        let wrapped = StreamWrapper::Mocked(mockstream.clone());
-        let mut consumer = AbciStream::new(wrapped);
-
-        // Produce should be consumer.write_all() which calls the AbciSteam write
+        let mut consumer = AbciStream::from_mock(mockstream);
 
         let packet = consumer.read_request();
         assert_eq!(packet.is_some(), true);
@@ -162,11 +171,7 @@ mod tests {
         mockstream.push_bytes_to_read(varint.as_slice());
         mockstream.push_bytes_to_read(msg_to_vec.as_slice());
 
-        let wrapped = StreamWrapper::Mocked(mockstream.clone());
-        let mut consumer = AbciStream::new(wrapped);
-
-        // Produce should be consumer.write_all() which calls the AbciSteam write
-
+        let mut consumer = AbciStream::from_mock(mockstream);
         let packet = consumer.read_request();
         assert_eq!(packet.is_some(), true);
         let v = packet.unwrap();
@@ -175,10 +180,7 @@ mod tests {
 
     #[test]
     fn should_encode() {
-        let mockstream = SharedMockStream::new();
-        let wrapped = StreamWrapper::Mocked(mockstream.clone());
-        let mut stream = AbciStream::new(wrapped);
-
+        let mut stream = AbciStream::from_mock(SharedMockStream::new());
         let mut r = Response::new();
         let mut echo = ResponseEcho::new();
         echo.set_message(String::from("Helloworld"));
