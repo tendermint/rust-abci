@@ -1,8 +1,7 @@
 extern crate abci;
-extern crate abci_protobuf;
 extern crate byteorder;
 
-use abci_protobuf::abci::*;
+use abci::*;
 use byteorder::{BigEndian, ByteOrder};
 
 // Simple counter application.  Its only state is a u64 count
