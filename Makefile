@@ -6,7 +6,7 @@ tmkv = protobuf/github.com/tendermint/tendermint/libs/common/types.proto
 tmmerkle = protobuf/github.com/tendermint/tendermint/crypto/merkle/merkle.proto
 tmabci = protobuf/github.com/tendermint/tendermint/abci/types/types.proto
 
-# You *only* need to run this to rebuild protobufs
+# You *only* need to run this to rebuild protobufs from the tendermint source
 update-proto:
 	curl $(tendermint)/abci/types/types.proto > $(tmabci)
 	curl $(tendermint)/libs/common/types.proto > $(tmkv)

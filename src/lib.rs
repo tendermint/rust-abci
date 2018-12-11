@@ -21,15 +21,19 @@
 //!
 use std::net::SocketAddr;
 
-extern crate abci_protobuf;
 extern crate bytes;
 extern crate integer_encoding;
 extern crate mockstream;
 extern crate protobuf;
 
+mod messages;
 mod server;
+mod stream;
 
-use abci_protobuf::abci::*;
+pub use messages::abci::*;
+pub use messages::merkle::*;
+pub use messages::types::*;
+
 use server::serve;
 
 /// Main Trait for ABCI application. Provides generic responses for all callbacks

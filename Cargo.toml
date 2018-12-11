@@ -16,4 +16,6 @@ protobuf = "2.2.0"
 byteorder = "1.2.7"
 integer-encoding = "1.0.5"
 mockstream = "0.0.3"
-abci-protobuf = { path = "./abci-protobuf" }
+
+[build-dependencies]
+protobuf-codegen-pure = "2.2.0"
