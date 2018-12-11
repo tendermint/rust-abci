@@ -24,6 +24,7 @@ jobs:
       - run:
           name: Stable Build
           command: |
+            rustup toolchain install stable
             rustup run stable rustc --version --verbose
             rustup run stable cargo --version --verbose
             rustup run stable cargo build
