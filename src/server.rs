@@ -7,7 +7,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 
 use messages::abci::*;
-use stream::{AbciStream, StreamWrapper};
+use stream::AbciStream;
 
 /// Creates the TCP server and listens for connections from Tendermint
 pub fn serve<A>(app: A, addr: SocketAddr) -> io::Result<()>
