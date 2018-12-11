@@ -23,8 +23,8 @@ use std::net::SocketAddr;
 
 extern crate bytes;
 extern crate integer_encoding;
-extern crate protobuf;
 extern crate mockstream;
+extern crate protobuf;
 
 pub mod common;
 pub mod merkle;

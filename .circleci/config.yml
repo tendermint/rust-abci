@@ -17,12 +17,14 @@ jobs:
       - run:
           name: Nightly Build
           command: |
+            rustup toolchain install nightly
             rustup run nightly rustc --version --verbose
             rustup run nightly cargo --version --verbose
             rustup run nightly cargo build
       - run:
           name: Stable Build
           command: |
+            rustup toolchain install stable
             rustup run stable rustc --version --verbose
             rustup run stable cargo --version --verbose
             rustup run stable cargo build
