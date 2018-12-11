@@ -54,20 +54,6 @@ impl Debug for AbciStream {
 }
 
 impl AbciStream {
-    /// Create an ABCI Stream from a mock
-    pub fn from_mock(mockstream: SharedMockStream) -> AbciStream {
-        AbciStream {
-            stream: StreamWrapper::Mocked(mockstream),
-        }
-    }
-
-    /// Create an ABCI Stream from a TcpStream
-    pub fn from_tcp(tcpstream: TcpStream) -> AbciStream {
-        AbciStream {
-            stream: StreamWrapper::Tcp(tcpstream),
-        }
-    }
-
     /// Write an ABCI specifc response to the stream.   Properly sizes the output
     /// based on the size of the response.
     pub fn write_response(&mut self, response: &Response) -> io::Result<()> {
@@ -94,6 +80,22 @@ impl AbciStream {
             };
         }
         None
+    }
+}
+
+impl From<SharedMockStream> for AbciStream {
+    fn from(stream: SharedMockStream) -> AbciStream {
+        AbciStream {
+            stream: StreamWrapper::Mocked(stream),
+        }
+    }
+}
+
+impl From<TcpStream> for AbciStream {
+    fn from(stream: TcpStream) -> AbciStream {
+        AbciStream {
+            stream: StreamWrapper::Tcp(stream),
+        }
     }
 }
 
@@ -146,8 +148,7 @@ mod tests {
         mockstream.push_bytes_to_read(varint.as_slice());
         mockstream.push_bytes_to_read(msg_to_vec.as_slice());
 
-        let mut consumer = AbciStream::from_mock(mockstream);
-
+        let mut consumer = AbciStream::from(mockstream);
         let packet = consumer.read_request();
         assert_eq!(packet.is_some(), true);
         let v = packet.unwrap();
@@ -173,7 +174,7 @@ mod tests {
         mockstream.push_bytes_to_read(varint.as_slice());
         mockstream.push_bytes_to_read(msg_to_vec.as_slice());
 
-        let mut consumer = AbciStream::from_mock(mockstream);
+        let mut consumer = AbciStream::from(mockstream);
         let packet = consumer.read_request();
         assert_eq!(packet.is_some(), true);
         let v = packet.unwrap();
@@ -182,7 +183,7 @@ mod tests {
 
     #[test]
     fn should_encode() {
-        let mut stream = AbciStream::from_mock(SharedMockStream::new());
+        let mut stream = AbciStream::from(SharedMockStream::new());
         let mut r = Response::new();
         let mut echo = ResponseEcho::new();
         echo.set_message(String::from("Helloworld"));

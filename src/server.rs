@@ -7,7 +7,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 
 use messages::abci::*;
-use stream::{AbciStream, StreamWrapper};
+use stream::AbciStream;
 
 /// Creates the TCP server and listens for connections from Tendermint
 pub fn serve<A>(app: A, addr: SocketAddr) -> io::Result<()>
@@ -24,7 +24,7 @@ where
         match new_connection {
             Ok(stream) => {
                 println!("Got connection! {:?}", stream);
-                thread::spawn(move || handle_stream(AbciStream::from_tcp(stream), &app_instance));
+                thread::spawn(move || handle_stream(AbciStream::from(stream), &app_instance));
             }
             Err(err) => {
                 // We need all 3 connections...
