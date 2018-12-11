@@ -8,7 +8,8 @@ fn main() {
         customize: protobuf_codegen_pure::Customize {
             ..Default::default()
         },
-    }).expect("protoc");
+    })
+    .expect("protoc");
 
     protobuf_codegen_pure::run(protobuf_codegen_pure::Args {
         out_dir: "src",
@@ -17,7 +18,8 @@ fn main() {
         customize: protobuf_codegen_pure::Customize {
             ..Default::default()
         },
-    }).expect("protoc");
+    })
+    .expect("protoc");
 
     protobuf_codegen_pure::run(protobuf_codegen_pure::Args {
         out_dir: "src",
@@ -26,5 +28,6 @@ fn main() {
         customize: protobuf_codegen_pure::Customize {
             ..Default::default()
         },
-    }).expect("protoc");
+    })
+    .expect("protoc");
 }
