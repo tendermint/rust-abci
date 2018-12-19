@@ -26,15 +26,17 @@ extern crate integer_encoding;
 extern crate mockstream;
 extern crate protobuf;
 
-pub mod common;
-pub mod merkle;
+mod messages;
 mod server;
-pub mod types;
+mod stream;
+
+pub use messages::abci::*;
+pub use messages::merkle::*;
+pub use messages::types::*;
 
 use server::serve;
-pub use types::*;
 
-/// Main Trait for ABCI application. Provides generic responses for all callbacks
+/// Main Trait for an ABCI application. Provides generic responses for all callbacks
 /// Override desired callbacks as needed.  Tendermint makes 3 TCP connections to the
 /// application and does so in a synchonized manner.
 pub trait Application {

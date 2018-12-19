@@ -8,7 +8,9 @@ This library implements the [ABCI
 protocol](https://tendermint.com/docs/spec/abci/) and can be used to write ABCI
 applications for [Tendermint](https://github.com/tendermint/tendermint/).
 
-**Tested against Tendermint 0.26.3**
+## Supported Version
+- Tendermint 0.26.4
+- ABCI 0.15.0
 
 ## Installation
 
@@ -28,8 +30,12 @@ To use this library to build your own ABCI apps in Rust you have to include the 
 
 ```toml
 [dependencies]
-abci = "0.4.0"
+abci = "0.4.1"
 ```
+
+### Development
+
+This crate already contains the compiled ABCI protobuf messages.  If you want to update protobuf messages to a newer version of Tendermint. Run `make update-proto`
 
 ## Running the examples
 

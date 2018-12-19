@@ -1,6 +1,7 @@
 extern crate abci;
 extern crate byteorder;
 
+use abci::*;
 use byteorder::{BigEndian, ByteOrder};
 
 // Simple counter application.  Its only state is a u64 count
@@ -28,10 +29,10 @@ fn convert_tx(tx: &[u8]) -> u64 {
 
 impl abci::Application for CounterApp {
     // Validate transactions.  Rule:  Transactions must be incremental: 1,2,3,4...
-    fn check_tx(&mut self, req: &abci::RequestCheckTx) -> abci::ResponseCheckTx {
+    fn check_tx(&mut self, req: &RequestCheckTx) -> ResponseCheckTx {
         // Get the Tx [u8] and convert to u64
         let c = convert_tx(req.get_tx());
-        let mut resp = abci::ResponseCheckTx::new();
+        let mut resp = ResponseCheckTx::new();
 
         // Validation logic
         if c != self.count + 1 {
@@ -45,18 +46,18 @@ impl abci::Application for CounterApp {
         resp
     }
 
-    fn deliver_tx(&mut self, req: &abci::RequestDeliverTx) -> abci::ResponseDeliverTx {
+    fn deliver_tx(&mut self, req: &RequestDeliverTx) -> ResponseDeliverTx {
         // Get the Tx [u8]
         let c = convert_tx(req.get_tx());
         // Update state
         self.count = c;
         // Return default code 0 == bueno
-        abci::ResponseDeliverTx::new()
+        ResponseDeliverTx::new()
     }
 
-    fn commit(&mut self, _req: &abci::RequestCommit) -> abci::ResponseCommit {
+    fn commit(&mut self, _req: &RequestCommit) -> ResponseCommit {
         // Create the response
-        let mut resp = abci::ResponseCommit::new();
+        let mut resp = ResponseCommit::new();
         // Convert count to bits
         let mut buf = [0; 8];
         BigEndian::write_u64(&mut buf, self.count);
