@@ -5,6 +5,7 @@ use std::net::*;
 use std::ops::DerefMut;
 use std::sync::{Arc, Mutex};
 use std::thread;
+use env_logger::Env;
 
 use messages::abci::*;
 use stream::AbciStream;
@@ -14,6 +15,7 @@ pub fn serve<A>(app: A, addr: SocketAddr) -> io::Result<()>
 where
     A: Application + 'static + Send + Sync,
 {
+    env_logger::from_env(Env::default().default_filter_or("info")).init();
     let listener = TcpListener::bind(addr).unwrap();
 
     // Wrap the app atomically and clone for each connection.
@@ -23,12 +25,12 @@ where
         let app_instance = Arc::clone(&app);
         match new_connection {
             Ok(stream) => {
-                println!("Got connection! {:?}", stream);
+                info!("Got connection! {:?}", stream);
                 thread::spawn(move || handle_stream(AbciStream::from(stream), &app_instance));
             }
             Err(err) => {
                 // We need all 3 connections...
-                panic!("Connection failed: {}", err);
+                warn!("Connection failed: {}", err);
             }
         }
     }
@@ -50,7 +52,7 @@ where
             _ => break,
         }
     }
-    println!("Connection closed on {:?}", stream);
+    info!("Connection closed on {:?}", stream);
 }
 
 fn respond<A>(stream: &mut AbciStream, app: &mut A, request: &Request) -> io::Result<()>
