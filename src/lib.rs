@@ -26,6 +26,10 @@ extern crate integer_encoding;
 extern crate mockstream;
 extern crate protobuf;
 
+#[macro_use]
+extern crate log;
+extern crate env_logger;
+
 mod messages;
 mod server;
 mod stream;
