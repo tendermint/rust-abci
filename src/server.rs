@@ -30,7 +30,7 @@ where
             }
             Err(err) => {
                 // We need all 3 connections...
-                warn!("Connection failed: {}", err);
+                panic!("Connection failed: {}", err);
             }
         }
     }
