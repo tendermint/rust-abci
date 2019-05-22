@@ -1,11 +1,11 @@
 use Application;
 
+use env_logger::Env;
 use std::io;
 use std::net::*;
 use std::ops::DerefMut;
 use std::sync::{Arc, Mutex};
 use std::thread;
-use env_logger::Env;
 
 use messages::abci::*;
 use stream::AbciStream;
