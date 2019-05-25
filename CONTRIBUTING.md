@@ -17,12 +17,12 @@ Feature requests or bug reports can be posted as a (Github issue)[https://github
 
 There are several ways to identify an area where you can contribute to Chain:
 
-If you'd like to solve a issue, please say that you are claiming it in the issue. This makes sure that no one else will work on it and the work isn't duplicated.
+If you'd like to solve a issue, please comment that you would like to claim the issue. This makes sure that no one else will work on it.
 
 ## Forking
 ---
 
-Once you have a issue that you would to work on, comment on it to claim it:
+Once you have a issue that you would to work on and commented on it to claim it:
 
 * Fork the repository to your Github account.
 * Clone your fork to your local machine
@@ -45,7 +45,7 @@ If you are working on a issue and plan on contributing, please submit your PR ea
 
 The code should follow [Rust Style Guide](https://github.com/rust-lang/rfcs/tree/master/style-guide). Much of the code style is captured by `rustfmt`. 
 
-The following are instructions for setting up a development environment.
+Before opening a Pull Request please run the checks below:
 
 * Install rustfmt: `rustup component add rustfmt`
 
