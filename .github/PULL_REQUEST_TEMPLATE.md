@@ -10,7 +10,9 @@ v    If a checkbox is n/a - please still include it but + a little note why
 - [ ] Wrote tests
 - [ ] Updated relevant documentation (`docs/`)
 - [ ] Added a relevant changelog entry: `clog add [section] [stanza] [message]`
-- [ ] rereviewed `Files changed` in the github PR explorer
+- [ ] Reviewed `Files changed` in the github PR explorer
+- [ ] Bump Tendermint & ABCI version in README.md if version was updated
+
 
 ______
 
