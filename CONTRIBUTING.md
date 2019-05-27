@@ -12,11 +12,6 @@ All contributors are expected to follow (Code of Conduct)[./CODE_OF_CONDUCT.md]
 --- 
 Feature requests or bug reports can be posted as a (Github issue)[https://github.com/tendermint/rust-abci/issues/new]. In the issue, please follow the template and describe to the best of your ability what you did, what you expected and what happened instead.
 
-## Working on Issues
----
-
-There are several ways to identify an area where you can contribute to Chain:
-
 If you'd like to solve a issue, please comment that you would like to claim the issue. This makes sure that no one else will work on it.
 
 ## Forking
