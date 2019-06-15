@@ -1,7 +1,8 @@
 [package]
 name = "abci"
 version = "0.5.4"
-authors = ["Adrian Brink <adrian@brink-holdings.com>", "Jackson Lewis <st.japa6@gmail.com>", "Dave Bryson", "Tomas Tauber"]
+authors = ["Adrian Brink <adrian@brink-holdings.com>", "Jackson Lewis <st.japa6@gmail.com>", "Dave Bryson", "Tomas Tauber", "Ismail Khoffi <Ismail.Khoffi@gmail.com>"]
+edition = "2018"
 license = "MIT/Apache-2.0"
 description = "Tendermint ABCI server for Rust"
 homepage = "https://tendermint.com/docs/guides/app-development"
