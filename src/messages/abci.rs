@@ -6175,7 +6175,7 @@ impl ::protobuf::reflect::ProtobufValue for ResponseQuery {
 #[derive(PartialEq,Clone,Default)]
 pub struct ResponseBeginBlock {
     // message fields
-    pub tags: ::protobuf::RepeatedField<super::types::KVPair>,
+    pub events: ::protobuf::RepeatedField<Event>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -6192,35 +6192,35 @@ impl ResponseBeginBlock {
         ::std::default::Default::default()
     }
 
-    // repeated .common.KVPair tags = 1;
+    // repeated .abci.Event events = 1;
 
 
-    pub fn get_tags(&self) -> &[super::types::KVPair] {
-        &self.tags
+    pub fn get_events(&self) -> &[Event] {
+        &self.events
     }
-    pub fn clear_tags(&mut self) {
-        self.tags.clear();
+    pub fn clear_events(&mut self) {
+        self.events.clear();
     }
 
     // Param is passed by value, moved
-    pub fn set_tags(&mut self, v: ::protobuf::RepeatedField<super::types::KVPair>) {
-        self.tags = v;
+    pub fn set_events(&mut self, v: ::protobuf::RepeatedField<Event>) {
+        self.events = v;
     }
 
     // Mutable pointer to the field.
-    pub fn mut_tags(&mut self) -> &mut ::protobuf::RepeatedField<super::types::KVPair> {
-        &mut self.tags
+    pub fn mut_events(&mut self) -> &mut ::protobuf::RepeatedField<Event> {
+        &mut self.events
     }
 
     // Take field
-    pub fn take_tags(&mut self) -> ::protobuf::RepeatedField<super::types::KVPair> {
-        ::std::mem::replace(&mut self.tags, ::protobuf::RepeatedField::new())
+    pub fn take_events(&mut self) -> ::protobuf::RepeatedField<Event> {
+        ::std::mem::replace(&mut self.events, ::protobuf::RepeatedField::new())
     }
 }
 
 impl ::protobuf::Message for ResponseBeginBlock {
     fn is_initialized(&self) -> bool {
-        for v in &self.tags {
+        for v in &self.events {
             if !v.is_initialized() {
                 return false;
             }
@@ -6233,7 +6233,7 @@ impl ::protobuf::Message for ResponseBeginBlock {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
                 1 => {
-                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.tags)?;
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.events)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -6247,7 +6247,7 @@ impl ::protobuf::Message for ResponseBeginBlock {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        for value in &self.tags {
+        for value in &self.events {
             let len = value.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         };
@@ -6257,7 +6257,7 @@ impl ::protobuf::Message for ResponseBeginBlock {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
-        for v in &self.tags {
+        for v in &self.events {
             os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
@@ -6304,10 +6304,10 @@ impl ::protobuf::Message for ResponseBeginBlock {
         unsafe {
             descriptor.get(|| {
                 let mut fields = ::std::vec::Vec::new();
-                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<super::types::KVPair>>(
-                    "tags",
-                    |m: &ResponseBeginBlock| { &m.tags },
-                    |m: &mut ResponseBeginBlock| { &mut m.tags },
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<Event>>(
+                    "events",
+                    |m: &ResponseBeginBlock| { &m.events },
+                    |m: &mut ResponseBeginBlock| { &mut m.events },
                 ));
                 ::protobuf::reflect::MessageDescriptor::new::<ResponseBeginBlock>(
                     "ResponseBeginBlock",
@@ -6331,7 +6331,7 @@ impl ::protobuf::Message for ResponseBeginBlock {
 
 impl ::protobuf::Clear for ResponseBeginBlock {
     fn clear(&mut self) {
-        self.tags.clear();
+        self.events.clear();
         self.unknown_fields.clear();
     }
 }
@@ -6357,7 +6357,7 @@ pub struct ResponseCheckTx {
     pub info: ::std::string::String,
     pub gas_wanted: i64,
     pub gas_used: i64,
-    pub tags: ::protobuf::RepeatedField<super::types::KVPair>,
+    pub events: ::protobuf::RepeatedField<Event>,
     pub codespace: ::std::string::String,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
@@ -6498,29 +6498,29 @@ impl ResponseCheckTx {
         self.gas_used = v;
     }
 
-    // repeated .common.KVPair tags = 7;
+    // repeated .abci.Event events = 7;
 
 
-    pub fn get_tags(&self) -> &[super::types::KVPair] {
-        &self.tags
+    pub fn get_events(&self) -> &[Event] {
+        &self.events
     }
-    pub fn clear_tags(&mut self) {
-        self.tags.clear();
+    pub fn clear_events(&mut self) {
+        self.events.clear();
     }
 
     // Param is passed by value, moved
-    pub fn set_tags(&mut self, v: ::protobuf::RepeatedField<super::types::KVPair>) {
-        self.tags = v;
+    pub fn set_events(&mut self, v: ::protobuf::RepeatedField<Event>) {
+        self.events = v;
     }
 
     // Mutable pointer to the field.
-    pub fn mut_tags(&mut self) -> &mut ::protobuf::RepeatedField<super::types::KVPair> {
-        &mut self.tags
+    pub fn mut_events(&mut self) -> &mut ::protobuf::RepeatedField<Event> {
+        &mut self.events
     }
 
     // Take field
-    pub fn take_tags(&mut self) -> ::protobuf::RepeatedField<super::types::KVPair> {
-        ::std::mem::replace(&mut self.tags, ::protobuf::RepeatedField::new())
+    pub fn take_events(&mut self) -> ::protobuf::RepeatedField<Event> {
+        ::std::mem::replace(&mut self.events, ::protobuf::RepeatedField::new())
     }
 
     // string codespace = 8;
@@ -6552,7 +6552,7 @@ impl ResponseCheckTx {
 
 impl ::protobuf::Message for ResponseCheckTx {
     fn is_initialized(&self) -> bool {
-        for v in &self.tags {
+        for v in &self.events {
             if !v.is_initialized() {
                 return false;
             }
@@ -6595,7 +6595,7 @@ impl ::protobuf::Message for ResponseCheckTx {
                     self.gas_used = tmp;
                 },
                 7 => {
-                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.tags)?;
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.events)?;
                 },
                 8 => {
                     ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.codespace)?;
@@ -6630,7 +6630,7 @@ impl ::protobuf::Message for ResponseCheckTx {
         if self.gas_used != 0 {
             my_size += ::protobuf::rt::value_size(6, self.gas_used, ::protobuf::wire_format::WireTypeVarint);
         }
-        for value in &self.tags {
+        for value in &self.events {
             let len = value.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         };
@@ -6661,7 +6661,7 @@ impl ::protobuf::Message for ResponseCheckTx {
         if self.gas_used != 0 {
             os.write_int64(6, self.gas_used)?;
         }
-        for v in &self.tags {
+        for v in &self.events {
             os.write_tag(7, ::protobuf::wire_format::WireTypeLengthDelimited)?;
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
@@ -6741,10 +6741,10 @@ impl ::protobuf::Message for ResponseCheckTx {
                     |m: &ResponseCheckTx| { &m.gas_used },
                     |m: &mut ResponseCheckTx| { &mut m.gas_used },
                 ));
-                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<super::types::KVPair>>(
-                    "tags",
-                    |m: &ResponseCheckTx| { &m.tags },
-                    |m: &mut ResponseCheckTx| { &mut m.tags },
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<Event>>(
+                    "events",
+                    |m: &ResponseCheckTx| { &m.events },
+                    |m: &mut ResponseCheckTx| { &mut m.events },
                 ));
                 fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
                     "codespace",
@@ -6779,7 +6779,7 @@ impl ::protobuf::Clear for ResponseCheckTx {
         self.info.clear();
         self.gas_wanted = 0;
         self.gas_used = 0;
-        self.tags.clear();
+        self.events.clear();
         self.codespace.clear();
         self.unknown_fields.clear();
     }
@@ -6806,7 +6806,7 @@ pub struct ResponseDeliverTx {
     pub info: ::std::string::String,
     pub gas_wanted: i64,
     pub gas_used: i64,
-    pub tags: ::protobuf::RepeatedField<super::types::KVPair>,
+    pub events: ::protobuf::RepeatedField<Event>,
     pub codespace: ::std::string::String,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
@@ -6947,29 +6947,29 @@ impl ResponseDeliverTx {
         self.gas_used = v;
     }
 
-    // repeated .common.KVPair tags = 7;
+    // repeated .abci.Event events = 7;
 
 
-    pub fn get_tags(&self) -> &[super::types::KVPair] {
-        &self.tags
+    pub fn get_events(&self) -> &[Event] {
+        &self.events
     }
-    pub fn clear_tags(&mut self) {
-        self.tags.clear();
+    pub fn clear_events(&mut self) {
+        self.events.clear();
     }
 
     // Param is passed by value, moved
-    pub fn set_tags(&mut self, v: ::protobuf::RepeatedField<super::types::KVPair>) {
-        self.tags = v;
+    pub fn set_events(&mut self, v: ::protobuf::RepeatedField<Event>) {
+        self.events = v;
     }
 
     // Mutable pointer to the field.
-    pub fn mut_tags(&mut self) -> &mut ::protobuf::RepeatedField<super::types::KVPair> {
-        &mut self.tags
+    pub fn mut_events(&mut self) -> &mut ::protobuf::RepeatedField<Event> {
+        &mut self.events
     }
 
     // Take field
-    pub fn take_tags(&mut self) -> ::protobuf::RepeatedField<super::types::KVPair> {
-        ::std::mem::replace(&mut self.tags, ::protobuf::RepeatedField::new())
+    pub fn take_events(&mut self) -> ::protobuf::RepeatedField<Event> {
+        ::std::mem::replace(&mut self.events, ::protobuf::RepeatedField::new())
     }
 
     // string codespace = 8;
@@ -7001,7 +7001,7 @@ impl ResponseDeliverTx {
 
 impl ::protobuf::Message for ResponseDeliverTx {
     fn is_initialized(&self) -> bool {
-        for v in &self.tags {
+        for v in &self.events {
             if !v.is_initialized() {
                 return false;
             }
@@ -7044,7 +7044,7 @@ impl ::protobuf::Message for ResponseDeliverTx {
                     self.gas_used = tmp;
                 },
                 7 => {
-                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.tags)?;
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.events)?;
                 },
                 8 => {
                     ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.codespace)?;
@@ -7079,7 +7079,7 @@ impl ::protobuf::Message for ResponseDeliverTx {
         if self.gas_used != 0 {
             my_size += ::protobuf::rt::value_size(6, self.gas_used, ::protobuf::wire_format::WireTypeVarint);
         }
-        for value in &self.tags {
+        for value in &self.events {
             let len = value.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         };
@@ -7110,7 +7110,7 @@ impl ::protobuf::Message for ResponseDeliverTx {
         if self.gas_used != 0 {
             os.write_int64(6, self.gas_used)?;
         }
-        for v in &self.tags {
+        for v in &self.events {
             os.write_tag(7, ::protobuf::wire_format::WireTypeLengthDelimited)?;
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
@@ -7190,10 +7190,10 @@ impl ::protobuf::Message for ResponseDeliverTx {
                     |m: &ResponseDeliverTx| { &m.gas_used },
                     |m: &mut ResponseDeliverTx| { &mut m.gas_used },
                 ));
-                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<super::types::KVPair>>(
-                    "tags",
-                    |m: &ResponseDeliverTx| { &m.tags },
-                    |m: &mut ResponseDeliverTx| { &mut m.tags },
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<Event>>(
+                    "events",
+                    |m: &ResponseDeliverTx| { &m.events },
+                    |m: &mut ResponseDeliverTx| { &mut m.events },
                 ));
                 fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
                     "codespace",
@@ -7228,7 +7228,7 @@ impl ::protobuf::Clear for ResponseDeliverTx {
         self.info.clear();
         self.gas_wanted = 0;
         self.gas_used = 0;
-        self.tags.clear();
+        self.events.clear();
         self.codespace.clear();
         self.unknown_fields.clear();
     }
@@ -7251,7 +7251,7 @@ pub struct ResponseEndBlock {
     // message fields
     pub validator_updates: ::protobuf::RepeatedField<ValidatorUpdate>,
     pub consensus_param_updates: ::protobuf::SingularPtrField<ConsensusParams>,
-    pub tags: ::protobuf::RepeatedField<super::types::KVPair>,
+    pub events: ::protobuf::RepeatedField<Event>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -7326,29 +7326,29 @@ impl ResponseEndBlock {
         self.consensus_param_updates.take().unwrap_or_else(|| ConsensusParams::new())
     }
 
-    // repeated .common.KVPair tags = 3;
+    // repeated .abci.Event events = 3;
 
 
-    pub fn get_tags(&self) -> &[super::types::KVPair] {
-        &self.tags
+    pub fn get_events(&self) -> &[Event] {
+        &self.events
     }
-    pub fn clear_tags(&mut self) {
-        self.tags.clear();
+    pub fn clear_events(&mut self) {
+        self.events.clear();
     }
 
     // Param is passed by value, moved
-    pub fn set_tags(&mut self, v: ::protobuf::RepeatedField<super::types::KVPair>) {
-        self.tags = v;
+    pub fn set_events(&mut self, v: ::protobuf::RepeatedField<Event>) {
+        self.events = v;
     }
 
     // Mutable pointer to the field.
-    pub fn mut_tags(&mut self) -> &mut ::protobuf::RepeatedField<super::types::KVPair> {
-        &mut self.tags
+    pub fn mut_events(&mut self) -> &mut ::protobuf::RepeatedField<Event> {
+        &mut self.events
     }
 
     // Take field
-    pub fn take_tags(&mut self) -> ::protobuf::RepeatedField<super::types::KVPair> {
-        ::std::mem::replace(&mut self.tags, ::protobuf::RepeatedField::new())
+    pub fn take_events(&mut self) -> ::protobuf::RepeatedField<Event> {
+        ::std::mem::replace(&mut self.events, ::protobuf::RepeatedField::new())
     }
 }
 
@@ -7364,7 +7364,7 @@ impl ::protobuf::Message for ResponseEndBlock {
                 return false;
             }
         };
-        for v in &self.tags {
+        for v in &self.events {
             if !v.is_initialized() {
                 return false;
             }
@@ -7383,7 +7383,7 @@ impl ::protobuf::Message for ResponseEndBlock {
                     ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.consensus_param_updates)?;
                 },
                 3 => {
-                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.tags)?;
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.events)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -7405,7 +7405,7 @@ impl ::protobuf::Message for ResponseEndBlock {
             let len = v.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         }
-        for value in &self.tags {
+        for value in &self.events {
             let len = value.compute_size();
             my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
         };
@@ -7425,7 +7425,7 @@ impl ::protobuf::Message for ResponseEndBlock {
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
         }
-        for v in &self.tags {
+        for v in &self.events {
             os.write_tag(3, ::protobuf::wire_format::WireTypeLengthDelimited)?;
             os.write_raw_varint32(v.get_cached_size())?;
             v.write_to_with_cached_sizes(os)?;
@@ -7482,10 +7482,10 @@ impl ::protobuf::Message for ResponseEndBlock {
                     |m: &ResponseEndBlock| { &m.consensus_param_updates },
                     |m: &mut ResponseEndBlock| { &mut m.consensus_param_updates },
                 ));
-                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<super::types::KVPair>>(
-                    "tags",
-                    |m: &ResponseEndBlock| { &m.tags },
-                    |m: &mut ResponseEndBlock| { &mut m.tags },
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<Event>>(
+                    "events",
+                    |m: &ResponseEndBlock| { &m.events },
+                    |m: &mut ResponseEndBlock| { &mut m.events },
                 ));
                 ::protobuf::reflect::MessageDescriptor::new::<ResponseEndBlock>(
                     "ResponseEndBlock",
@@ -7511,7 +7511,7 @@ impl ::protobuf::Clear for ResponseEndBlock {
     fn clear(&mut self) {
         self.validator_updates.clear();
         self.consensus_param_updates.clear();
-        self.tags.clear();
+        self.events.clear();
         self.unknown_fields.clear();
     }
 }
@@ -8728,6 +8728,224 @@ impl ::std::fmt::Debug for LastCommitInfo {
 }
 
 impl ::protobuf::reflect::ProtobufValue for LastCommitInfo {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct Event {
+    // message fields
+    pub field_type: ::std::string::String,
+    pub attributes: ::protobuf::RepeatedField<super::types::KVPair>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a Event {
+    fn default() -> &'a Event {
+        <Event as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl Event {
+    pub fn new() -> Event {
+        ::std::default::Default::default()
+    }
+
+    // string type = 1;
+
+
+    pub fn get_field_type(&self) -> &str {
+        &self.field_type
+    }
+    pub fn clear_field_type(&mut self) {
+        self.field_type.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_field_type(&mut self, v: ::std::string::String) {
+        self.field_type = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_field_type(&mut self) -> &mut ::std::string::String {
+        &mut self.field_type
+    }
+
+    // Take field
+    pub fn take_field_type(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.field_type, ::std::string::String::new())
+    }
+
+    // repeated .common.KVPair attributes = 2;
+
+
+    pub fn get_attributes(&self) -> &[super::types::KVPair] {
+        &self.attributes
+    }
+    pub fn clear_attributes(&mut self) {
+        self.attributes.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_attributes(&mut self, v: ::protobuf::RepeatedField<super::types::KVPair>) {
+        self.attributes = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_attributes(&mut self) -> &mut ::protobuf::RepeatedField<super::types::KVPair> {
+        &mut self.attributes
+    }
+
+    // Take field
+    pub fn take_attributes(&mut self) -> ::protobuf::RepeatedField<super::types::KVPair> {
+        ::std::mem::replace(&mut self.attributes, ::protobuf::RepeatedField::new())
+    }
+}
+
+impl ::protobuf::Message for Event {
+    fn is_initialized(&self) -> bool {
+        for v in &self.attributes {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.field_type)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.attributes)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if !self.field_type.is_empty() {
+            my_size += ::protobuf::rt::string_size(1, &self.field_type);
+        }
+        for value in &self.attributes {
+            let len = value.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        };
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if !self.field_type.is_empty() {
+            os.write_string(1, &self.field_type)?;
+        }
+        for v in &self.attributes {
+            os.write_tag(2, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        };
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &::std::any::Any {
+        self as &::std::any::Any
+    }
+    fn as_any_mut(&mut self) -> &mut ::std::any::Any {
+        self as &mut ::std::any::Any
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<::std::any::Any> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> Event {
+        Event::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "type",
+                    |m: &Event| { &m.field_type },
+                    |m: &mut Event| { &mut m.field_type },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<super::types::KVPair>>(
+                    "attributes",
+                    |m: &Event| { &m.attributes },
+                    |m: &mut Event| { &mut m.attributes },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<Event>(
+                    "Event",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static Event {
+        static mut instance: ::protobuf::lazy::Lazy<Event> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const Event,
+        };
+        unsafe {
+            instance.get(Event::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for Event {
+    fn clear(&mut self) {
+        self.field_type.clear();
+        self.attributes.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for Event {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for Event {
     fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
@@ -11408,7 +11626,7 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x18\x03\x20\x01(\x04B\0:\0\"4\n\x10RequestSetOption\x12\r\n\x03key\x18\
     \x01\x20\x01(\tB\0\x12\x0f\n\x05value\x18\x02\x20\x01(\tB\0:\0\"\xdb\x01\
     \n\x10RequestInitChain\x122\n\x04time\x18\x01\x20\x01(\x0b2\x1a.google.p\
-    rotobuf.TimestampB\x08\xc8\xde\x1f\0\x90\xdf\x1f\x01\x12\x12\n\x08chain_\
+    rotobuf.TimestampB\x08\x90\xdf\x1f\x01\xc8\xde\x1f\0\x12\x12\n\x08chain_\
     id\x18\x02\x20\x01(\tB\0\x121\n\x10consensus_params\x18\x03\x20\x01(\x0b\
     2\x15.abci.ConsensusParamsB\0\x12/\n\nvalidators\x18\x04\x20\x03(\x0b2\
     \x15.abci.ValidatorUpdateB\x04\xc8\xde\x1f\0\x12\x19\n\x0fapp_state_byte\
@@ -11452,67 +11670,70 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \0\x12\r\n\x03key\x18\x06\x20\x01(\x0cB\0\x12\x0f\n\x05value\x18\x07\x20\
     \x01(\x0cB\0\x12\x1e\n\x05proof\x18\x08\x20\x01(\x0b2\r.merkle.ProofB\0\
     \x12\x10\n\x06height\x18\t\x20\x01(\x03B\0\x12\x13\n\tcodespace\x18\n\
-    \x20\x01(\tB\0:\0\"L\n\x12ResponseBeginBlock\x124\n\x04tags\x18\x01\x20\
-    \x03(\x0b2\x0e.common.KVPairB\x16\xc8\xde\x1f\0\xea\xde\x1f\x0etags,omit\
-    empty:\0\"\xc7\x01\n\x0fResponseCheckTx\x12\x0e\n\x04code\x18\x01\x20\
+    \x20\x01(\tB\0:\0\"M\n\x12ResponseBeginBlock\x125\n\x06events\x18\x01\
+    \x20\x03(\x0b2\x0b.abci.EventB\x18\xc8\xde\x1f\0\xea\xde\x1f\x10events,o\
+    mitempty:\0\"\xc8\x01\n\x0fResponseCheckTx\x12\x0e\n\x04code\x18\x01\x20\
     \x01(\rB\0\x12\x0e\n\x04data\x18\x02\x20\x01(\x0cB\0\x12\r\n\x03log\x18\
     \x03\x20\x01(\tB\0\x12\x0e\n\x04info\x18\x04\x20\x01(\tB\0\x12\x14\n\nga\
     s_wanted\x18\x05\x20\x01(\x03B\0\x12\x12\n\x08gas_used\x18\x06\x20\x01(\
-    \x03B\0\x124\n\x04tags\x18\x07\x20\x03(\x0b2\x0e.common.KVPairB\x16\xea\
-    \xde\x1f\x0etags,omitempty\xc8\xde\x1f\0\x12\x13\n\tcodespace\x18\x08\
-    \x20\x01(\tB\0:\0\"\xc9\x01\n\x11ResponseDeliverTx\x12\x0e\n\x04code\x18\
+    \x03B\0\x125\n\x06events\x18\x07\x20\x03(\x0b2\x0b.abci.EventB\x18\xc8\
+    \xde\x1f\0\xea\xde\x1f\x10events,omitempty\x12\x13\n\tcodespace\x18\x08\
+    \x20\x01(\tB\0:\0\"\xca\x01\n\x11ResponseDeliverTx\x12\x0e\n\x04code\x18\
     \x01\x20\x01(\rB\0\x12\x0e\n\x04data\x18\x02\x20\x01(\x0cB\0\x12\r\n\x03\
     log\x18\x03\x20\x01(\tB\0\x12\x0e\n\x04info\x18\x04\x20\x01(\tB\0\x12\
     \x14\n\ngas_wanted\x18\x05\x20\x01(\x03B\0\x12\x12\n\x08gas_used\x18\x06\
-    \x20\x01(\x03B\0\x124\n\x04tags\x18\x07\x20\x03(\x0b2\x0e.common.KVPairB\
-    \x16\xea\xde\x1f\x0etags,omitempty\xc8\xde\x1f\0\x12\x13\n\tcodespace\
-    \x18\x08\x20\x01(\tB\0:\0\"\xbc\x01\n\x10ResponseEndBlock\x126\n\x11vali\
+    \x20\x01(\x03B\0\x125\n\x06events\x18\x07\x20\x03(\x0b2\x0b.abci.EventB\
+    \x18\xc8\xde\x1f\0\xea\xde\x1f\x10events,omitempty\x12\x13\n\tcodespace\
+    \x18\x08\x20\x01(\tB\0:\0\"\xbd\x01\n\x10ResponseEndBlock\x126\n\x11vali\
     dator_updates\x18\x01\x20\x03(\x0b2\x15.abci.ValidatorUpdateB\x04\xc8\
     \xde\x1f\0\x128\n\x17consensus_param_updates\x18\x02\x20\x01(\x0b2\x15.a\
-    bci.ConsensusParamsB\0\x124\n\x04tags\x18\x03\x20\x03(\x0b2\x0e.common.K\
-    VPairB\x16\xea\xde\x1f\x0etags,omitempty\xc8\xde\x1f\0:\0\"\"\n\x0eRespo\
-    nseCommit\x12\x0e\n\x04data\x18\x02\x20\x01(\x0cB\0:\0\"\x8d\x01\n\x0fCo\
-    nsensusParams\x12\"\n\x05block\x18\x01\x20\x01(\x0b2\x11.abci.BlockParam\
-    sB\0\x12(\n\x08evidence\x18\x02\x20\x01(\x0b2\x14.abci.EvidenceParamsB\0\
-    \x12*\n\tvalidator\x18\x03\x20\x01(\x0b2\x15.abci.ValidatorParamsB\0:\0\
-    \"7\n\x0bBlockParams\x12\x13\n\tmax_bytes\x18\x01\x20\x01(\x03B\0\x12\
+    bci.ConsensusParamsB\0\x125\n\x06events\x18\x03\x20\x03(\x0b2\x0b.abci.E\
+    ventB\x18\xea\xde\x1f\x10events,omitempty\xc8\xde\x1f\0:\0\"\"\n\x0eResp\
+    onseCommit\x12\x0e\n\x04data\x18\x02\x20\x01(\x0cB\0:\0\"\x8d\x01\n\x0fC\
+    onsensusParams\x12\"\n\x05block\x18\x01\x20\x01(\x0b2\x11.abci.BlockPara\
+    msB\0\x12(\n\x08evidence\x18\x02\x20\x01(\x0b2\x14.abci.EvidenceParamsB\
+    \0\x12*\n\tvalidator\x18\x03\x20\x01(\x0b2\x15.abci.ValidatorParamsB\0:\
+    \0\"7\n\x0bBlockParams\x12\x13\n\tmax_bytes\x18\x01\x20\x01(\x03B\0\x12\
     \x11\n\x07max_gas\x18\x02\x20\x01(\x03B\0:\0\"%\n\x0eEvidenceParams\x12\
     \x11\n\x07max_age\x18\x01\x20\x01(\x03B\0:\0\",\n\x0fValidatorParams\x12\
     \x17\n\rpub_key_types\x18\x01\x20\x03(\tB\0:\0\"H\n\x0eLastCommitInfo\
     \x12\x0f\n\x05round\x18\x01\x20\x01(\x05B\0\x12#\n\x05votes\x18\x02\x20\
-    \x03(\x0b2\x0e.abci.VoteInfoB\x04\xc8\xde\x1f\0:\0\"\xd5\x03\n\x06Header\
-    \x12$\n\x07version\x18\x01\x20\x01(\x0b2\r.abci.VersionB\x04\xc8\xde\x1f\
-    \0\x12\x1d\n\x08chain_id\x18\x02\x20\x01(\tB\x0b\xe2\xde\x1f\x07ChainID\
-    \x12\x10\n\x06height\x18\x03\x20\x01(\x03B\0\x122\n\x04time\x18\x04\x20\
-    \x01(\x0b2\x1a.google.protobuf.TimestampB\x08\xc8\xde\x1f\0\x90\xdf\x1f\
-    \x01\x12\x11\n\x07num_txs\x18\x05\x20\x01(\x03B\0\x12\x13\n\ttotal_txs\
-    \x18\x06\x20\x01(\x03B\0\x12*\n\rlast_block_id\x18\x07\x20\x01(\x0b2\r.a\
-    bci.BlockIDB\x04\xc8\xde\x1f\0\x12\x1a\n\x10last_commit_hash\x18\x08\x20\
-    \x01(\x0cB\0\x12\x13\n\tdata_hash\x18\t\x20\x01(\x0cB\0\x12\x19\n\x0fval\
-    idators_hash\x18\n\x20\x01(\x0cB\0\x12\x1e\n\x14next_validators_hash\x18\
-    \x0b\x20\x01(\x0cB\0\x12\x18\n\x0econsensus_hash\x18\x0c\x20\x01(\x0cB\0\
-    \x12\x12\n\x08app_hash\x18\r\x20\x01(\x0cB\0\x12\x1b\n\x11last_results_h\
-    ash\x18\x0e\x20\x01(\x0cB\0\x12\x17\n\revidence_hash\x18\x0f\x20\x01(\
-    \x0cB\0\x12\x1a\n\x10proposer_address\x18\x10\x20\x01(\x0cB\0:\0\"+\n\
-    \x07Version\x12\x0f\n\x05Block\x18\x01\x20\x01(\x04B\0\x12\r\n\x03App\
-    \x18\x02\x20\x01(\x04B\0:\0\"L\n\x07BlockID\x12\x0e\n\x04hash\x18\x01\
-    \x20\x01(\x0cB\0\x12/\n\x0cparts_header\x18\x02\x20\x01(\x0b2\x13.abci.P\
-    artSetHeaderB\x04\xc8\xde\x1f\0:\0\"2\n\rPartSetHeader\x12\x0f\n\x05tota\
-    l\x18\x01\x20\x01(\x05B\0\x12\x0e\n\x04hash\x18\x02\x20\x01(\x0cB\0:\0\"\
-    1\n\tValidator\x12\x11\n\x07address\x18\x01\x20\x01(\x0cB\0\x12\x0f\n\
-    \x05power\x18\x03\x20\x01(\x03B\0:\0\"I\n\x0fValidatorUpdate\x12#\n\x07p\
-    ub_key\x18\x01\x20\x01(\x0b2\x0c.abci.PubKeyB\x04\xc8\xde\x1f\0\x12\x0f\
-    \n\x05power\x18\x02\x20\x01(\x03B\0:\0\"S\n\x08VoteInfo\x12(\n\tvalidato\
-    r\x18\x01\x20\x01(\x0b2\x0f.abci.ValidatorB\x04\xc8\xde\x1f\0\x12\x1b\n\
-    \x11signed_last_block\x18\x02\x20\x01(\x08B\0:\0\"*\n\x06PubKey\x12\x0e\
-    \n\x04type\x18\x01\x20\x01(\tB\0\x12\x0e\n\x04data\x18\x02\x20\x01(\x0cB\
-    \0:\0\"\xaa\x01\n\x08Evidence\x12\x0e\n\x04type\x18\x01\x20\x01(\tB\0\
-    \x12(\n\tvalidator\x18\x02\x20\x01(\x0b2\x0f.abci.ValidatorB\x04\xc8\xde\
-    \x1f\0\x12\x10\n\x06height\x18\x03\x20\x01(\x03B\0\x122\n\x04time\x18\
-    \x04\x20\x01(\x0b2\x1a.google.protobuf.TimestampB\x08\xc8\xde\x1f\0\x90\
-    \xdf\x1f\x01\x12\x1c\n\x12total_voting_power\x18\x05\x20\x01(\x03B\0:\0B\
-    \x1c\xd0\xe2\x1e\x01\xf8\xe1\x1e\x01\xb8\xe2\x1e\x01\xc8\xe2\x1e\x01\xe0\
-    \xe2\x1e\x01\xc0\xe3\x1e\x01\xa8\xe2\x1e\x01b\x06proto3\
+    \x03(\x0b2\x0e.abci.VoteInfoB\x04\xc8\xde\x1f\0:\0\"[\n\x05Event\x12\x0e\
+    \n\x04type\x18\x01\x20\x01(\tB\0\x12@\n\nattributes\x18\x02\x20\x03(\x0b\
+    2\x0e.common.KVPairB\x1c\xea\xde\x1f\x14attributes,omitempty\xc8\xde\x1f\
+    \0:\0\"\xd5\x03\n\x06Header\x12$\n\x07version\x18\x01\x20\x01(\x0b2\r.ab\
+    ci.VersionB\x04\xc8\xde\x1f\0\x12\x1d\n\x08chain_id\x18\x02\x20\x01(\tB\
+    \x0b\xe2\xde\x1f\x07ChainID\x12\x10\n\x06height\x18\x03\x20\x01(\x03B\0\
+    \x122\n\x04time\x18\x04\x20\x01(\x0b2\x1a.google.protobuf.TimestampB\x08\
+    \xc8\xde\x1f\0\x90\xdf\x1f\x01\x12\x11\n\x07num_txs\x18\x05\x20\x01(\x03\
+    B\0\x12\x13\n\ttotal_txs\x18\x06\x20\x01(\x03B\0\x12*\n\rlast_block_id\
+    \x18\x07\x20\x01(\x0b2\r.abci.BlockIDB\x04\xc8\xde\x1f\0\x12\x1a\n\x10la\
+    st_commit_hash\x18\x08\x20\x01(\x0cB\0\x12\x13\n\tdata_hash\x18\t\x20\
+    \x01(\x0cB\0\x12\x19\n\x0fvalidators_hash\x18\n\x20\x01(\x0cB\0\x12\x1e\
+    \n\x14next_validators_hash\x18\x0b\x20\x01(\x0cB\0\x12\x18\n\x0econsensu\
+    s_hash\x18\x0c\x20\x01(\x0cB\0\x12\x12\n\x08app_hash\x18\r\x20\x01(\x0cB\
+    \0\x12\x1b\n\x11last_results_hash\x18\x0e\x20\x01(\x0cB\0\x12\x17\n\revi\
+    dence_hash\x18\x0f\x20\x01(\x0cB\0\x12\x1a\n\x10proposer_address\x18\x10\
+    \x20\x01(\x0cB\0:\0\"+\n\x07Version\x12\x0f\n\x05Block\x18\x01\x20\x01(\
+    \x04B\0\x12\r\n\x03App\x18\x02\x20\x01(\x04B\0:\0\"L\n\x07BlockID\x12\
+    \x0e\n\x04hash\x18\x01\x20\x01(\x0cB\0\x12/\n\x0cparts_header\x18\x02\
+    \x20\x01(\x0b2\x13.abci.PartSetHeaderB\x04\xc8\xde\x1f\0:\0\"2\n\rPartSe\
+    tHeader\x12\x0f\n\x05total\x18\x01\x20\x01(\x05B\0\x12\x0e\n\x04hash\x18\
+    \x02\x20\x01(\x0cB\0:\0\"1\n\tValidator\x12\x11\n\x07address\x18\x01\x20\
+    \x01(\x0cB\0\x12\x0f\n\x05power\x18\x03\x20\x01(\x03B\0:\0\"I\n\x0fValid\
+    atorUpdate\x12#\n\x07pub_key\x18\x01\x20\x01(\x0b2\x0c.abci.PubKeyB\x04\
+    \xc8\xde\x1f\0\x12\x0f\n\x05power\x18\x02\x20\x01(\x03B\0:\0\"S\n\x08Vot\
+    eInfo\x12(\n\tvalidator\x18\x01\x20\x01(\x0b2\x0f.abci.ValidatorB\x04\
+    \xc8\xde\x1f\0\x12\x1b\n\x11signed_last_block\x18\x02\x20\x01(\x08B\0:\0\
+    \"*\n\x06PubKey\x12\x0e\n\x04type\x18\x01\x20\x01(\tB\0\x12\x0e\n\x04dat\
+    a\x18\x02\x20\x01(\x0cB\0:\0\"\xaa\x01\n\x08Evidence\x12\x0e\n\x04type\
+    \x18\x01\x20\x01(\tB\0\x12(\n\tvalidator\x18\x02\x20\x01(\x0b2\x0f.abci.\
+    ValidatorB\x04\xc8\xde\x1f\0\x12\x10\n\x06height\x18\x03\x20\x01(\x03B\0\
+    \x122\n\x04time\x18\x04\x20\x01(\x0b2\x1a.google.protobuf.TimestampB\x08\
+    \x90\xdf\x1f\x01\xc8\xde\x1f\0\x12\x1c\n\x12total_voting_power\x18\x05\
+    \x20\x01(\x03B\0:\0B\x1c\xa8\xe2\x1e\x01\xf8\xe1\x1e\x01\xc8\xe2\x1e\x01\
+    \xb8\xe2\x1e\x01\xe0\xe2\x1e\x01\xc0\xe3\x1e\x01\xd0\xe2\x1e\x01b\x06pro\
+    to3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {
