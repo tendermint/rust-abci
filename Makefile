@@ -1,5 +1,6 @@
 # Origin
-tendermint = https://raw.githubusercontent.com/tendermint/tendermint/master
+version_branch = v0.32
+tendermint = https://raw.githubusercontent.com/tendermint/tendermint/$(version_branch)
 
 # Outputs
 tmkv = protobuf/github.com/tendermint/tendermint/libs/common/types.proto
