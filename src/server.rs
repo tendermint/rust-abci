@@ -9,9 +9,9 @@ use tokio::io;
 use tokio::net::TcpListener;
 use tokio::prelude::*;
 
-use codec::ABCICodec;
-use messages::abci::*;
-use Application;
+use crate::codec::ABCICodec;
+use crate::messages::abci::*;
+use crate::Application;
 
 /// Creates the TCP server and listens for connections from Tendermint
 pub fn serve<A>(app: A, addr: SocketAddr) -> io::Result<()>
@@ -33,12 +33,12 @@ where
             let app_instance = Arc::clone(&app);
 
             let responses = reader.map(move |request| {
-                info!("Got Request! {:?}", request);
+                debug!("Got Request! {:?}", request);
                 respond(&app_instance, &request)
             });
 
             let writes = responses.fold(_writer, |writer, response| {
-                info!("Return Response! {:?}", response);
+                debug!("Return Response! {:?}", response);
                 writer.send(response)
             });
             tokio::spawn(writes.then(|_| Ok(())))
