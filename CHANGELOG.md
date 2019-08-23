@@ -26,7 +26,7 @@ Special thanks to external contributors on this release: @liamsi
 
 ### BREAKING CHANGES:
 
--  [\#79](https://github.com/tendermint/rust-abci/pull/79): Tendermint 0.32.*'s ABCI compatibility
+-  [\#79](https://github.com/tendermint/rust-abci/pull/79): Tendermint 0.32.\*'s ABCI compatibility
 
 ### FEATURES:
 
