@@ -11,7 +11,6 @@ protocol](https://tendermint.com/docs/spec/abci/) and can be used to write ABCI
 applications for [Tendermint](https://github.com/tendermint/tendermint/).
 
 ## Supported Version
-
 - Tendermint 0.32.0
 - ABCI 0.16.0
 
@@ -33,7 +32,7 @@ To use this library to build your own ABCI apps in Rust you have to include the 
 
 ```toml
 [dependencies]
-abci = "0.6.0"
+abci = "0.6.1"
 ```
 
 ### Development
@@ -65,7 +64,7 @@ For a real life example of an ABCI application you can checkout [Cosmos SDK](htt
 
 | Tendermint | Rust-abci |
 | ---------- | :-------: |
-| 0.32       |   0.6.0   |
+| 0.32.2     |   0.6.1   |
 | 0.31.7     |   0.5.4   |
 
 ## Documentation
