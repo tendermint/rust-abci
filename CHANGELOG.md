@@ -11,7 +11,7 @@
 ### IMPROVEMENTS:
 
 ### BUG FIXES:
--  [\#87](https://github.com/tendermint/rust-abci/issues/87): Version of protobuf specified to the latest one (2.8.1)
+-  [\#89](https://github.com/tendermint/rust-abci/pull/89): Version of protobuf specified to the latest one (2.8.1)
 
 *August 23, 2019*
 
