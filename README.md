@@ -1,6 +1,6 @@
 # Rust ABCI
 
-Tendermint ABCI server, written in Rust programming language.
+Tendermint ABCI server, written in the Rust programming language.
 
 [![Current Version](https://meritbadge.herokuapp.com/abci)](https://crates.io/crates/abci)
 [![](https://tokei.rs/b1/github/tendermint/rust-abci)](https://github.com/tendermint/rust-abci)
@@ -11,6 +11,7 @@ protocol](https://tendermint.com/docs/spec/abci/) and can be used to write ABCI
 applications for [Tendermint](https://github.com/tendermint/tendermint/).
 
 ## Supported Version
+
 - Tendermint 0.32.0
 - ABCI 0.16.0
 
@@ -64,7 +65,7 @@ For a real life example of an ABCI application you can checkout [Cosmos SDK](htt
 
 | Tendermint | Rust-abci |
 | ---------- | :-------: |
-| 0.32.2     |   0.6.2   |
+| 0.32.7     |   0.6.3   |
 | 0.31.7     |   0.5.4   |
 
 ## Documentation
