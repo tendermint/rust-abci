@@ -1,10 +1,27 @@
 # CHANGELOG
 
+_November 18, 2019_
+
+Special thanks to external contributors on this release: @yihuang
+
+## v0.6.4
+
+### IMPROVEMENTS:
+
+- [\#100](https://github.com/tendermint/rust-abci/pull/100): worker panic propagated to the abci process
+
 _November 11, 2019_
 
 ## v0.6.3
 
 ### IMPROVEMENTS:
+
+- [\#97](https://github.com/tendermint/rust-abci/pull/97): futures version bumped to 0.3
+- [\#94](https://github.com/tendermint/rust-abci/pull/94): Reduce number of tokio dependencies
+
+_September 25, 2019_
+
+## v0.6.2
 
 - [\#97](https://github.com/tendermint/rust-abci/pull/97): futures version bumped to 0.3
 - [\#94](https://github.com/tendermint/rust-abci/pull/94): Reduce number of tokio dependencies
