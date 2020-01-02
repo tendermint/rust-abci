@@ -1,5 +1,15 @@
 # CHANGELOG
 
+January 2, 2020_
+
+Special thanks to external contributors on this release: @devashishdxt
+
+## v0.6.5
+
+### IMPROVEMENTS:
+
+- [\#110](https://github.com/tendermint/rust-abci/pull/110): Upgrade protobuf to 2.10.0
+
 _November 18, 2019_
 
 Special thanks to external contributors on this release: @yihuang
