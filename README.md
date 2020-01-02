@@ -44,7 +44,7 @@ This crate already contains the compiled ABCI protobuf messages. If you want to 
 
 ### Tendermint
 
-To run either of the example apps you have to have Tendermint installed and initialised (Remember to run `tendermint init`!). Please install it according to these [instructions](https://tendermint.com/docs/introduction/install.html). After initializing and configuring the node, Tendermint can be run with:
+To run either of the example apps you have to have Tendermint installed and initialised (Remember to run `tendermint init`!). Please install it according to these [instructions](https://docs.tendermint.com/master/introduction/install.html). After initializing and configuring the node, Tendermint can be run with:
 
 ```
 tendermint node
@@ -82,7 +82,7 @@ Please read, understand and adhere to our [code of conduct](./CODE_OF_CONDUCT.md
 
 ## Credits
 
-- [Jackson Lewis](https://github.com/JacksonCoder)
+- [Jackson Lewis](https://github.com/InquisitivePenguin)
 - [Dave Bryson](https://github.com/davebryson)
 
 Original `rust-tsp` made by [Adrian Brink](https://github.com/adrianbrink).
