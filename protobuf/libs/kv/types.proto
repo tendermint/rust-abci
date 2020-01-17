@@ -1,7 +1,8 @@
 syntax = "proto3";
-package common;
+package tendermint.libs.kv;
+option go_package = "github.com/tendermint/tendermint/libs/kv";
 
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "third_party/proto/gogoproto/gogo.proto";
 
 option (gogoproto.marshaler_all) = true;
 option (gogoproto.unmarshaler_all) = true;
@@ -16,7 +17,7 @@ option (gogoproto.testgen_all) = true;
 // Abstract types
 
 // Define these here for compatibility but use tmlibs/common.KVPair.
-message KVPair {
+message Pair {
   bytes key = 1;
   bytes value = 2;
 }
