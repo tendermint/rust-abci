@@ -8,7 +8,7 @@ fn main() {
             "protobuf/libs/kv/types.proto",
             "protobuf/crypto/merkle/merkle.proto",
         ],
-        includes: &["protobuf" ],
+        includes: &["protobuf"],
         customize: protobuf_codegen_pure::Customize {
             ..Default::default()
         },
