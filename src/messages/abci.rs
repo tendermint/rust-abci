@@ -11685,6 +11685,61 @@ impl ::protobuf::reflect::ProtobufValue for CheckTxType {
     }
 }
 
+#[derive(Clone,PartialEq,Eq,Debug,Hash)]
+pub enum CheckTxType {
+    New = 0,
+    Recheck = 1,
+}
+
+impl ::protobuf::ProtobufEnum for CheckTxType {
+    fn value(&self) -> i32 {
+        *self as i32
+    }
+
+    fn from_i32(value: i32) -> ::std::option::Option<CheckTxType> {
+        match value {
+            0 => ::std::option::Option::Some(CheckTxType::New),
+            1 => ::std::option::Option::Some(CheckTxType::Recheck),
+            _ => ::std::option::Option::None
+        }
+    }
+
+    fn values() -> &'static [Self] {
+        static values: &'static [CheckTxType] = &[
+            CheckTxType::New,
+            CheckTxType::Recheck,
+        ];
+        values
+    }
+
+    fn enum_descriptor_static() -> &'static ::protobuf::reflect::EnumDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::EnumDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::EnumDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                ::protobuf::reflect::EnumDescriptor::new("CheckTxType", file_descriptor_proto())
+            })
+        }
+    }
+}
+
+impl ::std::marker::Copy for CheckTxType {
+}
+
+impl ::std::default::Default for CheckTxType {
+    fn default() -> Self {
+        CheckTxType::New
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for CheckTxType {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Enum(self.descriptor())
+    }
+}
+
 static file_descriptor_proto_data: &'static [u8] = b"\
     \n\nabci.proto\x12\x15tendermint.abci.types\"\xac\x05\n\x07Request\x124\
     \n\x04echo\x18\x02\x20\x01(\x0b2\".tendermint.abci.types.RequestEchoH\0B\
@@ -11706,15 +11761,15 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x15\n\x0bp2p_version\x18\x03\x20\x01(\x04B\0:\0\"4\n\x10RequestSetOptio\
     n\x12\r\n\x03key\x18\x01\x20\x01(\tB\0\x12\x0f\n\x05value\x18\x02\x20\
     \x01(\tB\0:\0\"\xfd\x01\n\x10RequestInitChain\x122\n\x04time\x18\x01\x20\
-    \x01(\x0b2\x1a.google.protobuf.TimestampB\x08\xc8\xde\x1f\0\x90\xdf\x1f\
-    \x01\x12\x12\n\x08chain_id\x18\x02\x20\x01(\tB\0\x12B\n\x10consensus_par\
-    ams\x18\x03\x20\x01(\x0b2&.tendermint.abci.types.ConsensusParamsB\0\x12@\
-    \n\nvalidators\x18\x04\x20\x03(\x0b2&.tendermint.abci.types.ValidatorUpd\
-    ateB\x04\xc8\xde\x1f\0\x12\x19\n\x0fapp_state_bytes\x18\x05\x20\x01(\x0c\
-    B\0:\0\"S\n\x0cRequestQuery\x12\x0e\n\x04data\x18\x01\x20\x01(\x0cB\0\
-    \x12\x0e\n\x04path\x18\x02\x20\x01(\tB\0\x12\x10\n\x06height\x18\x03\x20\
-    \x01(\x03B\0\x12\x0f\n\x05prove\x18\x04\x20\x01(\x08B\0:\0\"\xe6\x01\n\
-    \x11RequestBeginBlock\x12\x0e\n\x04hash\x18\x01\x20\x01(\x0cB\0\x123\n\
+    \x01(\x0b2\x1a.google.protobuf.TimestampB\x08\x90\xdf\x1f\x01\xc8\xde\
+    \x1f\0\x12\x12\n\x08chain_id\x18\x02\x20\x01(\tB\0\x12B\n\x10consensus_p\
+    arams\x18\x03\x20\x01(\x0b2&.tendermint.abci.types.ConsensusParamsB\0\
+    \x12@\n\nvalidators\x18\x04\x20\x03(\x0b2&.tendermint.abci.types.Validat\
+    orUpdateB\x04\xc8\xde\x1f\0\x12\x19\n\x0fapp_state_bytes\x18\x05\x20\x01\
+    (\x0cB\0:\0\"S\n\x0cRequestQuery\x12\x0e\n\x04data\x18\x01\x20\x01(\x0cB\
+    \0\x12\x0e\n\x04path\x18\x02\x20\x01(\tB\0\x12\x10\n\x06height\x18\x03\
+    \x20\x01(\x03B\0\x12\x0f\n\x05prove\x18\x04\x20\x01(\x08B\0:\0\"\xe6\x01\
+    \n\x11RequestBeginBlock\x12\x0e\n\x04hash\x18\x01\x20\x01(\x0cB\0\x123\n\
     \x06header\x18\x02\x20\x01(\x0b2\x1d.tendermint.abci.types.HeaderB\x04\
     \xc8\xde\x1f\0\x12E\n\x10last_commit_info\x18\x03\x20\x01(\x0b2%.tenderm\
     int.abci.types.LastCommitInfoB\x04\xc8\xde\x1f\0\x12C\n\x14byzantine_val\
@@ -11757,19 +11812,19 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     2\x1f.tendermint.crypto.merkle.ProofB\0\x12\x10\n\x06height\x18\t\x20\
     \x01(\x03B\0\x12\x13\n\tcodespace\x18\n\x20\x01(\tB\0:\0\"^\n\x12Respons\
     eBeginBlock\x12F\n\x06events\x18\x01\x20\x03(\x0b2\x1c.tendermint.abci.t\
-    ypes.EventB\x18\xc8\xde\x1f\0\xea\xde\x1f\x10events,omitempty:\0\"\xd9\
+    ypes.EventB\x18\xea\xde\x1f\x10events,omitempty\xc8\xde\x1f\0:\0\"\xd9\
     \x01\n\x0fResponseCheckTx\x12\x0e\n\x04code\x18\x01\x20\x01(\rB\0\x12\
     \x0e\n\x04data\x18\x02\x20\x01(\x0cB\0\x12\r\n\x03log\x18\x03\x20\x01(\t\
     B\0\x12\x0e\n\x04info\x18\x04\x20\x01(\tB\0\x12\x14\n\ngas_wanted\x18\
     \x05\x20\x01(\x03B\0\x12\x12\n\x08gas_used\x18\x06\x20\x01(\x03B\0\x12F\
     \n\x06events\x18\x07\x20\x03(\x0b2\x1c.tendermint.abci.types.EventB\x18\
-    \xea\xde\x1f\x10events,omitempty\xc8\xde\x1f\0\x12\x13\n\tcodespace\x18\
+    \xc8\xde\x1f\0\xea\xde\x1f\x10events,omitempty\x12\x13\n\tcodespace\x18\
     \x08\x20\x01(\tB\0:\0\"\xdb\x01\n\x11ResponseDeliverTx\x12\x0e\n\x04code\
     \x18\x01\x20\x01(\rB\0\x12\x0e\n\x04data\x18\x02\x20\x01(\x0cB\0\x12\r\n\
     \x03log\x18\x03\x20\x01(\tB\0\x12\x0e\n\x04info\x18\x04\x20\x01(\tB\0\
     \x12\x14\n\ngas_wanted\x18\x05\x20\x01(\x03B\0\x12\x12\n\x08gas_used\x18\
     \x06\x20\x01(\x03B\0\x12F\n\x06events\x18\x07\x20\x03(\x0b2\x1c.tendermi\
-    nt.abci.types.EventB\x18\xc8\xde\x1f\0\xea\xde\x1f\x10events,omitempty\
+    nt.abci.types.EventB\x18\xea\xde\x1f\x10events,omitempty\xc8\xde\x1f\0\
     \x12\x13\n\tcodespace\x18\x08\x20\x01(\tB\0:\0\"\xf0\x01\n\x10ResponseEn\
     dBlock\x12G\n\x11validator_updates\x18\x01\x20\x03(\x0b2&.tendermint.abc\
     i.types.ValidatorUpdateB\x04\xc8\xde\x1f\0\x12I\n\x17consensus_param_upd\
@@ -11819,11 +11874,12 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \xbb\x01\n\x08Evidence\x12\x0e\n\x04type\x18\x01\x20\x01(\tB\0\x129\n\tv\
     alidator\x18\x02\x20\x01(\x0b2\x20.tendermint.abci.types.ValidatorB\x04\
     \xc8\xde\x1f\0\x12\x10\n\x06height\x18\x03\x20\x01(\x03B\0\x122\n\x04tim\
-    e\x18\x04\x20\x01(\x0b2\x1a.google.protobuf.TimestampB\x08\x90\xdf\x1f\
-    \x01\xc8\xde\x1f\0\x12\x1c\n\x12total_voting_power\x18\x05\x20\x01(\x03B\
-    \0:\0*%\n\x0bCheckTxType\x12\x07\n\x03New\x10\0\x12\x0b\n\x07Recheck\x10\
-    \x01\x1a\0B\x1c\xf8\xe1\x1e\x01\xa8\xe2\x1e\x01\xb8\xe2\x1e\x01\xe0\xe2\
-    \x1e\x01\xc0\xe3\x1e\x01\xc8\xe2\x1e\x01\xd0\xe2\x1e\x01b\x06proto3\
+    e\x18\x04\x20\x01(\x0b2\x1a.google.protobuf.TimestampB\x08\xc8\xde\x1f\0\
+    \x90\xdf\x1f\x01\x12\x1c\n\x12total_voting_power\x18\x05\x20\x01(\x03B\0\
+    :\0*%\n\x0bCheckTxType\x12\x07\n\x03New\x10\0\x12\x0b\n\x07Recheck\x10\
+    \x01\x1a\0*%\n\x0bCheckTxType\x12\x07\n\x03New\x10\0\x12\x0b\n\x07Rechec\
+    k\x10\x01\x1a\0B\x1c\xd0\xe2\x1e\x01\xc0\xe3\x1e\x01\xb8\xe2\x1e\x01\xe0\
+    \xe2\x1e\x01\xf8\xe1\x1e\x01\xc8\xe2\x1e\x01\xa8\xe2\x1e\x01b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {

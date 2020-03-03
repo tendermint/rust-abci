@@ -87,6 +87,11 @@ enum CheckTxType {
   Recheck = 1;
 }
 
+enum CheckTxType {
+  New     = 0;
+  Recheck = 1;
+}
+
 message RequestCheckTx {
   bytes       tx   = 1;
   CheckTxType type = 2;
