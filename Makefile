@@ -1,5 +1,5 @@
 # Origin
-version_branch = marko/4288_linting
+version_branch = v0.33.1
 tendermint = https://raw.githubusercontent.com/tendermint/tendermint/$(version_branch)
 
 # Outputs
@@ -16,4 +16,3 @@ update-proto:
 	sed 's@package types;@package abci;@' $(tmabci) > protobuf/abci.proto
 	curl $(tendermint)/version/version.go | grep -F -eTMCoreSem -eABCISemVer > version.txt
 	curl $(tendermint)/$(third_party) > $(third_party)
-	

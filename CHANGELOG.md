@@ -1,6 +1,6 @@
 # CHANGELOG
 
-January 2, 2020_
+_January 2, 2020_
 
 Special thanks to external contributors on this release: @devashishdxt
 
