@@ -12,7 +12,7 @@ applications for [Tendermint](https://github.com/tendermint/tendermint/).
 
 ## Supported Version
 
-- Tendermint 0.33.5
+- Tendermint 0.33.6
 - ABCI 0.16.2
 
 ## Installation

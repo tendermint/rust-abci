@@ -1,6 +1,6 @@
 # CHANGELOG
 
-_July 23, 2020_
+_July 24, 2020_
 
 ## v0.7.2
 
