@@ -1,3 +1,9 @@
+# 🚨 DEPRECATED 🚨 
+
+This repo has been deprecated. Development work continues as the "abci" crate of [informalsystems/tendermint-rs](https://github.com/informalsystems/tendermint-rs/tree/master/abci). Please reference that repository in the future.
+
+-------
+
 # Rust ABCI
 
 Tendermint ABCI server, written in the Rust programming language.
